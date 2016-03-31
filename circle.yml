@@ -19,7 +19,6 @@ dependencies:
     - mvn install
 test:
   post:
-    - cd cm-gui
-    - mvn jfx:native
-    - tar -zcvf target/jfx/app/* "$CIRCLE_ARTIFACTS/app.tgz"
-    - tar -zcvf target/jfx/native/* "$CIRCLE_ARTIFACTS/native.tgz"
+    - cd cm-gui && mvn jfx:native
+    - tar -zcvf cm-gui/target/jfx/app/* "$CIRCLE_ARTIFACTS/app.tgz"
+    - tar -zcvf cm-gui/target/jfx/native/* "$CIRCLE_ARTIFACTS/native.tgz"
