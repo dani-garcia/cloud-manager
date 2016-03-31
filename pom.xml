@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cloudmanager</groupId>
+    <artifactId>cloudmanager</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Cloud Manager</name>
+    <url>https://www.github.com/dani-garcia/cloud-manager</url>
+
+    <!-- Define modules -->
+    <modules>
+        <module>cm-core</module>
+        <module>cm-plugin-googledrive</module>
+        <module>cm-plugin-dropbox</module>
+        <module>cm-gui</module>
+    </modules>
+
+    <!-- Define java version and project encoding -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <!-- Define maven version -->
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
+
+    <!-- Define license -->
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>https://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
+
+    <build>
+        <plugins>
+            <!-- Required Java version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <!-- Directory plugin to find parent root directory absolute path -->
+            <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+                <version>0.1</version>
+                <executions>
+                    <execution>
+                        <id>directories</id>
+                        <goals>
+                            <goal>highest-basedir</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <property>main.basedir</property>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Replace API keys -->
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <id>replace-tokens</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <delimiters>
+                        <delimiter>@@</delimiter>
+                    </delimiters>
+                    <includes>
+                        <include>${project.build.directory}/**/*.apikey</include>
+                    </includes>
+                    <tokenValueMap>${main.basedir}/apikeys.properties</tokenValueMap>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

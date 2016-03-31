@@ -1,0 +1,22 @@
+# Created by https://www.gitignore.io/api/java,maven,jetbrains
+
+### Java ###
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+### Maven ###
+target/
+
+
+### JetBrains ###
+.idea/
+/out/
+*.iml
+
+### Private Info ###
+apikeys.properties
+**/config/config.json

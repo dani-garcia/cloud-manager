@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="750.0" prefWidth="1200.0"
+            fx:controller="com.cloudmanager.gui.controller.MainController">
+
+    <top>
+        <fx:include source="TopBar.fxml"/>
+    </top>
+
+    <center>
+        <SplitPane nodeOrientation="LEFT_TO_RIGHT" BorderPane.alignment="CENTER">
+            <fx:include fx:id="leftColumn" source="ColumnViewBorderPane.fxml"/>
+            <fx:include fx:id="rightColumn" source="ColumnViewBorderPane.fxml"/>
+        </SplitPane>
+    </center>
+</BorderPane>

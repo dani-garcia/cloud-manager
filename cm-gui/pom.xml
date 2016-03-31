@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.cloudmanager</groupId>
+        <artifactId>cloudmanager</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cm-gui</artifactId>
+    <name>Cloud Manager GUI</name>
+
+    <dependencies>
+        <!-- Cloud Manager Core -->
+        <dependency>
+            <groupId>com.cloudmanager</groupId>
+            <artifactId>cm-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Included plugins (These are here for ease of development) -->
+        <!-- They should be removed from here, compiled separately and included in the plugins folder -->
+        <dependency>
+            <groupId>com.cloudmanager</groupId>
+            <artifactId>cm-plugin-googledrive</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cloudmanager</groupId>
+            <artifactId>cm-plugin-dropbox</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- JavaFX Configuration -->
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>8.4.0</version>
+                <configuration>
+                    <verbose>true</verbose>
+
+                    <appName>CloudManager</appName>
+                    <mainClass>com.cloudmanager.gui.MainApp</mainClass>
+                    <vendor>Daniel García García</vendor>
+
+                    <description>File manager for cloud services like Google Drive and Dropbox</description>
+
+                    <bundler>all</bundler> <!-- all, exe, msi, deb, rpm, linux.app, dmg, pkg, mac.appstore -->
+                    <needShortcut>true</needShortcut>
+
+                    <!-- Include some files, like the readme and the license -->
+                    <additionalAppResources>src/main/deploy/resources</additionalAppResources>
+
+                    <!-- Include some extra arguments -->
+                    <bundleArguments>
+                        <!-- Linux Bundler arguments -->
+                        <licenseType>GPL</licenseType>
+                        <licenseFile>LICENSE</licenseFile>
+
+                        <email>UO231763@uniovi.es</email>
+
+                        <category>Network</category>
+                    </bundleArguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

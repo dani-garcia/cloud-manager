@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<MenuBar xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="com.cloudmanager.gui.controller.MenuController">
+
+    <Menu mnemonicParsing="false" text="%file">
+        <MenuItem fx:id="accountManagerItem" mnemonicParsing="false" text="%account_manager"/>
+
+        <SeparatorMenuItem/>
+
+        <MenuItem fx:id="fullScreenItem" mnemonicParsing="false" text="%full_screen">
+            <accelerator>
+                <KeyCodeCombination code="F11" shift="UP" control="UP" alt="UP" meta="UP" shortcut="UP"/>
+            </accelerator>
+        </MenuItem>
+
+        <SeparatorMenuItem/>
+
+        <MenuItem fx:id="exitItem" mnemonicParsing="false" text="%exit"/>
+    </Menu>
+
+    <Menu mnemonicParsing="false" text="%help">
+        <MenuItem fx:id="aboutItem" mnemonicParsing="false" text="%about"/>
+    </Menu>
+</MenuBar>

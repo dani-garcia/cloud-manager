@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<SplitPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+           dividerPositions="0.5" orientation="VERTICAL">
+
+    <TreeView fx:id="fileTree"/>
+
+    <TableView fx:id="fileTable">
+        <placeholder>
+            <Label text="%empty_folder"/>
+        </placeholder>
+        <columns>
+            <TableColumn fx:id="iconColumn" prefWidth="20.0" text=""/>
+            <TableColumn fx:id="nameColumn" prefWidth="200.0" text="%name"/>
+            <TableColumn fx:id="sizeColumn" prefWidth="120.0" text="%size"/>
+            <TableColumn fx:id="typeColumn" prefWidth="100.0" text="%type"/>
+            <TableColumn fx:id="dateColumn" prefWidth="150.0" text="%modified_date"/>
+        </columns>
+    </TableView>
+</SplitPane>

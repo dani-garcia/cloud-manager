@@ -1,0 +1,7 @@
+# Rename this file to apikeys.properties and put your API keys here
+# Dropbox
+DROPBOX_KEY=
+DROPBOX_SECRET=
+# Google Drive
+GOOGLEDRIVE_KEY=
+GOOGLEDRIVE_SECRET=

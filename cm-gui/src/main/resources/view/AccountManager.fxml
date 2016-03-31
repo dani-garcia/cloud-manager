@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<SplitPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+           dividerPositions="0.5" prefHeight="500.0" prefWidth="650.0"
+           fx:controller="com.cloudmanager.gui.controller.AccountManagerController">
+
+    <BorderPane>
+        <center>
+            <TableView fx:id="accountTable">
+                <columns>
+                    <TableColumn fx:id="iconColumn" prefWidth="40.0" text=""/>
+                    <TableColumn fx:id="serviceNameColumn" prefWidth="130.0" text="%service"/>
+                    <TableColumn fx:id="accountNameColumn" prefWidth="140.0" text="%account"/>
+                </columns>
+            </TableView>
+        </center>
+        <bottom>
+            <ButtonBar>
+                <buttons>
+                    <Button fx:id="newButton" mnemonicParsing="false" text="%new"/>
+                    <Button fx:id="removeButton" mnemonicParsing="false" text="%remove"/>
+                </buttons>
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+            </ButtonBar>
+        </bottom>
+    </BorderPane>
+
+    <BorderPane>
+        <center>
+            <TextArea editable="false" maxHeight="200.0" maxWidth="150.0"
+                      text="Extra info and settings about the selected service" wrapText="true"/>
+        </center>
+    </BorderPane>
+</SplitPane>
