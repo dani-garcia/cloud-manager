@@ -1,4 +1,4 @@
-# CloudManager
+# CloudManager [![Circle CI](https://circleci.com/gh/dani-garcia/cloud-manager.svg?style=svg&circle-token=457861990f061840af93d8ea879b5a9021b838e0)](https://circleci.com/gh/dani-garcia/cloud-manager)
 TODO: Write a project description
 
 ## Installation
