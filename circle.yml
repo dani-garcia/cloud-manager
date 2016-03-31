@@ -20,5 +20,5 @@ dependencies:
 test:
   post:
     - cd cm-gui && mvn jfx:native
-    - tar -zcvf cm-gui/target/jfx/app/* "$CIRCLE_ARTIFACTS/app.tgz"
-    - tar -zcvf cm-gui/target/jfx/native/* "$CIRCLE_ARTIFACTS/native.tgz"
+    - tar -zcvf "$CIRCLE_ARTIFACTS/app.tgz" cm-gui/target/jfx/app/*
+    - tar -zcvf "$CIRCLE_ARTIFACTS/natives.tgz" cm-gui/target/jfx/native/*
