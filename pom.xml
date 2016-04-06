@@ -94,6 +94,9 @@
                         <include>${project.build.directory}/**/*.apikey</include>
                     </includes>
                     <tokenValueMap>${main.basedir}/apikeys.properties</tokenValueMap>
+
+                    <!-- If we can't fid the API keys, keep going -->
+                    <!-- <ignoreErrors>true</ignoreErrors> -->
                 </configuration>
             </plugin>
         </plugins>

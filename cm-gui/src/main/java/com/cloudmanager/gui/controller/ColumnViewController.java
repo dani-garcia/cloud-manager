@@ -30,16 +30,20 @@ public class ColumnViewController {
 
 
     public void initialize(StringProperty own, ObservableStringValue other) {
-        ServiceManager accountManager = ServiceManager.getInstance();
+        ServiceManager serviceManager = ServiceManager.getInstance();
 
         // We set an account change listener. When the accounts change, we reload the tabs
-        accountManager.addListener(this::loadSelection);
+        serviceManager.addListener(this::loadSelection);
 
         // Set properties
         this.ownSelectionProperty = own;
         this.otherSelectionValue = other;
 
-        loadSelection(accountManager.getServices());
+        loadSelection(serviceManager.getServices());
+    }
+
+    public void select(FileService service) {
+        serviceSelector.getSelectionModel().select(service);
     }
 
     private void loadSelection(List<FileService> accounts) {
@@ -57,7 +61,7 @@ public class ColumnViewController {
         try {
             // Load the fxml
             FXMLLoader loader = ResourceManager.getFXMLLoader("/view/FileTreeView.fxml");
-            loader.setController(AbstractFileViewController.get(service));
+            loader.setController(AbstractFileViewController.getController(service));
 
             // Set it in the center
             SplitPane pane = loader.load();

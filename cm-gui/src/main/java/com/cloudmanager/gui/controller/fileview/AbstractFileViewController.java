@@ -21,7 +21,7 @@ import java.util.Date;
 
 public abstract class AbstractFileViewController {
 
-    public static AbstractFileViewController get(FileService service) {
+    public static AbstractFileViewController getController(FileService service) {
         if (service.getServiceName().equals(LocalService.SERVICE_NAME))
             return new LocalViewController(service);
         else

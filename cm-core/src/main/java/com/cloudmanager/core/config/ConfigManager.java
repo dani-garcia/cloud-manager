@@ -31,7 +31,6 @@ public class ConfigManager {
         try {
             instance = MAPPER.readValue(file, Config.class);
         } catch (Exception e) {
-            e.printStackTrace();
             // If we couldn't load the configuration, we create a new one
             instance = new Config();
         }

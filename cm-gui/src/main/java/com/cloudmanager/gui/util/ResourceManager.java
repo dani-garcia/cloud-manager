@@ -1,8 +1,10 @@
 package com.cloudmanager.gui.util;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
+import sun.awt.image.IntegerComponentRaster;
 
 import javax.swing.ImageIcon;
 import java.awt.image.BufferedImage;
@@ -53,8 +55,20 @@ public class ResourceManager {
     public static Image toFXImage(ImageIcon icon) {
         if (icon == null) return null;
 
-        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        icon.paintIcon(null, bi.getGraphics(), 0, 0);
-        return SwingFXUtils.toFXImage(bi, null);
+        int width = icon.getIconWidth();
+        int height = icon.getIconHeight();
+        
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        image.getGraphics().drawImage(icon.getImage(), 0, 0, null);
+
+        IntegerComponentRaster icr = (IntegerComponentRaster) image.getRaster();
+
+        WritableImage wimg = new WritableImage(width, height);
+
+        wimg.getPixelWriter().setPixels(0, 0, width, height,
+                PixelFormat.getIntArgbInstance(),
+                icr.getDataStorage(), icr.getDataOffset(0), icr.getScanlineStride());
+
+        return wimg;
     }
 }

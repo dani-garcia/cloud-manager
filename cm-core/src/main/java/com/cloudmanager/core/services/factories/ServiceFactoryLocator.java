@@ -22,12 +22,18 @@ public class ServiceFactoryLocator {
         if (map == null) {
             map = new HashMap<>();
 
-            ServiceLoader<ServiceFactory> loader = ServiceLoader.load(ServiceFactory.class, getPluginClassloader());
+            // TODO Enable this in the final version?
+            // ServiceLoader.load(ServiceFactory.class, getPluginClassloader())
+
+            ServiceLoader<ServiceFactory> loader = ServiceLoader.load(ServiceFactory.class);
 
             // Map the service name to its factory
             for (ServiceFactory serviceFactory : loader) {
+                System.out.println("Service Loaded: " + serviceFactory.getClass().getName());
                 map.put(serviceFactory.getServiceName(), serviceFactory);
             }
+
+            System.out.println("All services loaded");
         }
 
         return map;
@@ -36,9 +42,8 @@ public class ServiceFactoryLocator {
     private static URLClassLoader getPluginClassloader() {
         File folder = new File("plugins");
 
-        //TODO Enable this in the final version?
-        //  if (!folder.exists())
-        //     folder.mkdirs();
+        if (!folder.exists())
+            folder.mkdirs();
 
         File[] files = folder.listFiles(file -> file.getPath().toLowerCase().endsWith(".jar"));
         URL[] urls = Arrays.stream(files).map(ServiceFactoryLocator::toURL).toArray(URL[]::new);
