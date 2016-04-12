@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="400.0" prefWidth="450.0"
+            fx:id="root"
+            fx:controller="com.cloudmanager.gui.controller.AccountLoginController">
+
+    <top>
+        <GridPane hgap="10" vgap="10">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15"/>
+            </padding>
+
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="150.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="%account_name"/>
+            <TextField fx:id="nameField" GridPane.columnIndex="1"/>
+
+            <Label text="%service" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="serviceSelector" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        </GridPane>
+    </top>
+
+    <center>
+        <GridPane fx:id="loginForm" hgap="10" vgap="10">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15"/>
+            </padding>
+
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0" prefWidth="150.0"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+        </GridPane>
+    </center>
+</BorderPane>

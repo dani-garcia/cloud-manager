@@ -1,7 +1,7 @@
 package com.cloudmanager.gui;
 
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.services.DownloadManager;
+import com.cloudmanager.core.services.DownloadService;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
@@ -61,7 +61,7 @@ public class MainApp extends Application {
         primaryStage.show();
 
         // TODO Temporary
-        DownloadManager.get().addProgressListener((f, p) -> {
+        DownloadService.get().addProgressListener((f, p) -> {
             if (p < 100) {
                 System.out.println(p);
                 return;

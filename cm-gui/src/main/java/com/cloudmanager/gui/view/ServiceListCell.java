@@ -10,11 +10,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class FileListCell extends ListCell<FileService> {
+public class ServiceListCell extends ListCell<FileService> {
 
     private ObservableStringValue otherSelection;
 
-    public FileListCell(ObservableStringValue otherSelection) {
+    public ServiceListCell(ObservableStringValue otherSelection) {
         this.otherSelection = otherSelection;
     }
 
@@ -23,6 +23,7 @@ public class FileListCell extends ListCell<FileService> {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);
+            setGraphic(null);
 
         } else {
             // Get the icon

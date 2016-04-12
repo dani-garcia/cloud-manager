@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class ServiceAccount implements Serializable {
     private Map<String, String> auth;
 
     @JsonIgnore
-    private FileService service;
+    private transient FileService service;
 
     public ServiceAccount(@JsonProperty("id") String id,
                           @JsonProperty("name") String name,
@@ -29,6 +30,11 @@ public class ServiceAccount implements Serializable {
         this.name = name;
         this.serviceName = serviceName;
         this.auth = auth;
+    }
+
+    public ServiceAccount(String name, String serviceName, FileService service) {
+        this(null, name, serviceName, new HashMap<>());
+        this.service = service;
     }
 
     public String getId() {

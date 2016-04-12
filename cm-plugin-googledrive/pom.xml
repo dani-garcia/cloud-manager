@@ -28,7 +28,7 @@
             <version>v3-rev17-1.21.0</version>
         </dependency>
 
-        <!-- Jetty client for Google Drive Auth -->
+        <!-- Jetty client for Google Drive Auth to receive the auth code -->
         <dependency>
             <groupId>com.google.oauth-client</groupId>
             <artifactId>google-oauth-client-jetty</artifactId>

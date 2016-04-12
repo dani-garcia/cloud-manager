@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <SplitPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
            dividerPositions="0.5" prefHeight="500.0" prefWidth="650.0"
+           fx:id="root"
            fx:controller="com.cloudmanager.gui.controller.AccountManagerController">
 
     <BorderPane>
@@ -20,7 +21,7 @@
         <bottom>
             <ButtonBar>
                 <buttons>
-                    <Button fx:id="newButton" mnemonicParsing="false" text="%new"/>
+                    <Button fx:id="newButton" mnemonicParsing="false" text="%new_account"/>
                     <Button fx:id="removeButton" mnemonicParsing="false" text="%remove"/>
                 </buttons>
                 <padding>

@@ -8,23 +8,28 @@ import com.google.api.client.util.store.DataStoreFactory;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 class CredentialDataStore implements DataStore<StoredCredential> {
 
-    private final ServiceAccount account;
+    private Map<String, String> map;
 
     CredentialDataStore(ServiceAccount account) {
-        this.account = account;
+        this(account.getAuth());
+    }
+
+    CredentialDataStore(Map<String, String> map) {
+        this.map = map;
     }
 
     @Override
     public StoredCredential get(String key) throws IOException {
         StoredCredential cred = new StoredCredential();
 
-        cred.setAccessToken(account.getAuth().get("accessToken"));
-        cred.setExpirationTimeMilliseconds(Long.parseLong(account.getAuth().get("expirationTimeMilliseconds")));
-        cred.setRefreshToken(account.getAuth().get("refreshToken"));
+        cred.setAccessToken(map.get("accessToken"));
+        cred.setExpirationTimeMilliseconds(Long.parseLong(map.get("expirationTimeMilliseconds")));
+        cred.setRefreshToken(map.get("refreshToken"));
 
         return cred;
     }
@@ -32,9 +37,9 @@ class CredentialDataStore implements DataStore<StoredCredential> {
     @Override
     public DataStore<StoredCredential> set(String key, StoredCredential cred) throws IOException {
 
-        account.getAuth().put("accessToken", cred.getAccessToken());
-        account.getAuth().put("expirationTimeMilliseconds", cred.getExpirationTimeMilliseconds() + "");
-        account.getAuth().put("refreshToken", cred.getRefreshToken());
+        map.put("accessToken", cred.getAccessToken());
+        map.put("expirationTimeMilliseconds", cred.getExpirationTimeMilliseconds() + "");
+        map.put("refreshToken", cred.getRefreshToken());
 
         ConfigManager.save();
         return this;

@@ -3,9 +3,13 @@ package com.cloudmanager.services.dropbox;
 import com.cloudmanager.core.config.ConfigManager;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
+import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
 import com.cloudmanager.core.util.Util;
-import com.dropbox.core.*;
+import com.dropbox.core.DbxAppInfo;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.DbxWebAuthNoRedirect;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
@@ -62,23 +66,19 @@ class DropboxService extends AbstractFileService {
     public String getIcon() {return "/branding/dropbox-icon.png";}
 
     @Override
-    public void login() {
+    public LoginProcedure startLoginProcedure() {
+        return new DropboxLoginProcedure(new DbxWebAuthNoRedirect(requestConfig, appInfo), this);
+    }
 
+    @Override
+    public boolean authenticate() {
         String accessToken = getAccount().getAuth().get("access_token");
-        DbxAuthInfo authInfo;
 
-        if (accessToken != null)
-            authInfo = new DbxAuthInfo(accessToken, appInfo.getHost());
-        else {
-            authInfo = oauth();
-            if (authInfo == null)
-                return;
+        if (accessToken == null)
+            return false;
 
-            getAccount().getAuth().put("access_token", authInfo.getAccessToken());
-            ConfigManager.save();
-        }
-
-        client = new DbxClientV2(requestConfig, authInfo.getAccessToken());
+        client = new DbxClientV2(requestConfig, accessToken);
+        return true;
     }
 
     @Override
@@ -174,30 +174,6 @@ class DropboxService extends AbstractFileService {
         }
 
         return new ModelFile(dbxFile.getPathLower(), dbxFile.getName(), dbxFile.getPathLower(), type, size, modified, parent);
-    }
-
-    private DbxAuthInfo oauth() {
-        DbxWebAuthNoRedirect webAuth = new DbxWebAuthNoRedirect(requestConfig, appInfo);
-
-        String authorizeUrl = webAuth.start();
-        System.out.println("Go to " + authorizeUrl);
-        System.out.print("Enter the authorization code here: ");
-
-        String code = Util.consoleReadLine();
-        if (code == null) {
-            System.err.println("Error reading from console");
-            return null;
-        }
-
-        DbxAuthFinish authFinish;
-        try {
-            authFinish = webAuth.finish(code);
-        } catch (DbxException ex) {
-            System.err.println("Error in DbxWebAuth.finish: " + ex.getMessage());
-            return null;
-        }
-
-        return new DbxAuthInfo(authFinish.getAccessToken(), appInfo.getHost());
     }
 
     @Override

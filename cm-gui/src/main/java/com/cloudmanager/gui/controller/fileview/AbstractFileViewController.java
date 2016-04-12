@@ -22,6 +22,7 @@ import java.util.Date;
 public abstract class AbstractFileViewController {
 
     public static AbstractFileViewController getController(FileService service) {
+        // TODO Eliminar esto?
         if (service.getServiceName().equals(LocalService.SERVICE_NAME))
             return new LocalViewController(service);
         else
@@ -55,7 +56,7 @@ public abstract class AbstractFileViewController {
 
         // We start the load on a different thread
         new Thread(() -> {
-            service.login();
+            service.authenticate();
             TreeItem<ModelFile> rootItem = FileTreeItem.getRoot(service, this::processFileEvents);
 
             // loadTree needs to run on the JFX thread to modify the controls

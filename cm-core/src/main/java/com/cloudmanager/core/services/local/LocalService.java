@@ -2,6 +2,7 @@ package com.cloudmanager.core.services.local;
 
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
+import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
 
 import javax.swing.filechooser.FileSystemView;
@@ -58,10 +59,16 @@ public class LocalService extends AbstractFileService {
 
     // Not applicable
     @Override
-    public void login() { }
+    public LoginProcedure startLoginProcedure() {
+        return null;
+    }
+
+    @Override
+    public boolean authenticate() { return true; }
 
     @Override
     public String getIcon() { return "/icons/computer_keyboard.png"; }
+
 
     @Override
     public String getAccountOwner() { return null; }

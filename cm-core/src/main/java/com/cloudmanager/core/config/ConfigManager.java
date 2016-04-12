@@ -57,6 +57,7 @@ public class ConfigManager {
             MAPPER.writeValue(configFile, instance);
 
         } catch (Exception e) {
+            e.printStackTrace();
             return false; // Couldn't save
         }
 

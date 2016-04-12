@@ -1,6 +1,7 @@
 package com.cloudmanager.core.services;
 
 import com.cloudmanager.core.model.ModelFile;
+import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
 
 import java.util.List;
@@ -22,8 +23,11 @@ public interface FileService {
 
     String getIcon();
 
+
     // Service methods
-    void login();
+    LoginProcedure startLoginProcedure();
+
+    boolean authenticate();
 
     void logout();
 

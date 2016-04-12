@@ -1,20 +1,26 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.config.AccountManager;
 import com.cloudmanager.core.model.ServiceAccount;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class AccountManagerController {
+    @FXML
+    private Parent root;
+
     @FXML
     public TableView<ServiceAccount> accountTable;
 
@@ -32,7 +38,8 @@ public class AccountManagerController {
 
     @FXML
     private void initialize() {
-        accountTable.getItems().setAll(ConfigManager.getConfig().getAccounts());
+        accountTable.getItems().setAll(AccountManager.getInstance().getAccounts());
+        AccountManager.getInstance().addListener(accounts -> accountTable.getItems().setAll(accounts));
 
         iconColumn.setCellValueFactory(s -> {
             Image icon = ResourceManager.loadImage(s.getValue().getService().getIcon());
@@ -47,9 +54,23 @@ public class AccountManagerController {
         serviceNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getServiceName()));
         accountNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
 
+        setButtons();
+    }
 
+    private void setButtons() {
         newButton.setOnAction(event -> {
+            Parent newWindow = ResourceManager.loadFXML("/view/accounts/AccountLogin.fxml");
 
+            Stage stage = new Stage();
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            stage.setTitle(ResourceManager.getString("account_login"));
+            stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
+
+            stage.setScene(new Scene(newWindow));
+
+            stage.show();
         });
 
         removeButton.setOnAction(event -> {
@@ -61,7 +82,7 @@ public class AccountManagerController {
                 return;
             }
 
-            ServiceManager.getInstance().removeServiceAccount(acc);
+            AccountManager.getInstance().removeAccount(acc);
 
             // Reload the data
             initialize();

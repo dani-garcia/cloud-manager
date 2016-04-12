@@ -57,7 +57,7 @@ public class ResourceManager {
 
         int width = icon.getIconWidth();
         int height = icon.getIconHeight();
-        
+
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         image.getGraphics().drawImage(icon.getImage(), 0, 0, null);
 

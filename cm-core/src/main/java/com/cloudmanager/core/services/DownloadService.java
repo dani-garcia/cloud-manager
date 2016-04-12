@@ -5,14 +5,14 @@ import com.cloudmanager.core.transfers.FileTransfer;
 
 import java.util.function.BiConsumer;
 
-public class DownloadManager {
-    private static final DownloadManager instance = new DownloadManager();
+public class DownloadService {
+    private static final DownloadService instance = new DownloadService();
 
-    public static DownloadManager get() {
+    public static DownloadService get() {
         return instance;
     }
 
-    private DownloadManager() { }
+    private DownloadService() { }
 
     private BiConsumer<ModelFile, Double> listener;
 

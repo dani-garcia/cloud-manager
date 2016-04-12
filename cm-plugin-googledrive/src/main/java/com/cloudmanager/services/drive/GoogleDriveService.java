@@ -2,11 +2,10 @@ package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
+import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
 import com.cloudmanager.core.util.Util;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets.Details;
@@ -53,8 +52,6 @@ class GoogleDriveService extends AbstractFileService {
     /*Google Drive folder type. Used to differenciate folders from normal files */
     private static final String MIME_FOLDER = "application/vnd.google-apps.folder";
 
-    /* Setting up api key and secrets */
-    private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final GoogleClientSecrets secrets;
 
 
@@ -72,7 +69,12 @@ class GoogleDriveService extends AbstractFileService {
     public String getIcon() {return "/branding/googledrive-icon.png";}
 
     @Override
-    public void login() {
+    public LoginProcedure startLoginProcedure() {
+        return new GoogleDriveLoginProcedure(secrets, this);
+    }
+
+    @Override
+    public boolean authenticate() {
         HttpTransport httpTransport;
 
         try {
@@ -80,21 +82,27 @@ class GoogleDriveService extends AbstractFileService {
 
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
         // Try to authenticate
         try {
             // set up authorization code flow
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                    httpTransport, JSON_FACTORY, secrets,
+                    httpTransport, JacksonFactory.getDefaultInstance(), secrets,
                     Collections.singleton(DriveScopes.DRIVE))
                     .setCredentialDataStore(new CredentialDataStore(getAccount()))
                     .build();
 
             // TODO Para evitar que abra el enlace automaticamente, reemplazar la clase 'AuthorizationCodeInstalledApp'
             // TODO Tiene poco codigo, asi que debe ser facil de integrar
-            Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+            // Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+
+            Credential credential = flow.loadCredential("user");
+
+            if (credential == null || credential.getRefreshToken() == null) {
+                return false;
+            }
 
             client = new Drive.Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance(), credential)
                     .setApplicationName(APP_NAME)
@@ -102,7 +110,10 @@ class GoogleDriveService extends AbstractFileService {
 
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
     @Override

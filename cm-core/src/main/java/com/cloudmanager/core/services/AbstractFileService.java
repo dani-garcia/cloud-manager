@@ -47,4 +47,20 @@ public abstract class AbstractFileService implements FileService {
     public void setCurrentDir(ModelFile file) {
         currentDir = file;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractFileService that = (AbstractFileService) o;
+
+        return getAccountId() != null ? getAccountId().equals(that.getAccountId()) : that.getAccountId() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getAccountId() != null ? getAccountId().hashCode() : 0;
+    }
 }

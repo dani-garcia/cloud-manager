@@ -3,16 +3,13 @@ package com.cloudmanager.core.model;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class ModelFile implements Serializable, Comparable<ModelFile> {
-    private static final long serialVersionUID = 1L;
-
+public class ModelFile implements Comparable<ModelFile> {
     private static final ImageIcon FILE_ICON = new ImageIcon(ModelFile.class.getResource("/icons/document.png"));
     private static final ImageIcon FOLDER_ICON = new ImageIcon(ModelFile.class.getResource("/icons/folder.png"));
 

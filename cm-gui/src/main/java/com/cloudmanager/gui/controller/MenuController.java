@@ -12,6 +12,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MenuController {
+    @FXML
+    private Parent root;
 
     @FXML
     private MenuItem accountManagerItem;
@@ -39,17 +41,17 @@ public class MenuController {
         });
 
         accountManagerItem.setOnAction(event -> {
-            Parent root = ResourceManager.loadFXML("/view/AccountManager.fxml");
+            Parent newWindow = ResourceManager.loadFXML("/view/accounts/AccountManager.fxml");
 
             Stage stage = new Stage();
-            stage.initModality(Modality.WINDOW_MODAL);
 
-            stage.initOwner(MainApp.getPrimaryStage());
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
 
             stage.setTitle(ResourceManager.getString("account_manager"));
             stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(newWindow));
 
             stage.show();
         });

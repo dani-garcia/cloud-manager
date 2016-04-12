@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <MenuBar xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+         fx:id="root"
          fx:controller="com.cloudmanager.gui.controller.MenuController">
 
     <Menu mnemonicParsing="false" text="%file">
