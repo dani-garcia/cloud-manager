@@ -16,7 +16,8 @@ import java.util.function.Consumer;
 class DropboxLoginProcedure implements LoginProcedure {
 
     private List<LoginField> fields = new ArrayList<>();
-    private LoginField code, name;
+    private LoginField code;
+    private String accountName;
 
     private DbxWebAuthNoRedirect webAuth;
     private DropboxService service;
@@ -34,16 +35,16 @@ class DropboxLoginProcedure implements LoginProcedure {
     }
 
     @Override
-    public void preLogin() {
-        LoginField text = new LoginField(FieldType.PLAIN_TEXT, "", "login_url_copy_code");
+    public void preLogin(String accountName) {
+        this.accountName = accountName;
+
+        LoginField text = new LoginField(FieldType.PLAIN_TEXT, "", "login_url_copy_code_explanation");
         LoginField url = new LoginField(FieldType.OUTPUT, "login_url", "");
         code = new LoginField(FieldType.INPUT, "login_code", "");
-        name = new LoginField(FieldType.INPUT, "service_name", "");
 
         fields.add(text);
         fields.add(url);
         fields.add(code);
-        fields.add(name);
 
         String authorizeUrl = webAuth.start();
 
@@ -80,14 +81,12 @@ class DropboxLoginProcedure implements LoginProcedure {
         }
 
         // Finish login
-        ServiceAccount account = new ServiceAccount(name.getValue(), DropboxService.SERVICE_NAME, service);
+        ServiceAccount account = new ServiceAccount(accountName, DropboxService.SERVICE_NAME, service);
         account.getAuth().put("access_token", authFinish.getAccessToken());
         service.setAccount(account);
-
-        AccountManager.getInstance().addAccount(account);
-
         service.authenticate();
 
+        AccountManager.getInstance().addAccount(account);
         onComplete.accept(true);
         return true;
     }

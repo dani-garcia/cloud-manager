@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 public interface LoginProcedure {
 
-    void preLogin();
+    void preLogin(String accountName);
 
     List<LoginField> getFields();
 

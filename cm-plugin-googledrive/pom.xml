@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-drive</artifactId>
-            <version>v3-rev17-1.21.0</version>
+            <version>v3-rev18-1.21.0</version>
         </dependency>
 
         <!-- Jetty client for Google Drive Auth to receive the auth code -->

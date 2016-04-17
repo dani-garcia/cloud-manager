@@ -46,7 +46,7 @@ public class AccountLoginController {
 
         FileService service = factory.create();
         login = service.startLoginProcedure();
-        login.preLogin();
+        login.preLogin(nameField.getText());
 
         // Add the fields
         loginForm.getChildren().clear();
@@ -71,7 +71,7 @@ public class AccountLoginController {
                     TextField inputTextField = new TextField();
                     inputTextField.textProperty().addListener((obs, oldVal, newVal) -> field.setValue(newVal));
 
-                    loginForm.add(new Label(field.getName()), 0, row);
+                    loginForm.add(new Label(ResourceManager.getString(field.getName())), 0, row);
                     loginForm.add(inputTextField, 1, row);
                     break;
 
@@ -87,12 +87,14 @@ public class AccountLoginController {
                         clipboard.setContent(content);
                     });
 
-                    loginForm.add(new Label(field.getName()), 0, row);
+                    loginForm.add(new Label(ResourceManager.getString(field.getName())), 0, row);
                     loginForm.add(new BorderPane(readOnlyText, null, copyButton, null, null), 1, row);
                     break;
 
                 case PLAIN_TEXT:
-                    loginForm.add(new Label(field.getValue()), 0, row, 2, 1);
+                    Label label = new Label(ResourceManager.getString(field.getValue()));
+                    label.setWrapText(true);
+                    loginForm.add(label, 0, row, 2, 1);
                     break;
             }
             row++;

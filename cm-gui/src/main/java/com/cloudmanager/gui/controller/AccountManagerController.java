@@ -65,7 +65,7 @@ public class AccountManagerController {
             stage.initOwner(root.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
-            stage.setTitle(ResourceManager.getString("account_login"));
+            stage.setTitle(ResourceManager.getString("login_title"));
             stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
             stage.setScene(new Scene(newWindow));
