@@ -3,9 +3,7 @@ package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.config.AccountManager;
 import com.cloudmanager.core.model.ServiceAccount;
-import com.cloudmanager.core.services.login.LoginField;
-import com.cloudmanager.core.services.login.LoginField.FieldType;
-import com.cloudmanager.core.services.login.LoginProcedure;
+import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
@@ -21,21 +19,16 @@ import javafx.application.Platform;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-class GoogleDriveLoginProcedure implements LoginProcedure {
-    private List<LoginField> fields = new ArrayList<>();
-    private LoginField url;
-    private String accountName;
-
+class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
     private GoogleAuthorizationCodeFlow flow;
-    private VerificationCodeReceiver receiver;
+    private VerificationCodeReceiver server;
 
     private GoogleClientSecrets secrets;
     private GoogleDriveService service;
-
-    private Consumer<Boolean> onComplete;
 
     GoogleDriveLoginProcedure(GoogleClientSecrets secrets, GoogleDriveService service) {
         this.secrets = secrets;
@@ -43,24 +36,7 @@ class GoogleDriveLoginProcedure implements LoginProcedure {
     }
 
     @Override
-    public List<LoginField> getFields() {
-        return fields;
-    }
-
-    @Override
-    public void preLogin(String accountName) {
-        this.accountName = accountName;
-
-        LoginField text = new LoginField(FieldType.PLAIN_TEXT, "", "login_url_auto_code_explanation");
-        url = new LoginField(FieldType.OUTPUT, "login_url", "");
-
-        fields.add(text);
-        fields.add(url);
-
-        setUp();
-    }
-
-    private void setUp() {
+    protected void setUp() {
         HttpTransport httpTransport;
 
         try {
@@ -81,12 +57,10 @@ class GoogleDriveLoginProcedure implements LoginProcedure {
                 .setCredentialDataStore(new CredentialDataStore(authMap))
                 .build();
 
-        receiver = new LocalServerReceiver();
+        server = new LocalServerReceiver();
 
         try {
-            String redirectUri = receiver.getRedirectUri();
-            System.err.println("Redir URI: " + redirectUri);
-
+            String redirectUri = server.getRedirectUri();
             AuthorizationCodeRequestUrl authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectUri);
 
             url.setValue(authorizationUrl.build());
@@ -103,7 +77,7 @@ class GoogleDriveLoginProcedure implements LoginProcedure {
     private void startCodeReceiverThread(String redirectUri, Map<String, String> authMap) {
         Thread thread = new Thread(() -> {
             try {
-                String code = receiver.waitForCode();
+                String code = server.waitForCode();
 
                 TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
 
@@ -134,30 +108,12 @@ class GoogleDriveLoginProcedure implements LoginProcedure {
     }
 
     @Override
-    public void addLoginCompleteListener(Consumer<Boolean> listener) {
-        if (onComplete == null)
-            onComplete = listener;
-        else
-            onComplete = onComplete.andThen(listener);
-    }
-
-    @Override
-    public boolean isPostLoginManual() {
-        return false;
-    }
-
-    @Override
-    public boolean postLogin() {
-        return false;
-    }
-
-    @Override
     public void cancel() {
-        if (receiver == null)
+        if (server == null)
             return;
 
         try {
-            receiver.stop();
+            server.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -9,7 +9,6 @@ import com.cloudmanager.core.util.Util;
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.DbxWebAuthNoRedirect;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
@@ -43,13 +42,13 @@ class DropboxService extends AbstractFileService {
     }
 
     /* Service Name */
-    public static final String SERVICE_NAME = "dropbox";
+    static final String SERVICE_NAME = "dropbox";
 
     /* Setting up request config and api key */
-    private static final DbxRequestConfig requestConfig = new DbxRequestConfig(
+    static final DbxRequestConfig requestConfig = new DbxRequestConfig(
             APP_NAME, ConfigManager.getConfig().getLocale().toString());
 
-    private static final DbxAppInfo appInfo;
+    static final DbxAppInfo appInfo;
 
 
     /*-----------------------*/
@@ -67,7 +66,7 @@ class DropboxService extends AbstractFileService {
 
     @Override
     public LoginProcedure startLoginProcedure() {
-        return new DropboxLoginProcedure(new DbxWebAuthNoRedirect(requestConfig, appInfo), this);
+        return new DropboxLoginProcedure(this);
     }
 
     @Override
