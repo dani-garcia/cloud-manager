@@ -31,7 +31,27 @@ project in your preferred IDE (IntelliJ has Maven support by default, other
 IDEs may need a plugin).
 
 This project requires API keys from Google Drive and Dropbox. As these cannot be distributed publicly,
-you will need to get your own. Then copy `apikeys.properties.sample` to `apikeys.properties` and fill the data.
+you will need to get your own.
+
+To do this:
+ - [Go here](https://console.developers.google.com/project) for Google Drive.
+   - Click `Create project`, name it and click `Create`
+   - On the project main page, search for `Drive API` and enable it
+   - Click on the `Go to credentials` button that appeared
+     - on `Where will you be calling the API from?` select `Other UI`
+     - on `What data will you be accessing?` select `User Data`
+   - Click `What credentials do I need?`
+   - Name the credentials and click `Create client ID`
+   - Select your email, input a product name and click `Continue`
+   - Download your credentials
+
+ - [Go here](https://www.dropbox.com/developers/apps) for Dropbox.
+   - Click `Create App`, choose the Dropbox API and wichever access you want, give it a name and click `Create App`
+   - On the settings page, take note of the `App key` and the`App secret`
+   - On that same page, set `Allow implicit grant` to true, and add the redirect URL under `Redirect URIs`
+   ( by default, use `http://localhost:41325/auth`)
+
+Once you have the API keys, copy `apikeys.properties.sample` to `apikeys.properties` and fill the data.
 
 If running the project from the IDE returns an error saying `the API keys are not set`, you might
 need to run `maven install` before (This can usually be configured in the IDE's run configuration).
@@ -53,7 +73,8 @@ $ mvn jfx:jar       # To compile the .jar only
 $ mvn jfx:native    # To compile the .jar and the natives
 ```
 
-This will place the .jar file and the required libraries in the `cm-gui/target/jfx/app` folder and the native files in the `cm-gui/target/jfx/native` folder.
+This will place the .jar file and the required libraries in the `cm-gui/target/jfx/app` folder
+and the native files in the `cm-gui/target/jfx/native` folder.
 
 ## Credits
 Daniel García García <UO231763@uniovi.es>
