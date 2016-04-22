@@ -30,10 +30,10 @@ public abstract class AbstractFileViewController {
     }
 
     @FXML
-    protected TreeView<ModelFile> fileTree;
+    TreeView<ModelFile> fileTree;
 
     @FXML
-    protected TableView<ModelFile> fileTable;
+    private TableView<ModelFile> fileTable;
 
     @FXML
     private TableColumn<ModelFile, ImageView> iconColumn;

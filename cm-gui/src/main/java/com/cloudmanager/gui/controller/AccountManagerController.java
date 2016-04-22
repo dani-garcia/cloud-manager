@@ -22,19 +22,19 @@ public class AccountManagerController {
     private Parent root;
 
     @FXML
-    public TableView<ServiceAccount> accountTable;
+    private TableView<ServiceAccount> accountTable;
 
     @FXML
-    public TableColumn<ServiceAccount, ImageView> iconColumn;
+    private TableColumn<ServiceAccount, ImageView> iconColumn;
     @FXML
-    public TableColumn<ServiceAccount, String> serviceNameColumn;
+    private TableColumn<ServiceAccount, String> serviceNameColumn;
     @FXML
-    public TableColumn<ServiceAccount, String> accountNameColumn;
+    private TableColumn<ServiceAccount, String> accountNameColumn;
 
     @FXML
-    public Button newButton;
+    private Button newButton;
     @FXML
-    public Button removeButton;
+    private Button removeButton;
 
     @FXML
     private void initialize() {
@@ -51,7 +51,7 @@ public class AccountManagerController {
             return new SimpleObjectProperty<>(view);
         });
 
-        serviceNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getServiceName()));
+        serviceNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getService().getServiceDisplayName()));
         accountNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
 
         setButtons();
