@@ -6,6 +6,7 @@ import com.cloudmanager.core.services.factories.ServiceFactoryLocator;
 import com.cloudmanager.core.services.login.LoginField;
 import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.gui.util.ResourceManager;
+import com.cloudmanager.gui.view.ServiceFactoryListCell;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -31,7 +32,10 @@ public class AccountLoginController {
 
     @FXML
     private void initialize() {
+        serviceSelector.setCellFactory(val -> new ServiceFactoryListCell());
+        serviceSelector.setButtonCell(new ServiceFactoryListCell());
         serviceSelector.getItems().setAll(ServiceFactoryLocator.listAll());
+
         serviceSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> loadWindow(newValue));
 
         serviceSelector.disableProperty().bind(nameField.textProperty().isEmpty()); // TODO Comprobar que nombre ya existe?

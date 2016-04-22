@@ -29,6 +29,11 @@ public class LocalService extends AbstractFileService {
     }
 
     @Override
+    public String getServiceDisplayName() {
+        return SERVICE_NAME;
+    }
+
+    @Override
     public ModelFile getRootFile() {
         // We might have more than one root (e.g. in Windows we have one root per drive),
         // so we create a fake node and add the real roots as its children

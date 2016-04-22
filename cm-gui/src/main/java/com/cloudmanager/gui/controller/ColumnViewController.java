@@ -40,7 +40,7 @@ public class ColumnViewController {
 
         loadSelection();
 
-        // TODO
+        // TODO Implement the reload button
         reloadButton.setOnAction(event -> select(null));
     }
 

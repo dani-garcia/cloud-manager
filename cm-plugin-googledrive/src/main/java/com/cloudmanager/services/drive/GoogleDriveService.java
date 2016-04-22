@@ -46,8 +46,10 @@ class GoogleDriveService extends AbstractFileService {
         secrets = new GoogleClientSecrets().setInstalled(new Details().setClientId(key).setClientSecret(secret));
     }
 
-    /* Service Name */
+    /* Service Name and Icon */
     public static final String SERVICE_NAME = "googledrive";
+    public static final String SERVICE_DISPLAY_NAME = "Google Drive";
+    public static final String SERVICE_ICON = "/branding/googledrive-icon.png";
 
     /*Google Drive folder type. Used to differenciate folders from normal files */
     private static final String MIME_FOLDER = "application/vnd.google-apps.folder";
@@ -66,7 +68,12 @@ class GoogleDriveService extends AbstractFileService {
     }
 
     @Override
-    public String getIcon() {return "/branding/googledrive-icon.png";}
+    public String getServiceDisplayName() {
+        return SERVICE_DISPLAY_NAME;
+    }
+
+    @Override
+    public String getIcon() {return SERVICE_ICON;}
 
     @Override
     public LoginProcedure startLoginProcedure() {

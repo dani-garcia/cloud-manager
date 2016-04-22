@@ -12,6 +12,16 @@ public class DropboxServiceFactory implements ServiceFactory {
     }
 
     @Override
+    public String getServiceDisplayName() {
+        return DropboxService.SERVICE_DISPLAY_NAME;
+    }
+
+    @Override
+    public String getIcon() {
+        return DropboxService.SERVICE_ICON;
+    }
+
+    @Override
     public FileService create() {
         return new DropboxService();
     }

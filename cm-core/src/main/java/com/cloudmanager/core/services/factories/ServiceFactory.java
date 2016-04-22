@@ -7,6 +7,10 @@ public interface ServiceFactory {
 
     String getServiceName();
 
+    String getServiceDisplayName();
+
+    String getIcon();
+
     FileService create();
 
     FileService create(ServiceAccount account);

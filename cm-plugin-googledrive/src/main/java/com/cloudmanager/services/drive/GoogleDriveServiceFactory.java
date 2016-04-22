@@ -12,6 +12,16 @@ public class GoogleDriveServiceFactory implements ServiceFactory {
     }
 
     @Override
+    public String getServiceDisplayName() {
+        return GoogleDriveService.SERVICE_DISPLAY_NAME;
+    }
+
+    @Override
+    public String getIcon() {
+        return GoogleDriveService.SERVICE_ICON;
+    }
+
+    @Override
     public FileService create() {
         return new GoogleDriveService();
     }

@@ -41,8 +41,10 @@ class DropboxService extends AbstractFileService {
         appInfo = new DbxAppInfo(key, secret);
     }
 
-    /* Service Name */
-    static final String SERVICE_NAME = "dropbox";
+    /* Service Name  and Icon */
+    public static final String SERVICE_NAME = "dropbox";
+    public static final String SERVICE_DISPLAY_NAME = "Dropbox";
+    public static final String SERVICE_ICON = "/branding/dropbox-icon.png";
 
     /* Setting up request config and api key */
     static final DbxRequestConfig requestConfig = new DbxRequestConfig(
@@ -62,7 +64,12 @@ class DropboxService extends AbstractFileService {
     }
 
     @Override
-    public String getIcon() {return "/branding/dropbox-icon.png";}
+    public String getServiceDisplayName() {
+        return SERVICE_DISPLAY_NAME;
+    }
+
+    @Override
+    public String getIcon() {return SERVICE_ICON;}
 
     @Override
     public LoginProcedure startLoginProcedure() {

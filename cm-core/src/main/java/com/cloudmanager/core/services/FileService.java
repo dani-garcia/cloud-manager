@@ -19,6 +19,8 @@ public interface FileService {
     // Service Info
     String getServiceName();
 
+    String getServiceDisplayName();
+
     String getAccountOwner();
 
     String getIcon();
