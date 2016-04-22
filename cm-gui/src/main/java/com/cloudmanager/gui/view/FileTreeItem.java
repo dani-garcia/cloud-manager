@@ -63,7 +63,7 @@ public class FileTreeItem extends TreeItem<ModelFile> {
 
             // We take the children from the model and add it to the tree
             getValue().getChildren().stream()
-                    .filter(f -> f.getType().equals(ModelFile.Type.FOLDER)) // Only show folders in the tree
+                    .filter(ModelFile::isFolder) // Only show folders in the tree
                     .map(f -> new FileTreeItem(f, fs, treeItemListener))
                     .forEach(super.getChildren()::add);
         }

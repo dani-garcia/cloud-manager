@@ -1,9 +1,10 @@
 package com.cloudmanager.core.util;
 
 
-import java.awt.Desktop;
-import java.io.*;
-import java.net.URI;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,32 +13,20 @@ import java.util.regex.Pattern;
 
 public final class Util {
 
-    public static String consoleReadLine() {
-        try {
-            return new BufferedReader(new InputStreamReader(System.in)).readLine();
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
     public static String[] splitDir(String dir) {
         return dir.split(Pattern.quote(File.separator), -1);
     }
 
-    public static void openInBrowser(String url) {
-        System.out.println(url);
-
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop e = Desktop.getDesktop();
-                if (e.isSupported(Desktop.Action.BROWSE)) {
-                    System.out.println("Attempting to open that address in the default browser now...");
-                    e.browse(URI.create(url));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static long copy(InputStream source, OutputStream sink)
+            throws IOException {
+        long nread = 0L;
+        byte[] buf = new byte[4096];
+        int n;
+        while ((n = source.read(buf)) > 0) {
+            sink.write(buf, 0, n);
+            nread += n;
         }
+        return nread;
     }
 
     public static Map<String, String> getPropertiesMap(Class clazz, String path) {

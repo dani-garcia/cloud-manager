@@ -144,15 +144,12 @@ public class ModelFile implements Comparable<ModelFile> {
         return thisFile;
     }
 
-    public boolean isParentOf(ModelFile thatFile) {
-        while (thatFile.getParent() != null) {
-            thatFile = thatFile.getParent();
+    public boolean isFile() {
+        return type == Type.FILE;
+    }
 
-            if (this.equals(thatFile))
-                return true;
-        }
-
-        return false;
+    public boolean isFolder() {
+        return type == Type.FOLDER;
     }
 
     public void selectFile() {

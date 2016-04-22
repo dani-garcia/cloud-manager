@@ -4,6 +4,7 @@ import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
 import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
+import com.cloudmanager.core.util.Util;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
@@ -43,7 +44,7 @@ public class LocalService extends AbstractFileService {
 
     @Override
     public List<ModelFile> getChildren(ModelFile parent) {
-        if (parent.getType() != ModelFile.Type.FOLDER)
+        if (!parent.isFolder())
             return null;
 
         File[] files = new File(parent.getPath()).listFiles();
@@ -77,11 +78,14 @@ public class LocalService extends AbstractFileService {
     public boolean receiveFile(FileTransfer transfer) {
         String targetPath = getCurrentDir().getPath();
         String targetName = transfer.getTargetFileName();
-        InputStream stream = transfer.getContentStream();
+        File targetFile = new File(targetPath, targetName);
 
-        try {
-            Files.copy(stream, new File(targetPath, targetName).toPath());
-            stream.close();
+        try (InputStream input = transfer.getContentStream();
+             FileOutputStream output = new FileOutputStream(targetFile)) {
+
+            output.getChannel().lock(); // Lock the file
+
+            Util.copy(input, output);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

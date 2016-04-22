@@ -11,9 +11,13 @@
     </top>
 
     <center>
-        <SplitPane nodeOrientation="LEFT_TO_RIGHT" BorderPane.alignment="CENTER">
+        <SplitPane>
             <fx:include fx:id="leftColumn" source="ColumnViewBorderPane.fxml"/>
             <fx:include fx:id="rightColumn" source="ColumnViewBorderPane.fxml"/>
         </SplitPane>
     </center>
+
+    <bottom>
+        <fx:include source="DownloadBar.fxml"/>
+    </bottom>
 </BorderPane>

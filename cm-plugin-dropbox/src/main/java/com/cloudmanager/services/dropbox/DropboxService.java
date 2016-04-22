@@ -130,7 +130,7 @@ class DropboxService extends AbstractFileService {
 
     @Override
     public List<ModelFile> getChildren(ModelFile parent) {
-        if (parent.getType() != ModelFile.Type.FOLDER)
+        if (!parent.isFolder())
             return null;
 
         try {

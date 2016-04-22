@@ -19,8 +19,7 @@ public class DownloadService {
     public void transferFile(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         // TODO Error si el archivo ya existe
         // TODO Si son el mismo servicio, comprobar que no intentamos mover un archivo dentro de si mismo o similar
-        // TODO Si estamos moviendo ua carpeta, copiar recursivamente su contenido
-        // TODO Gestor de transferencias y barras de progreso en segundo plano
+        // TODO Si estamos moviendo una carpeta, copiar recursivamente su contenido
 
         // If we don't get a target, assume the current directory
         if (targetFolder == null)
@@ -49,10 +48,15 @@ public class DownloadService {
 
     private void transferToAnotherService(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         new Thread(() -> {
+            // Create the file trasfer, add the listener and notify the start of the download
             FileTransfer transfer = origin.sendFile(file);
             transfer.addProgressListener(listener);
+            listener.accept(file, 0d);
+
+            // Start receiving the file in the background
             target.receiveFile(transfer);
 
+            // Refresh the target directory once complete
             targetFolder.refreshChildren();
         }).start();
     }

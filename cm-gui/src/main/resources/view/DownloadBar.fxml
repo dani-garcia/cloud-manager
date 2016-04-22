@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.VBox?>
+<Accordion xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="root"
+           fx:controller="com.cloudmanager.gui.controller.DownloadController">
+    <panes>
+        <TitledPane fx:id="downloadPane" animated="true">
+            <VBox fx:id="downloadsBox" prefHeight="200.0" spacing="5">
+                <padding>
+                    <Insets bottom="5" left="5" right="5" top="5"/>
+                </padding>
+            </VBox>
+        </TitledPane>
+    </panes>
+</Accordion>

@@ -16,31 +16,24 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 final class CodeReceiverServer {
-    private static final String DEFAULT_HOST = "localhost";
-    private static final int DEFAULT_PORT = 41325;
-    private static final String DEFAULT_PATH = "/auth";
+    private static final String HOST = "localhost";
+    private static final int PORT = 41325;
+    private static final String PATH = "/auth";
 
     private Server server;
-
-    private final String host;
-    private int port;
 
     private Map<String, String[]> responseMap;
 
     private final Lock lock = new ReentrantLock();
     private final Condition gotAuthorizationResponse = lock.newCondition();
 
-    CodeReceiverServer() throws IOException {
-        this.host = DEFAULT_HOST;
-        this.port = DEFAULT_PORT;
+    void start() throws IOException {
+        if (server != null)
+            return;
 
-        start();
-    }
-
-    private void start() throws IOException {
-        server = new Server(port);
-
+        server = new Server(PORT);
         server.setHandler(new CallbackHandler());
+
         try {
             server.start();
         } catch (Exception e) {
@@ -49,7 +42,7 @@ final class CodeReceiverServer {
     }
 
     String getRedirectUri() throws IOException {
-        return "http://" + host + ":" + port + DEFAULT_PATH;
+        return "http://" + HOST + ":" + PORT + PATH;
     }
 
     Map<String, String[]> waitForCode() throws IOException {
@@ -81,7 +74,7 @@ final class CodeReceiverServer {
         @Override
         public void handle(String target, Request request, HttpServletRequest servletRequest, HttpServletResponse response)
                 throws IOException, ServletException {
-            if (!DEFAULT_PATH.equals(target)) {
+            if (!PATH.equals(target)) {
                 return;
             }
             writeLandingHtml(response);

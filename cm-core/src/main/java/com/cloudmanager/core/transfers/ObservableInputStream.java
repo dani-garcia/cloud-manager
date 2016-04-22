@@ -8,7 +8,7 @@ import java.util.function.BiConsumer;
  * InputStream that notifies listeners of its progress.
  */
 public class ObservableInputStream<T> extends InputStream {
-    private static final int percentStep = 5;
+    private static final int percentStep = 1;
 
     private final InputStream contentStream;
     private final long size;

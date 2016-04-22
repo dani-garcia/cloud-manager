@@ -1,11 +1,9 @@
-
 package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.config.AccountManager;
 import com.cloudmanager.core.model.ServiceAccount;
 import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -82,7 +80,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
 
                 // store credential
-                Credential credential = flow.createAndStoreCredential(response, "user");
+                flow.createAndStoreCredential(response, "user");
 
                 // Finish login
                 ServiceAccount account = new ServiceAccount(accountName, GoogleDriveService.SERVICE_NAME, service);

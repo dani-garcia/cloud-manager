@@ -25,6 +25,7 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
     protected void setUp() {
         try {
             server = new CodeReceiverServer();
+            server.start();
 
             this.webAuth = new DbxWebAuth(DropboxService.requestConfig,
                     DropboxService.appInfo,

@@ -1,15 +1,12 @@
 package com.cloudmanager.gui;
 
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.services.DownloadService;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.Locale;
@@ -59,20 +56,5 @@ public class MainApp extends Application {
 
         // Show stage
         primaryStage.show();
-
-        // TODO Temporary
-        DownloadService.get().addProgressListener((f, p) -> {
-            if (p < 100) {
-                System.out.println(p);
-                return;
-            }
-
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setContentText("Moved '" + f.getName());
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.show();
-            });
-        });
     }
 }

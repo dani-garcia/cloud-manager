@@ -68,7 +68,7 @@ public class DraggableFileHandler {
 
                     // If it's dropped on a folder (and not on itself)
                 } else if (!targetFile.get().equals(draggedFiles.get(fileId))
-                        && targetFile.get().getType().equals(ModelFile.Type.FOLDER)) {
+                        && targetFile.get().isFolder()) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
                 }
             }

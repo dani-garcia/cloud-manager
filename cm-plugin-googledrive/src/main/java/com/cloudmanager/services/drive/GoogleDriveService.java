@@ -94,12 +94,7 @@ class GoogleDriveService extends AbstractFileService {
                     .setCredentialDataStore(new CredentialDataStore(getAccount()))
                     .build();
 
-            // TODO Para evitar que abra el enlace automaticamente, reemplazar la clase 'AuthorizationCodeInstalledApp'
-            // TODO Tiene poco codigo, asi que debe ser facil de integrar
-            // Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
-
             Credential credential = flow.loadCredential("user");
-
             if (credential == null || credential.getRefreshToken() == null) {
                 return false;
             }
@@ -181,7 +176,7 @@ class GoogleDriveService extends AbstractFileService {
 
     @Override
     public List<ModelFile> getChildren(ModelFile parent) {
-        if (parent.getType() != ModelFile.Type.FOLDER)
+        if (!parent.isFolder())
             return null;
 
         try {
