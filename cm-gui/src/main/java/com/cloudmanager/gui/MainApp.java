@@ -1,12 +1,15 @@
 package com.cloudmanager.gui;
 
 import com.cloudmanager.core.config.ConfigManager;
+import com.cloudmanager.core.services.DownloadService;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.util.Locale;
@@ -56,5 +59,21 @@ public class MainApp extends Application {
 
         // Show stage
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(e -> {
+            if (DownloadService.get().getTransfersInProgress() > 0) {
+
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle(ResourceManager.getString("unfinished_transfers"));
+                alert.setHeaderText(ResourceManager.getString("unfinished_transfers"));
+                alert.setContentText(ResourceManager.getString("unfinished_transfers_really_close"));
+
+                alert.showAndWait().ifPresent(type -> {
+                    if (type == ButtonType.CANCEL || type == ButtonType.CLOSE) {
+                        e.consume();
+                    }
+                });
+            }
+        });
     }
 }

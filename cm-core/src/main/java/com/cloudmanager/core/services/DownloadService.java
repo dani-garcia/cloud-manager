@@ -3,6 +3,9 @@ package com.cloudmanager.core.services;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.transfers.FileTransfer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class DownloadService {
@@ -15,6 +18,8 @@ public class DownloadService {
     private DownloadService() { }
 
     private BiConsumer<ModelFile, Double> listener;
+
+    private List<Thread> transfersInProgress = Collections.synchronizedList(new ArrayList<>());
 
     public void transferFile(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         // TODO Error si el archivo ya existe
@@ -47,7 +52,7 @@ public class DownloadService {
     }
 
     private void transferToAnotherService(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             // Create the file trasfer, add the listener and notify the start of the download
             FileTransfer transfer = origin.sendFile(file);
             transfer.addProgressListener(listener);
@@ -58,7 +63,20 @@ public class DownloadService {
 
             // Refresh the target directory once complete
             targetFolder.refreshChildren();
-        }).start();
+
+            // Remove the thread from the transfer in progress
+            transfersInProgress.remove(Thread.currentThread());
+        });
+
+        // Add the transfer in progress
+        transfersInProgress.add(thread);
+
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    public int getTransfersInProgress() {
+        return transfersInProgress.size();
     }
 
     public void addProgressListener(BiConsumer<ModelFile, Double> otherListener) {
