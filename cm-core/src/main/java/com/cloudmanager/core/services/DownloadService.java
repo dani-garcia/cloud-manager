@@ -43,12 +43,11 @@ public class DownloadService {
     private void moveOnSameService(FileService service, ModelFile file, ModelFile targetFolder) {
         service.moveFile(file, targetFolder);
 
-        ModelFile ancestor = file.getCommonAncestor(targetFolder);
-        ancestor.selectFile();
-
-        targetFolder.refreshChildren();
+        // TODO En ciertas ocasiones no recarga bien los ficheros
+        // EJ Tenemos la carpeta aa/bb y aa/cc
+        // Si arrastramos un fichero de una a otra, aparecerá en los dos lados hasta que se recargue
         file.refreshFile();
-        targetFolder.selectFile();
+        targetFolder.refreshChildren();
     }
 
     private void transferToAnotherService(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {

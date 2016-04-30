@@ -76,18 +76,17 @@ public class FileTreeItem extends TreeItem<ModelFile> {
                     switch (e) {
                         case FILE_UPDATED:
                             file.getParent().refreshChildren();
-                            break;
+                            break; // Refresh the parents children to refresh this file
 
                         case CHILDREN_UPDATED:
-                            // Refresh children
                             forceRefresh = true;
-                            // Fall through
+                            break; // Refresh children
 
                         case FILE_SELECTED:
-                            // Update the interface
-                            Platform.runLater(() -> treeItemListener.accept(this, e));
-                            break;
+                            break; // Don't do anything, only call the listener
                     }
+
+                    Platform.runLater(() -> treeItemListener.accept(this, e));
                 }
         );
     }

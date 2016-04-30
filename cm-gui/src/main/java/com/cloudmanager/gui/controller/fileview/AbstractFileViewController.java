@@ -1,6 +1,7 @@
 package com.cloudmanager.gui.controller.fileview;
 
 import com.cloudmanager.core.model.ModelFile;
+import com.cloudmanager.core.model.ModelFile.Event;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.core.services.local.LocalService;
 import com.cloudmanager.gui.util.ResourceManager;
@@ -67,22 +68,16 @@ public abstract class AbstractFileViewController {
     protected abstract void loadComponents(TreeItem<ModelFile> rootItem);
 
     private void processFileEvents(TreeItem<ModelFile> item, ModelFile.Event event) {
-        switch (event) {
-            case FILE_UPDATED:
-                fileTree.getSelectionModel().select(item);
-                break;
-
-            case CHILDREN_UPDATED:
-                reloadTableSelection(item);
-                break;
-
-            case FILE_SELECTED:
-                scrollTo(item);
-                break;
+        if (event == Event.FILE_UPDATED) {
+            // If we updated the file, we need to find it again
+            item = findItem(item.getValue().getPath());
         }
+
+        select(item);
+        onSelectionChanged(item);
     }
 
-    private void reloadTableSelection(TreeItem<ModelFile> selection) {
+    private void onSelectionChanged(TreeItem<ModelFile> selection) {
         if (selection != null)
             this.selection = selection;
 
@@ -92,15 +87,34 @@ public abstract class AbstractFileViewController {
         fileTable.getItems().setAll(this.selection.getValue().getChildren());
     }
 
-    void scrollTo(TreeItem<ModelFile> item) {
+    void select(TreeItem<ModelFile> item) {
         item.setExpanded(true);
         fileTree.getSelectionModel().select(item);
+    }
 
+    void scrollTo(TreeItem<ModelFile> item) {
         int row = fileTree.getRow(item);
         // Leave a bit of space on the top if possible
         row = Math.max(row - 2, 0);
 
         fileTree.scrollTo(row);
+    }
+
+    TreeItem<ModelFile> findItem(String target) {
+        return findItem(fileTree.getRoot(), target);
+    }
+
+    private TreeItem<ModelFile> findItem(TreeItem<ModelFile> root, String target) {
+        if (target.contains(root.getValue().getPath())) {
+
+            for (TreeItem<ModelFile> child : root.getChildren()) {
+                if (target.contains(child.getValue().getPath())) {
+                    return findItem(child, target);
+                }
+            }
+        }
+
+        return root;
     }
 
     private void loadTree(TreeItem<ModelFile> rootItem) {
@@ -112,7 +126,7 @@ public abstract class AbstractFileViewController {
         ///////
         // On item selected, fill the table
         fileTree.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            reloadTableSelection(newVal);
+            onSelectionChanged(newVal);
         });
 
         ///////

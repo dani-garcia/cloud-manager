@@ -2,6 +2,7 @@ package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
 
@@ -14,13 +15,13 @@ public class DraggableTableRow extends TableRow<ModelFile> {
     }
 
     private void createContextMenu(FileService service) {
-        MenuItem removeMenuItem = new MenuItem("Remove");
+        MenuItem removeMenuItem = new MenuItem(ResourceManager.getString("remove"));
         removeMenuItem.setOnAction(e -> {
             service.deleteFile(getItem());
             getItem().refreshFile();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText(getItem() + " deleted.");
+            alert.setContentText(ResourceManager.getString("file_removed", getItem().getName()));
             alert.show();
         });
 
