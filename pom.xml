@@ -52,53 +52,6 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
-
-            <!-- Directory plugin to find parent root directory absolute path -->
-            <plugin>
-                <groupId>org.commonjava.maven.plugins</groupId>
-                <artifactId>directory-maven-plugin</artifactId>
-                <version>0.1</version>
-                <executions>
-                    <execution>
-                        <id>directories</id>
-                        <goals>
-                            <goal>highest-basedir</goal>
-                        </goals>
-                        <phase>initialize</phase>
-                        <configuration>
-                            <property>main.basedir</property>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Replace API keys -->
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>replacer</artifactId>
-                <version>1.5.3</version>
-                <executions>
-                    <execution>
-                        <id>replace-tokens</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <delimiters>
-                        <delimiter>@@</delimiter>
-                    </delimiters>
-                    <includes>
-                        <include>${project.build.directory}/**/*.apikey</include>
-                    </includes>
-                    <tokenValueMap>${main.basedir}/apikeys.properties</tokenValueMap>
-
-                    <!-- If we can't fid the API keys, keep going -->
-                    <!-- <ignoreErrors>true</ignoreErrors> -->
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>

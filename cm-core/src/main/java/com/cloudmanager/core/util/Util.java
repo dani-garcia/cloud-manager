@@ -1,7 +1,6 @@
 package com.cloudmanager.core.util;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,14 +8,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 public final class Util {
-
-    public static String[] splitDir(String dir) {
-        return dir.split(Pattern.quote(File.separator), -1);
-    }
-
     public static long copy(InputStream source, OutputStream sink)
             throws IOException {
         long nread = 0L;

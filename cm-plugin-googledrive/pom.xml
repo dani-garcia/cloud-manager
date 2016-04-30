@@ -19,13 +19,14 @@
             <groupId>com.cloudmanager</groupId>
             <artifactId>cm-core</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Google Drive API -->
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-drive</artifactId>
-            <version>v3-rev18-1.21.0</version>
+            <version>v3-rev22-1.21.0</version>
         </dependency>
 
         <!-- Jetty client for Google Drive Auth to receive the auth code -->
@@ -37,7 +38,34 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
+            <!-- Load properties from file -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>apikeys.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Compile the plugin and all the dependencies in a single jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

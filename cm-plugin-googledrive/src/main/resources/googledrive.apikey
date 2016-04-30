@@ -1,2 +1,2 @@
-key=@@GOOGLEDRIVE_KEY@@
-secret=@@GOOGLEDRIVE_SECRET@@
+key=${drive.key}
+secret=${drive.secret}

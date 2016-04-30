@@ -5,7 +5,6 @@ import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
 import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
-import com.cloudmanager.core.util.Util;
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
@@ -20,27 +19,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 class DropboxService extends AbstractFileService {
-    static {
-        // Load the API keys
-        Map<String, String> properties = Util.getPropertiesMap(DropboxService.class, "dropbox.apikey");
-
-        final String key = properties.get("key");
-        final String secret = properties.get("secret");
-
-        // Check if they are present
-        if (key.startsWith("@@") || secret.startsWith("@@")) {
-            System.err.println("Dropbox API Keys not set!");
-            System.exit(-7);
-        }
-
-        // Set the API keys
-        appInfo = new DbxAppInfo(key, secret);
-    }
-
     /* Service Name  and Icon */
     public static final String SERVICE_NAME = "dropbox";
     public static final String SERVICE_DISPLAY_NAME = "Dropbox";
@@ -50,8 +31,8 @@ class DropboxService extends AbstractFileService {
     static final DbxRequestConfig requestConfig = new DbxRequestConfig(
             APP_NAME, ConfigManager.getConfig().getLocale().toString());
 
-    static final DbxAppInfo appInfo;
-
+    // Set the API keys
+    static final DbxAppInfo appInfo = new DbxAppInfo(DropboxApiKeys.KEY, DropboxApiKeys.SECRET);
 
     /*-----------------------*/
     /* Dropbox service class */

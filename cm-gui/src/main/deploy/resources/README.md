@@ -51,7 +51,7 @@ To do this:
    - On that same page, set `Allow implicit grant` to true, and add the redirect URL under `Redirect URIs`
    ( by default, use `http://localhost:41325/auth`)
 
-Once you have the API keys, copy `apikeys.properties.sample` to `apikeys.properties` and fill the data.
+Once you have the API keys, go to each plugins folder, copy `apikeys.properties.sample` to `apikeys.properties` and fill the data.
 
 If running the project from the IDE returns an error saying `the API keys are not set`, you might
 need to run `maven install` before (This can usually be configured in the IDE's run configuration).

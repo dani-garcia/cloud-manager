@@ -11,11 +11,13 @@ machine:
 
 dependencies:
   override:
-    - cp apikeys.properties.sample apikeys.properties
-    - sed -i "s/<DB_KEY>/$DB_KEY/g" apikeys.properties
-    - sed -i "s/<DB_SECRET>/$DB_SECRET/g" apikeys.properties
-    - sed -i "s/<GD_KEY>/$GD_KEY/g" apikeys.properties
-    - sed -i "s/<GD_SECRET>/$GD_SECRET/g" apikeys.properties
+    # Dropbox API key
+    - cp cm-plugin-dropbox/apikeys.properties.sample cm-plugin-dropbox/apikeys.properties
+    - sed -i -e "s/<DB_KEY>/$DB_KEY/g" -e "s/<DB_SECRET>/$DB_SECRET/g" cm-plugin-dropbox/apikeys.properties
+    # Google Drive API key
+    - cp cm-plugin-googledrive/apikeys.properties.sample cm-plugin-googledrive/apikeys.properties
+    - sed -i -e "s/<GD_KEY>/$GD_KEY/g" -e "s/<GD_SECRET>/$GD_SECRET/g" cm-plugin-googledrive/apikeys.properties
+    # Install dependencies
     - mvn install
 test:
   post:

@@ -1,0 +1,4 @@
+# Rename this file to apikeys.properties and put your API keys here
+# Google Drive
+drive.key=<GD_KEY>
+drive.secret=<GD_SECRET>

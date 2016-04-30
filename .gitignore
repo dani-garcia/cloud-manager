@@ -17,6 +17,11 @@ target/
 /out/
 *.iml
 
+### Eclipse ###
+.settings/
+.project
+.classpath
+
 ### Private Info ###
 apikeys.properties
-**/config/config.json
+config/config.json

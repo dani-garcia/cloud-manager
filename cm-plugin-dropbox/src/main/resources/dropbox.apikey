@@ -1,2 +1,2 @@
-key=@@DROPBOX_KEY@@
-secret=@@DROPBOX_SECRET@@
+key=${dropbox.key}
+secret=${dropbox.secret}

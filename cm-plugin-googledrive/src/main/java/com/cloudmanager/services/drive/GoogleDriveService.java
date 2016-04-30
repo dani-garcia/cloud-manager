@@ -4,7 +4,6 @@ import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
 import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
-import com.cloudmanager.core.util.Util;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -25,27 +24,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 class GoogleDriveService extends AbstractFileService {
-    static {
-        // Load the API keys
-        Map<String, String> properties = Util.getPropertiesMap(GoogleDriveService.class, "googledrive.apikey");
-
-        final String key = properties.get("key");
-        final String secret = properties.get("secret");
-
-        // Check if they are present
-        if (key.startsWith("@@") || secret.startsWith("@@")) {
-            System.err.println("Google Drive API Keys not set!");
-            System.exit(-7);
-        }
-
-        // Set the API keys
-        secrets = new GoogleClientSecrets().setInstalled(new Details().setClientId(key).setClientSecret(secret));
-    }
-
     /* Service Name and Icon */
     public static final String SERVICE_NAME = "googledrive";
     public static final String SERVICE_DISPLAY_NAME = "Google Drive";
@@ -54,7 +39,12 @@ class GoogleDriveService extends AbstractFileService {
     /*Google Drive folder type. Used to differenciate folders from normal files */
     private static final String MIME_FOLDER = "application/vnd.google-apps.folder";
 
-    private static final GoogleClientSecrets secrets;
+    // Set the API keys
+    private static final GoogleClientSecrets secrets = new GoogleClientSecrets()
+            .setInstalled(
+                    new Details()
+                            .setClientId(GoogleDriveApiKeys.KEY)
+                            .setClientSecret(GoogleDriveApiKeys.SECRET));
 
 
     /*----------------------------*/
