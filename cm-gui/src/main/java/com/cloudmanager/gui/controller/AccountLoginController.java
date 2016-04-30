@@ -1,5 +1,7 @@
 package com.cloudmanager.gui.controller;
 
+import com.cloudmanager.core.config.AccountManager;
+import com.cloudmanager.core.model.ServiceAccount;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.core.services.factories.ServiceFactory;
 import com.cloudmanager.core.services.factories.ServiceFactoryLocator;
@@ -7,6 +9,7 @@ import com.cloudmanager.core.services.login.LoginField;
 import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.ServiceFactoryListCell;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -111,15 +114,20 @@ public class AccountLoginController {
         }
     }
 
-    private void loginCompleted(boolean success) {
-        if (success) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("account_added"));
-            alert.show();
+    private void loginCompleted(boolean success, ServiceAccount account) {
+        Platform.runLater(() -> {
+            if (success) {
+                // Add the account
+                AccountManager.getInstance().addAccount(account);
 
-            ((Stage) root.getScene().getWindow()).close();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_account"));
-            alert.showAndWait();
-        }
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("account_added"));
+                alert.show();
+
+                ((Stage) root.getScene().getWindow()).close();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_account"));
+                alert.showAndWait();
+            }
+        });
     }
 }

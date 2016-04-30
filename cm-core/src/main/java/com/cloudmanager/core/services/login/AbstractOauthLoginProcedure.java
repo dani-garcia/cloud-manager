@@ -1,17 +1,18 @@
 package com.cloudmanager.core.services.login;
 
+import com.cloudmanager.core.model.ServiceAccount;
 import com.cloudmanager.core.services.login.LoginField.FieldType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public abstract class AbstractOauthLoginProcedure implements LoginProcedure {
     private List<LoginField> fields = new ArrayList<>();
     protected LoginField url;
     protected String accountName;
 
-    protected Consumer<Boolean> onComplete;
+    protected BiConsumer<Boolean, ServiceAccount> onComplete;
 
     @Override
     public void preLogin(String accountName) {
@@ -44,7 +45,7 @@ public abstract class AbstractOauthLoginProcedure implements LoginProcedure {
     }
 
     @Override
-    public void addLoginCompleteListener(Consumer<Boolean> listener) {
+    public void addLoginCompleteListener(BiConsumer<Boolean, ServiceAccount> listener) {
         if (onComplete == null)
             onComplete = listener;
         else

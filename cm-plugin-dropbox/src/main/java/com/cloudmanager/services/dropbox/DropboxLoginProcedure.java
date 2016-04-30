@@ -1,13 +1,11 @@
 package com.cloudmanager.services.dropbox;
 
-import com.cloudmanager.core.config.AccountManager;
 import com.cloudmanager.core.model.ServiceAccount;
 import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
 import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.DbxWebAuth.*;
-import javafx.application.Platform;
 
 import java.io.IOException;
 import java.util.Map;
@@ -39,7 +37,7 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
 
         } catch (IOException e) {
             e.printStackTrace();
-            onComplete.accept(false);
+            onComplete.accept(false, null);
             cancel();
         }
     }
@@ -55,11 +53,11 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
                     authFinish = webAuth.finish(authMap);
                 } catch (DbxException | BadRequestException | ProviderException | CsrfException | BadStateException e) {
                     e.printStackTrace();
-                    Platform.runLater(() -> onComplete.accept(false)); // Other error
+                    onComplete.accept(false, null); // Other error
                     return;
                 } catch (NotApprovedException e) {
                     e.printStackTrace(); // User denied access
-                    Platform.runLater(() -> onComplete.accept(false));
+                    onComplete.accept(false, null);
                     return;
                 }
 
@@ -69,14 +67,11 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
                 service.setAccount(account);
                 service.authenticate();
 
-                Platform.runLater(() -> {
-                    AccountManager.getInstance().addAccount(account);
-                    onComplete.accept(true);
-                });
+                onComplete.accept(true, account);
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Platform.runLater(() -> onComplete.accept(false));
+                onComplete.accept(false, null);
             } finally {
                 cancel();
             }

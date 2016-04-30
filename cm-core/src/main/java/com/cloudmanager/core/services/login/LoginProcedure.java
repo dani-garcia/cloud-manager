@@ -1,7 +1,9 @@
 package com.cloudmanager.core.services.login;
 
+import com.cloudmanager.core.model.ServiceAccount;
+
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public interface LoginProcedure {
 
@@ -18,7 +20,7 @@ public interface LoginProcedure {
      */
     boolean postLogin();
 
-    void addLoginCompleteListener(Consumer<Boolean> listener);
+    void addLoginCompleteListener(BiConsumer<Boolean, ServiceAccount> listener);
 
     void cancel();
 

@@ -1,6 +1,5 @@
 package com.cloudmanager.services.drive;
 
-import com.cloudmanager.core.config.AccountManager;
 import com.cloudmanager.core.model.ServiceAccount;
 import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
@@ -13,7 +12,6 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.DriveScopes;
-import javafx.application.Platform;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -42,7 +40,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
 
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
-            onComplete.accept(false);
+            onComplete.accept(false, null);
             return;
         }
 
@@ -67,7 +65,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
 
         } catch (IOException e) {
             e.printStackTrace();
-            onComplete.accept(false);
+            onComplete.accept(false, null);
             cancel();
         }
     }
@@ -88,14 +86,11 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 service.setAccount(account);
                 service.authenticate();
 
-                Platform.runLater(() -> {
-                    AccountManager.getInstance().addAccount(account);
-                    onComplete.accept(true);
-                });
+                onComplete.accept(false, account);
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Platform.runLater(() -> onComplete.accept(false));
+                onComplete.accept(false, null);
             } finally {
                 cancel();
             }

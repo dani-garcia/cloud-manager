@@ -24,4 +24,4 @@ target/
 
 ### Private Info ###
 apikeys.properties
-config/config.json
+**/config/config.json
