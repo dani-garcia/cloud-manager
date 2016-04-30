@@ -14,18 +14,18 @@ public class FileTreeItem extends TreeItem<ModelFile> {
 
     private FileService fs;
 
-    private BiConsumer<TreeItem, ModelFile.Event> treeItemListener;
+    private BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener;
     private boolean forceRefresh = false;
     private boolean childrenSet = false;
 
-    public static FileTreeItem getRoot(FileService fs, BiConsumer<TreeItem, ModelFile.Event> treeItemListener) {
+    public static FileTreeItem getRoot(FileService fs, BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener) {
         FileTreeItem root = new FileTreeItem(fs.getRootFile(), fs, treeItemListener);
         root.setExpanded(true);
 
         return root;
     }
 
-    private FileTreeItem(ModelFile f, FileService fs, BiConsumer<TreeItem, ModelFile.Event> treeItemListener) {
+    private FileTreeItem(ModelFile f, FileService fs, BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener) {
         super(f);
         this.fs = fs;
         this.treeItemListener = treeItemListener;

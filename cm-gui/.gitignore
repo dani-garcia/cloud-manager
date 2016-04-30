@@ -1,0 +1,5 @@
+### Eclipse ###
+# We need this file so Eclipse doesn't complain that JavaFX is not accessible
+!.settings/
+.settings/*
+!.settings/org.eclipse.jdt.core.prefs
