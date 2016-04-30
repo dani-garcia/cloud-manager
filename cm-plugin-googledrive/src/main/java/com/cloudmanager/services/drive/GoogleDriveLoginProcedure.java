@@ -86,7 +86,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 service.setAccount(account);
                 service.authenticate();
 
-                onComplete.accept(false, account);
+                onComplete.accept(true, account);
 
             } catch (IOException e) {
                 e.printStackTrace();
