@@ -1,23 +1,26 @@
 package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.util.Util;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets.Details;
 
 import java.util.Map;
 
 class GoogleDriveApiKeys {
-    static final String KEY;
-    static final String SECRET;
+    static final GoogleClientSecrets SECRETS;
 
     static {
-        Map<String, String> map = Util.getPropertiesMap(GoogleDriveApiKeys.class, GoogleDriveService.SERVICE_NAME + ".apikey");
+        Map<String, String> map = Util.getPropertiesMap(GoogleDriveService.SERVICE_NAME + ".apikey");
 
-        KEY = map.get("key");
-        SECRET = map.get("secret");
+        String key = map.get("key");
+        String secret = map.get("secret");
 
         // Check if they are present
-        if (KEY.startsWith("${") || SECRET.startsWith("${")) {
+        if (key.startsWith("${") || secret.startsWith("${")) {
             System.err.println("Google Drive API Keys not set!");
             System.exit(-7);
         }
+
+        SECRETS = new GoogleClientSecrets().setInstalled(new Details().setClientId(key).setClientSecret(secret));
     }
 }

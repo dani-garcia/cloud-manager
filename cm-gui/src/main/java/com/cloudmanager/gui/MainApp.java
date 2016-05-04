@@ -12,8 +12,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
-import java.util.Locale;
-
 public class MainApp extends Application {
 
     private static Stage primaryStage;
@@ -44,9 +42,6 @@ public class MainApp extends Application {
             alert.showAndWait();
             System.exit(0);
         }
-
-        // Set the language from the config
-        Locale.setDefault(ConfigManager.getConfig().getLocale());
     }
 
     private void initRootLayout() {

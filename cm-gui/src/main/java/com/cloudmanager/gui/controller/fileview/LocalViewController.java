@@ -16,14 +16,9 @@ public class LocalViewController extends AbstractFileViewController {
 
         // Select the Home directory by default
         // And scroll to it
-        scrollHome();
-    }
+        TreeItem<ModelFile> home = findItem(System.getProperty("user.home"));
 
-    private void scrollHome() {
-        final String home = System.getProperty("user.home");
-        TreeItem<ModelFile> homeItem = findItem(home);
-
-        select(homeItem);
-        scrollTo(homeItem);
+        select(home);
+        scrollTo(home);
     }
 }

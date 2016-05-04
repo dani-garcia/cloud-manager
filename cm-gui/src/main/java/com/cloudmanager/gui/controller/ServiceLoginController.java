@@ -1,8 +1,7 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.AccountManager;
-import com.cloudmanager.core.model.ServiceAccount;
-import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.core.config.RepoManager;
+import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.services.factories.ServiceFactory;
 import com.cloudmanager.core.services.factories.ServiceFactoryLocator;
 import com.cloudmanager.core.services.login.LoginField;
@@ -20,7 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class AccountLoginController {
+public class ServiceLoginController {
     @FXML
     private Parent root;
 
@@ -51,8 +50,7 @@ public class AccountLoginController {
         if (login != null)
             login.cancel();
 
-        FileService service = factory.create();
-        login = service.startLoginProcedure();
+        login = factory.startLoginProcedure();
         login.preLogin(nameField.getText());
 
         // Add the fields
@@ -114,13 +112,13 @@ public class AccountLoginController {
         }
     }
 
-    private void loginCompleted(boolean success, ServiceAccount account) {
+    private void loginCompleted(boolean success, FileRepo account) {
         Platform.runLater(() -> {
             if (success) {
                 // Add the account
-                AccountManager.getInstance().addAccount(account);
+                RepoManager.getInstance().addRepo(account);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("account_added"));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("repo_added"));
                 alert.show();
 
                 ((Stage) root.getScene().getWindow()).close();

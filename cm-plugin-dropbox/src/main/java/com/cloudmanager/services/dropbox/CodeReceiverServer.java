@@ -41,7 +41,7 @@ final class CodeReceiverServer {
         }
     }
 
-    String getRedirectUri() throws IOException {
+    String getRedirectUri() {
         return "http://" + HOST + ":" + PORT + PATH;
     }
 

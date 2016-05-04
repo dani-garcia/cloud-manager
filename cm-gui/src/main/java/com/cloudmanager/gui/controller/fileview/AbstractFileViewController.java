@@ -3,7 +3,6 @@ package com.cloudmanager.gui.controller.fileview;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.model.ModelFile.Event;
 import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.local.LocalService;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.DraggableTableRow;
 import com.cloudmanager.gui.view.DraggableTreeCell;
@@ -21,15 +20,6 @@ import javafx.scene.image.ImageView;
 import java.util.Date;
 
 public abstract class AbstractFileViewController {
-
-    public static AbstractFileViewController getController(FileService service) {
-        // TODO Eliminar esto?
-        if (service.getServiceName().equals(LocalService.SERVICE_NAME))
-            return new LocalViewController(service);
-        else
-            return new RemoteViewController(service);
-    }
-
     @FXML
     TreeView<ModelFile> fileTree;
 

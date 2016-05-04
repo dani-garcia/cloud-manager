@@ -2,7 +2,6 @@ package com.cloudmanager.core.services.local;
 
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
-import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
 import com.cloudmanager.core.util.Util;
 
@@ -17,11 +16,8 @@ import java.util.stream.Collectors;
 
 public class LocalService extends AbstractFileService {
     public static final String SERVICE_NAME = "local";
-
-    @Override
-    public String getAccountId() {
-        return SERVICE_NAME;
-    }
+    public static final String SERVICE_DISPLAY_NAME = "Local";
+    public static final String SERVICE_ICON = "/icons/computer_keyboard.png";
 
     @Override
     public String getServiceName() {
@@ -30,7 +26,7 @@ public class LocalService extends AbstractFileService {
 
     @Override
     public String getServiceDisplayName() {
-        return SERVICE_NAME;
+        return SERVICE_DISPLAY_NAME;
     }
 
     @Override
@@ -63,21 +59,12 @@ public class LocalService extends AbstractFileService {
                 .collect(Collectors.toList());
     }
 
-    // Not applicable
-    @Override
-    public LoginProcedure startLoginProcedure() {
-        return null;
-    }
-
     @Override
     public boolean authenticate() { return true; }
 
     @Override
-    public String getIcon() { return "/icons/computer_keyboard.png"; }
+    public String getIcon() { return SERVICE_ICON; }
 
-
-    @Override
-    public String getAccountOwner() { return null; }
 
     @Override
     public boolean receiveFile(FileTransfer transfer) {
@@ -114,8 +101,6 @@ public class LocalService extends AbstractFileService {
 
         String path = file.getAbsolutePath();
         String name = fsv.getSystemDisplayName(file);
-        if (name.isEmpty())
-            name = fsv.getSystemTypeDescription(file) + " (" + path + ")";
 
         ModelFile.Type type = file.isDirectory() ? ModelFile.Type.FOLDER : ModelFile.Type.FILE;
         long length = file.length();

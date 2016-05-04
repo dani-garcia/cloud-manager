@@ -1,7 +1,8 @@
 package com.cloudmanager.core.services.factories;
 
-import com.cloudmanager.core.model.ServiceAccount;
+import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.core.services.login.LoginProcedure;
 
 public interface ServiceFactory {
 
@@ -11,7 +12,7 @@ public interface ServiceFactory {
 
     String getIcon();
 
-    FileService create();
+    LoginProcedure startLoginProcedure();
 
-    FileService create(ServiceAccount account);
+    FileService create(FileRepo repo);
 }

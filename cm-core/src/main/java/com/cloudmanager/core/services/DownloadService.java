@@ -32,7 +32,7 @@ public class DownloadService {
 
         target.setCurrentDir(targetFolder);
 
-        if (origin.getAccountId().equals(target.getAccountId())) {
+        if (origin.getRepoId().equals(target.getRepoId())) {
             moveOnSameService(origin, file, targetFolder);
 
         } else {

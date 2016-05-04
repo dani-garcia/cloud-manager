@@ -1,34 +1,33 @@
-package com.cloudmanager.services.drive;
+package com.cloudmanager.core.services.local;
 
 import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.core.services.factories.ServiceFactory;
 import com.cloudmanager.core.services.login.LoginProcedure;
 
-public class GoogleDriveServiceFactory implements ServiceFactory {
-
+public class LocalServiceFactory implements ServiceFactory {
     @Override
     public String getServiceName() {
-        return GoogleDriveService.SERVICE_NAME;
+        return LocalService.SERVICE_NAME;
     }
 
     @Override
     public String getServiceDisplayName() {
-        return GoogleDriveService.SERVICE_DISPLAY_NAME;
+        return LocalService.SERVICE_DISPLAY_NAME;
     }
 
     @Override
     public String getIcon() {
-        return GoogleDriveService.SERVICE_ICON;
+        return LocalService.SERVICE_ICON;
     }
 
     @Override
     public LoginProcedure startLoginProcedure() {
-        return new GoogleDriveLoginProcedure();
+        return new LocalLoginProcedure();
     }
 
     @Override
-    public FileService create(FileRepo repo) {
-        return new GoogleDriveService().setRepo(repo);
+    public FileService create(FileRepo account) {
+        return new LocalService().setRepo(account);
     }
 }

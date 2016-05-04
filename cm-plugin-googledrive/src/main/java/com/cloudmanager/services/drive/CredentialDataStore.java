@@ -1,7 +1,7 @@
 package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.model.ServiceAccount;
+import com.cloudmanager.core.model.FileRepo;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.DataStoreFactory;
@@ -15,8 +15,8 @@ class CredentialDataStore implements DataStore<StoredCredential> {
 
     private Map<String, String> map;
 
-    CredentialDataStore(ServiceAccount account) {
-        this(account.getAuth());
+    CredentialDataStore(FileRepo repo) {
+        this(repo.getAuth());
     }
 
     CredentialDataStore(Map<String, String> map) {

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ServiceAccount implements Serializable {
+public class FileRepo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String id, name, serviceName;
@@ -21,10 +21,10 @@ public class ServiceAccount implements Serializable {
     @JsonIgnore
     private transient FileService service;
 
-    public ServiceAccount(@JsonProperty("id") String id,
-                          @JsonProperty("name") String name,
-                          @JsonProperty("service_name") String serviceName,
-                          @JsonProperty("auth") Map<String, String> auth) {
+    public FileRepo(@JsonProperty("id") String id,
+                    @JsonProperty("name") String name,
+                    @JsonProperty("service_name") String serviceName,
+                    @JsonProperty("auth") Map<String, String> auth) {
         // Random id
         this.id = (id == null) ? UUID.randomUUID().toString() : id;
         this.name = name;
@@ -32,9 +32,8 @@ public class ServiceAccount implements Serializable {
         this.auth = auth;
     }
 
-    public ServiceAccount(String name, String serviceName, FileService service) {
+    public FileRepo(String name, String serviceName) {
         this(null, name, serviceName, new HashMap<>());
-        this.service = service;
     }
 
     public String getId() {

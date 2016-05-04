@@ -7,7 +7,7 @@
          fx:controller="com.cloudmanager.gui.controller.MenuController">
 
     <Menu mnemonicParsing="false" text="%file">
-        <MenuItem fx:id="accountManagerItem" mnemonicParsing="false" text="%account_manager"/>
+        <MenuItem fx:id="repoManagerItem" mnemonicParsing="false" text="%repo_manager"/>
 
         <SeparatorMenuItem/>
 

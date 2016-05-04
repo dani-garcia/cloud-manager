@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
             fx:id="columnViewBorderPane"
-            fx:controller="com.cloudmanager.gui.controller.ColumnViewController">
+            fx:controller="com.cloudmanager.gui.controller.RepoViewController">
     <top>
         <BorderPane>
             <padding>
@@ -18,7 +18,7 @@
             </left>
 
             <right>
-                <ComboBox fx:id="serviceSelector"/>
+                <ComboBox fx:id="repoSelector"/>
             </right>
         </BorderPane>
     </top>

@@ -1,13 +1,12 @@
 package com.cloudmanager.services.drive;
 
-import com.cloudmanager.core.model.ServiceAccount;
+import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -22,14 +21,6 @@ import java.util.Map;
 class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
     private GoogleAuthorizationCodeFlow flow;
     private VerificationCodeReceiver server;
-
-    private GoogleClientSecrets secrets;
-    private GoogleDriveService service;
-
-    GoogleDriveLoginProcedure(GoogleClientSecrets secrets, GoogleDriveService service) {
-        this.secrets = secrets;
-        this.service = service;
-    }
 
     @Override
     protected void setUp() {
@@ -48,7 +39,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
 
         // set up authorization code flow
         flow = new GoogleAuthorizationCodeFlow.Builder(
-                httpTransport, JacksonFactory.getDefaultInstance(), secrets,
+                httpTransport, JacksonFactory.getDefaultInstance(), GoogleDriveApiKeys.SECRETS,
                 Collections.singleton(DriveScopes.DRIVE))
                 .setCredentialDataStore(new CredentialDataStore(authMap))
                 .build();
@@ -81,12 +72,10 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 flow.createAndStoreCredential(response, "user");
 
                 // Finish login
-                ServiceAccount account = new ServiceAccount(accountName, GoogleDriveService.SERVICE_NAME, service);
-                account.getAuth().putAll(authMap);
-                service.setAccount(account);
-                service.authenticate();
+                FileRepo repo = new FileRepo(repoName, GoogleDriveService.SERVICE_NAME);
+                repo.getAuth().putAll(authMap);
 
-                onComplete.accept(true, account);
+                onComplete.accept(true, repo);
 
             } catch (IOException e) {
                 e.printStackTrace();

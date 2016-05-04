@@ -1,11 +1,11 @@
 package com.cloudmanager.services.dropbox;
 
-import com.cloudmanager.core.model.ServiceAccount;
+import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.core.services.factories.ServiceFactory;
+import com.cloudmanager.core.services.login.LoginProcedure;
 
 public class DropboxServiceFactory implements ServiceFactory {
-
     @Override
     public String getServiceName() {
         return DropboxService.SERVICE_NAME;
@@ -22,12 +22,12 @@ public class DropboxServiceFactory implements ServiceFactory {
     }
 
     @Override
-    public FileService create() {
-        return new DropboxService();
+    public LoginProcedure startLoginProcedure() {
+        return new DropboxLoginProcedure();
     }
 
     @Override
-    public FileService create(ServiceAccount account) {
-        return new DropboxService().setAccount(account);
+    public FileService create(FileRepo repo) {
+        return new DropboxService().setRepo(repo);
     }
 }

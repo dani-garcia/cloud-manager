@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="500.0" prefWidth="350.0"
+            fx:id="root"
+            fx:controller="com.cloudmanager.gui.controller.RepoManagerController">
+
+    <center>
+        <TableView fx:id="repoTable">
+            <columns>
+                <TableColumn fx:id="iconColumn" prefWidth="40.0" text=""/>
+                <TableColumn fx:id="serviceNameColumn" prefWidth="130.0" text="%service"/>
+                <TableColumn fx:id="repoNameColumn" prefWidth="140.0" text="%repo_name"/>
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <ButtonBar>
+            <buttons>
+                <Button fx:id="newButton" mnemonicParsing="false" text="%new"/>
+                <Button fx:id="removeButton" mnemonicParsing="false" text="%remove"/>
+            </buttons>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </ButtonBar>
+    </bottom>
+</BorderPane>

@@ -25,7 +25,7 @@ public class DraggableTreeCell extends TreeCell<ModelFile> {
     }
 
     public DraggableTreeCell(final TreeView<ModelFile> tree, FileService service) {
-        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getAccountId(), this::getItem);
+        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getRepoId(), this::getItem);
 
         createContextMenu();
     }

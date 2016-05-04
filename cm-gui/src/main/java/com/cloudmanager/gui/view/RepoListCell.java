@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.local.LocalService;
+import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.services.factories.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -10,16 +10,16 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ServiceListCell extends ListCell<FileService> {
+public class RepoListCell extends ListCell<FileRepo> {
 
     private ObservableStringValue otherSelection;
 
-    public ServiceListCell(ObservableStringValue otherSelection) {
+    public RepoListCell(ObservableStringValue otherSelection) {
         this.otherSelection = otherSelection;
     }
 
     @Override
-    public void updateItem(FileService item, boolean empty) {
+    public void updateItem(FileRepo item, boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);
@@ -27,7 +27,8 @@ public class ServiceListCell extends ListCell<FileService> {
 
         } else {
             // Get the icon
-            Image icon = ResourceManager.loadImage(item.getIcon());
+            String iconName = ServiceFactoryLocator.find(item.getServiceName()).getIcon(); // TODO Cambiar esto
+            Image icon = ResourceManager.loadImage(iconName);
             ImageView view = new ImageView(icon);
 
             // Set its size
@@ -38,14 +39,10 @@ public class ServiceListCell extends ListCell<FileService> {
             // Set the image
             setGraphic(view);
 
-            // Set the name
-            if (item.getServiceName().equals(LocalService.SERVICE_NAME))
-                setText(ResourceManager.getString("local_filesystem"));
-            else
-                setText(item.getAccountName());
+            setText(item.getName());
 
             // If the service is selected on the other panel, disable it here
-            BooleanBinding serviceInUse = Bindings.equal(item.getAccountId(), otherSelection);
+            BooleanBinding serviceInUse = Bindings.equal(item.getId(), otherSelection);
 
             disableProperty().bind(serviceInUse);
             styleProperty().bind(Bindings.when(serviceInUse)

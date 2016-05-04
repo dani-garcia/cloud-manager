@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
+import java.util.Locale;
 
 public class ConfigManager {
     private static final File DEFAULT_FOLDER = new File("config");
@@ -38,12 +39,15 @@ public class ConfigManager {
         // We set the config location, to be able to save the file later
         configFile = file;
 
+        // We set the app language
+        Locale.setDefault(instance.getLocale());
+
         return instance;
     }
 
     public static boolean save() {
         try {
-            // Maje sure the config is loaded before saving
+            // Make sure the config is loaded before saving
             getConfig();
 
             if (!configFile.exists()) {

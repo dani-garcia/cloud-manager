@@ -17,7 +17,7 @@ public class MenuController {
     private Parent root;
 
     @FXML
-    private MenuItem accountManagerItem;
+    private MenuItem repoManagerItem;
 
     @FXML
     private MenuItem fullScreenItem;
@@ -44,15 +44,15 @@ public class MenuController {
             MainApp.getPrimaryStage().setFullScreen(true);
         });
 
-        accountManagerItem.setOnAction(event -> {
-            Parent newWindow = ResourceManager.loadFXML("/view/accounts/AccountManager.fxml");
+        repoManagerItem.setOnAction(event -> {
+            Parent newWindow = ResourceManager.loadFXML("/view/RepoManager.fxml");
 
             Stage stage = new Stage();
 
             stage.initOwner(root.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
-            stage.setTitle(ResourceManager.getString("account_manager"));
+            stage.setTitle(ResourceManager.getString("repo_manager"));
             stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
             stage.setScene(new Scene(newWindow));

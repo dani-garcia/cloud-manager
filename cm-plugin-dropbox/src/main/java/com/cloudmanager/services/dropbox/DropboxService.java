@@ -1,24 +1,21 @@
 package com.cloudmanager.services.dropbox;
 
-import com.cloudmanager.core.config.ConfigManager;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
-import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
-import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
-import com.dropbox.core.v2.users.FullAccount;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 class DropboxService extends AbstractFileService {
@@ -29,10 +26,7 @@ class DropboxService extends AbstractFileService {
 
     /* Setting up request config and api key */
     static final DbxRequestConfig requestConfig = new DbxRequestConfig(
-            APP_NAME, ConfigManager.getConfig().getLocale().toString());
-
-    // Set the API keys
-    static final DbxAppInfo appInfo = new DbxAppInfo(DropboxApiKeys.KEY, DropboxApiKeys.SECRET);
+            APP_NAME, Locale.getDefault().toString());
 
     /*-----------------------*/
     /* Dropbox service class */
@@ -53,32 +47,14 @@ class DropboxService extends AbstractFileService {
     public String getIcon() {return SERVICE_ICON;}
 
     @Override
-    public LoginProcedure startLoginProcedure() {
-        return new DropboxLoginProcedure(this);
-    }
-
-    @Override
     public boolean authenticate() {
-        String accessToken = getAccount().getAuth().get("access_token");
+        String accessToken = getRepo().getAuth().get("access_token");
 
         if (accessToken == null)
             return false;
 
         client = new DbxClientV2(requestConfig, accessToken);
         return true;
-    }
-
-    @Override
-    public String getAccountOwner() {
-        try {
-            // Get current account info
-            FullAccount account = client.users().getCurrentAccount();
-            return account.getName().getDisplayName();
-
-        } catch (DbxException e) {
-            System.out.println("Error getting account name.");
-            return null;
-        }
     }
 
     @Override

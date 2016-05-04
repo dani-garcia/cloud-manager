@@ -22,7 +22,7 @@ public final class Util {
         return nread;
     }
 
-    public static Map<String, String> getPropertiesMap(Class<?> clazz, String path) {
+    public static Map<String, String> getPropertiesMap(String path) {
         final Map<String, String> properties = new HashMap<>();
 
         try (InputStream is = Util.class.getClassLoader().getResourceAsStream(path)) {

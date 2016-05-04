@@ -13,7 +13,7 @@ public class RemoteViewController extends AbstractFileViewController {
     @Override
     protected void loadComponents(TreeItem<ModelFile> rootItem) {
         // Select the root item
-        fileTree.getSelectionModel().select(rootItem);
-        fileTree.scrollTo(fileTree.getRow(rootItem));
+        select(rootItem);
+        scrollTo(rootItem);
     }
 }

@@ -1,7 +1,5 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.ServiceManager;
-import com.cloudmanager.core.services.local.LocalService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -15,9 +13,9 @@ public class MainController {
     private BorderPane rightColumn;
 
     @FXML
-    private ColumnViewController leftColumnController;
+    private RepoViewController leftColumnController;
     @FXML
-    private ColumnViewController rightColumnController;
+    private RepoViewController rightColumnController;
 
     private StringProperty leftSelection = new SimpleStringProperty();
     private StringProperty rightSelection = new SimpleStringProperty();
@@ -27,7 +25,7 @@ public class MainController {
         leftColumnController.initialize(leftSelection, rightSelection);
         rightColumnController.initialize(rightSelection, leftSelection);
 
-        // Select the local service on the left
-        leftColumnController.select(ServiceManager.getInstance().getService(LocalService.SERVICE_NAME));
+        // TODO Restore last services
+        //leftColumnController.select(service);
     }
 }

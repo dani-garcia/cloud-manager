@@ -9,7 +9,7 @@
            fx:controller="com.cloudmanager.gui.controller.DownloadController">
     <panes>
         <TitledPane fx:id="downloadPane" animated="true">
-            <VBox fx:id="downloadsBox" prefHeight="200.0" spacing="5">
+            <VBox fx:id="downloadsBox" spacing="5">
                 <padding>
                     <Insets bottom="5" left="5" right="5" top="5"/>
                 </padding>

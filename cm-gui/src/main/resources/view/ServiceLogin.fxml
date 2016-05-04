@@ -8,7 +8,7 @@
 <BorderPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
             prefHeight="300.0" prefWidth="450.0"
             fx:id="root"
-            fx:controller="com.cloudmanager.gui.controller.AccountLoginController">
+            fx:controller="com.cloudmanager.gui.controller.ServiceLoginController">
 
     <top>
         <GridPane hgap="10" vgap="10">
@@ -21,7 +21,7 @@
                 <ColumnConstraints hgrow="ALWAYS"/>
             </columnConstraints>
 
-            <Label text="%account_name"/>
+            <Label text="%repo_name"/>
             <TextField fx:id="nameField" GridPane.columnIndex="1"/>
 
             <Label text="%service" GridPane.rowIndex="1"/>

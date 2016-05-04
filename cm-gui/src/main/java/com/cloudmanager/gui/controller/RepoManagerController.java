@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.AccountManager;
-import com.cloudmanager.core.model.ServiceAccount;
+import com.cloudmanager.core.config.RepoManager;
+import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,19 +17,19 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AccountManagerController {
+public class RepoManagerController {
     @FXML
     private Parent root;
 
     @FXML
-    private TableView<ServiceAccount> accountTable;
+    private TableView<FileRepo> repoTable;
 
     @FXML
-    private TableColumn<ServiceAccount, ImageView> iconColumn;
+    private TableColumn<FileRepo, ImageView> iconColumn;
     @FXML
-    private TableColumn<ServiceAccount, String> serviceNameColumn;
+    private TableColumn<FileRepo, String> serviceNameColumn;
     @FXML
-    private TableColumn<ServiceAccount, String> accountNameColumn;
+    private TableColumn<FileRepo, String> repoNameColumn;
 
     @FXML
     private Button newButton;
@@ -38,8 +38,8 @@ public class AccountManagerController {
 
     @FXML
     private void initialize() {
-        accountTable.getItems().setAll(AccountManager.getInstance().getAccounts());
-        AccountManager.getInstance().addListener(accounts -> accountTable.getItems().setAll(accounts));
+        repoTable.getItems().setAll(RepoManager.getInstance().getRepos());
+        RepoManager.getInstance().addListener(accounts -> repoTable.getItems().setAll(accounts));
 
         iconColumn.setCellValueFactory(s -> {
             Image icon = ResourceManager.loadImage(s.getValue().getService().getIcon());
@@ -52,14 +52,14 @@ public class AccountManagerController {
         });
 
         serviceNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getService().getServiceDisplayName()));
-        accountNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
+        repoNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
 
         setButtons();
     }
 
     private void setButtons() {
         newButton.setOnAction(event -> {
-            Parent newWindow = ResourceManager.loadFXML("/view/accounts/AccountLogin.fxml");
+            Parent newWindow = ResourceManager.loadFXML("/view/ServiceLogin.fxml");
 
             Stage stage = new Stage();
             stage.initOwner(root.getScene().getWindow());
@@ -74,20 +74,20 @@ public class AccountManagerController {
         });
 
         removeButton.setOnAction(event -> {
-            ServiceAccount acc = accountTable.getSelectionModel().getSelectedItem();
+            FileRepo acc = repoTable.getSelectionModel().getSelectedItem();
 
             if (acc == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, ResourceManager.getString("account_not_selected"));
+                Alert alert = new Alert(Alert.AlertType.WARNING, ResourceManager.getString("repo_not_selected"));
                 alert.showAndWait();
                 return;
             }
 
-            AccountManager.getInstance().removeAccount(acc);
+            RepoManager.getInstance().removeRepo(acc);
 
             // Reload the data
             initialize();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("account_delete_success", acc.getName()));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("repo_delete_success", acc.getName()));
             alert.showAndWait();
         });
     }

@@ -2,12 +2,9 @@ package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
-import com.cloudmanager.core.services.login.LoginProcedure;
 import com.cloudmanager.core.transfers.FileTransfer;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets.Details;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
@@ -16,7 +13,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Joiner;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.About;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
@@ -39,13 +35,6 @@ class GoogleDriveService extends AbstractFileService {
     /*Google Drive folder type. Used to differenciate folders from normal files */
     private static final String MIME_FOLDER = "application/vnd.google-apps.folder";
 
-    // Set the API keys
-    private static final GoogleClientSecrets secrets = new GoogleClientSecrets()
-            .setInstalled(
-                    new Details()
-                            .setClientId(GoogleDriveApiKeys.KEY)
-                            .setClientSecret(GoogleDriveApiKeys.SECRET));
-
 
     /*----------------------------*/
     /* Google drive service class */
@@ -66,11 +55,6 @@ class GoogleDriveService extends AbstractFileService {
     public String getIcon() {return SERVICE_ICON;}
 
     @Override
-    public LoginProcedure startLoginProcedure() {
-        return new GoogleDriveLoginProcedure(secrets, this);
-    }
-
-    @Override
     public boolean authenticate() {
         HttpTransport httpTransport;
 
@@ -86,9 +70,9 @@ class GoogleDriveService extends AbstractFileService {
         try {
             // set up authorization code flow
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                    httpTransport, JacksonFactory.getDefaultInstance(), secrets,
+                    httpTransport, JacksonFactory.getDefaultInstance(), GoogleDriveApiKeys.SECRETS,
                     Collections.singleton(DriveScopes.DRIVE))
-                    .setCredentialDataStore(new CredentialDataStore(getAccount()))
+                    .setCredentialDataStore(new CredentialDataStore(getRepo()))
                     .build();
 
             Credential credential = flow.loadCredential("user");
@@ -106,18 +90,6 @@ class GoogleDriveService extends AbstractFileService {
         }
 
         return true;
-    }
-
-    @Override
-    public String getAccountOwner() {
-        try {
-            About about = client.about().get().execute();
-            return about.getUser().getDisplayName();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     @Override

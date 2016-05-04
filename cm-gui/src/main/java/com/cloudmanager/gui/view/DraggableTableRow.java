@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 public class DraggableTableRow extends TableRow<ModelFile> {
 
     public DraggableTableRow(TableView<ModelFile> table, FileService service) {
-        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getAccountId(), this::getItem);
+        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getRepoId(), this::getItem);
 
         createContextMenu(service);
     }
