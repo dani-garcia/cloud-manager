@@ -1,0 +1,13 @@
+{
+  "repos": [
+    {
+      "id": "d57c5659-8f31-4be9-9a01-145019507e39",
+      "name": "Local",
+      "service_name": "local",
+      "auth": {}
+    }
+  ],
+  "settings": {
+    "leftPanel": "d57c5659-8f31-4be9-9a01-145019507e39"
+  }
+}

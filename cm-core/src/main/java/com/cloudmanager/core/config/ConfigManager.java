@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 
 public class ConfigManager {
+    private static final String FALLBACK_FILE = "/default-config.json";
+
     private static final File DEFAULT_FOLDER = new File("config");
     private static final File DEFAULT_FILE = new File(DEFAULT_FOLDER, "config.json");
 
@@ -32,8 +36,14 @@ public class ConfigManager {
         try {
             instance = MAPPER.readValue(file, Config.class);
         } catch (Exception e) {
-            // If we couldn't load the configuration, we create a new one
-            instance = new Config();
+            // If we couldn't load the configuration, we create one using the default
+            try (InputStream stream = Config.class.getResourceAsStream(FALLBACK_FILE)) {
+                instance = MAPPER.readValue(stream, Config.class);
+
+            } catch (IOException e1) {
+                // If we couldn't use the default, start with a blank one
+                instance = new Config();
+            }
         }
 
         // We set the config location, to be able to save the file later
