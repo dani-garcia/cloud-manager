@@ -3,12 +3,9 @@ package com.cloudmanager.core.config;
 import com.cloudmanager.core.model.FileRepo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-class Config {
+public class Config {
     /**
      * Application language
      */
@@ -20,6 +17,9 @@ class Config {
      */
     @JsonProperty
     private List<FileRepo> repos = new ArrayList<>();
+
+    @JsonProperty
+    private Map<String, String> settings = new HashMap<>();
 
     // Getters and setters
 
@@ -33,5 +33,14 @@ class Config {
 
     List<FileRepo> _getRepos() {
         return repos;
+    }
+
+    public String getSetting(String key) {
+        return settings.get(key);
+    }
+
+    public void putSetting(String key, String value) {
+        settings.put(key, value);
+        ConfigManager.save();
     }
 }

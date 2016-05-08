@@ -1,5 +1,8 @@
 package com.cloudmanager.gui.controller;
 
+import com.cloudmanager.core.config.Config;
+import com.cloudmanager.core.config.ConfigManager;
+import com.cloudmanager.core.config.RepoManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -22,10 +25,20 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        // Initialize the columns
         leftColumnController.initialize(leftSelection, rightSelection);
         rightColumnController.initialize(rightSelection, leftSelection);
 
-        // TODO Restore last services
-        //leftColumnController.select(service);
+        final Config conf = ConfigManager.getConfig();
+        final String leftPanel = "leftPanel";
+        final String rightPanel = "rightPanel";
+
+        // Save the changes on the config
+        leftSelection.addListener((obs, oldVal, newVal) -> conf.putSetting(leftPanel, newVal));
+        rightSelection.addListener((obs, oldVal, newVal) -> conf.putSetting(rightPanel, newVal));
+
+        // Restore last services
+        leftColumnController.select(RepoManager.getInstance().getRepo(conf.getSetting(leftPanel)));
+        rightColumnController.select(RepoManager.getInstance().getRepo(conf.getSetting(rightPanel)));
     }
 }
