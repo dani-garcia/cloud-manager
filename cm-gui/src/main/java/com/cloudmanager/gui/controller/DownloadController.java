@@ -56,7 +56,7 @@ public class DownloadController {
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.show();
 
-                download.getChildren().remove(download);
+                downloadsBox.getChildren().remove(download);
                 downloadsMap.remove(f);
             }
         }));
