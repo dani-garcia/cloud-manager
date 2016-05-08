@@ -54,7 +54,6 @@ public class ServiceLoginController {
         login.preLogin(nameField.getText());
 
         // Add the fields
-        loginForm.getChildren().clear();
         addFieldGrid(login);
 
         // Set the completion listener
@@ -68,6 +67,7 @@ public class ServiceLoginController {
     }
 
     private void addFieldGrid(LoginProcedure login) {
+        loginForm.getChildren().clear();
         int row = 0;
 
         for (LoginField field : login.getFields()) {
@@ -106,7 +106,7 @@ public class ServiceLoginController {
         }
 
         if (login.isPostLoginManual()) {
-            Button loginButton = new Button(ResourceManager.getString("login"));
+            Button loginButton = new Button(ResourceManager.getString("add"));
             loginButton.setOnAction(e -> login.postLogin());
             loginForm.add(loginButton, 0, row);
         }
@@ -123,7 +123,7 @@ public class ServiceLoginController {
 
                 ((Stage) root.getScene().getWindow()).close();
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_account"));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_repo"));
                 alert.showAndWait();
             }
         });

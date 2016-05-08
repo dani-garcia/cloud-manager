@@ -16,6 +16,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
 public class RepoManagerController {
     @FXML
@@ -35,6 +37,8 @@ public class RepoManagerController {
     private Button newButton;
     @FXML
     private Button removeButton;
+    @FXML
+    private Button closeButton;
 
     @FXML
     private void initialize() {
@@ -58,6 +62,11 @@ public class RepoManagerController {
     }
 
     private void setButtons() {
+        closeButton.setOnAction(event -> {
+            Window window = root.getScene().getWindow();
+            window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
+        });
+
         newButton.setOnAction(event -> {
             Parent newWindow = ResourceManager.loadFXML("/view/ServiceLogin.fxml");
 
@@ -65,7 +74,7 @@ public class RepoManagerController {
             stage.initOwner(root.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
-            stage.setTitle(ResourceManager.getString("login_title"));
+            stage.setTitle(ResourceManager.getString("add_repo"));
             stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
             stage.setScene(new Scene(newWindow));

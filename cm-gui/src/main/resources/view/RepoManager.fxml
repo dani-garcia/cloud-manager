@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
-            prefHeight="500.0" prefWidth="350.0"
+            prefHeight="500.0"
             fx:id="root"
             fx:controller="com.cloudmanager.gui.controller.RepoManagerController">
 
@@ -20,8 +20,10 @@
     <bottom>
         <ButtonBar>
             <buttons>
-                <Button fx:id="newButton" mnemonicParsing="false" text="%new"/>
-                <Button fx:id="removeButton" mnemonicParsing="false" text="%remove"/>
+                <Button fx:id="newButton" mnemonicParsing="false" text="%new" ButtonBar.buttonData="LEFT"/>
+                <Button fx:id="removeButton" mnemonicParsing="false" text="%remove" ButtonBar.buttonData="LEFT"/>
+
+                <Button fx:id="closeButton" mnemonicParsing="false" text="%close" ButtonBar.buttonData="RIGHT"/>
             </buttons>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
