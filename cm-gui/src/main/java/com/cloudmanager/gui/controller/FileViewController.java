@@ -1,8 +1,9 @@
-package com.cloudmanager.gui.controller.fileview;
+package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.model.ModelFile.Event;
 import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.core.services.local.LocalService;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.DraggableTableRow;
 import com.cloudmanager.gui.view.DraggableTreeCell;
@@ -19,7 +20,14 @@ import javafx.scene.image.ImageView;
 
 import java.util.Date;
 
-public abstract class AbstractFileViewController {
+/**
+ * Handles the file tree and the file table.
+ * <p>
+ * It's job is to load the tree, and update the table when the selected folder changes.
+ * <p>
+ * It also reloads the tree when the files notify a change
+ */
+public class FileViewController {
     @FXML
     TreeView<ModelFile> fileTree;
 
@@ -42,7 +50,12 @@ public abstract class AbstractFileViewController {
 
     private TreeItem<ModelFile> selection;
 
-    AbstractFileViewController(FileService service) {
+    /**
+     * Constructs the controller from a service
+     *
+     * @param service The service
+     */
+    public FileViewController(FileService service) {
         this.service = service;
 
         // We start the load on a different thread
@@ -50,12 +63,15 @@ public abstract class AbstractFileViewController {
             service.authenticate();
             TreeItem<ModelFile> rootItem = FileTreeItem.getRoot(service, this::processFileEvents);
 
+            // Hide the fake root node on the local service
+            if (service.getServiceName().equals(LocalService.SERVICE_NAME)) {
+                fileTree.setShowRoot(false); // Hide the fake root node
+            }
+
             // loadTree needs to run on the JFX thread to modify the controls
             Platform.runLater(() -> loadTree(rootItem));
         }).start();
     }
-
-    protected abstract void loadComponents(TreeItem<ModelFile> rootItem);
 
     private void processFileEvents(TreeItem<ModelFile> item, ModelFile.Event event) {
         if (event == Event.FILE_UPDATED) {
@@ -137,7 +153,10 @@ public abstract class AbstractFileViewController {
                 new ReadOnlyObjectWrapper<>(new ImageView(ResourceManager.toFXImage(param.getValue().getIcon()))));
 
         ////////
-        // Load extra components of the children classes
-        loadComponents(rootItem);
+        // Select the default directory
+        TreeItem<ModelFile> home = findItem(service.getDefaultDir().getPath());
+
+        select(home);
+        scrollTo(home);
     }
 }

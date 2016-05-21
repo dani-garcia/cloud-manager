@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
+/**
+ * Handles the menu bar and its items.
+ */
 public class MenuController {
     @FXML
     private Parent root;

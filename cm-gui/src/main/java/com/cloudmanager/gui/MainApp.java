@@ -1,8 +1,8 @@
 package com.cloudmanager.gui;
 
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.services.DownloadService;
 import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.core.services.TransferService;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -12,6 +12,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
+/**
+ * The main application class.
+ */
 public class MainApp extends Application {
 
     private static Stage primaryStage;
@@ -27,10 +30,12 @@ public class MainApp extends Application {
         // Init the configuration
         initConfig();
 
+        // Set the primary stage
         MainApp.primaryStage = primaryStage;
         MainApp.primaryStage.setTitle(FileService.APP_NAME);
         MainApp.primaryStage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
+        // Prepare the main layout
         initRootLayout();
     }
 
@@ -55,8 +60,9 @@ public class MainApp extends Application {
         // Show stage
         primaryStage.show();
 
+        // If there are downloads pending, alert the user
         primaryStage.setOnCloseRequest(e -> {
-            if (DownloadService.get().getTransfersInProgress() > 0) {
+            if (TransferService.get().getTransfersInProgress() > 0) {
 
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle(ResourceManager.getString("unfinished_transfers"));
@@ -65,7 +71,7 @@ public class MainApp extends Application {
 
                 alert.showAndWait().ifPresent(type -> {
                     if (type == ButtonType.CANCEL || type == ButtonType.CLOSE) {
-                        e.consume();
+                        e.consume(); // If the user cancels, don't close the application
                     }
                 });
             }

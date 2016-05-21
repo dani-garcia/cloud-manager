@@ -1,4 +1,4 @@
-package com.cloudmanager.core.transfers;
+package com.cloudmanager.core.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.util.function.BiConsumer;
  * InputStream that notifies listeners of its progress.
  */
 public class ObservableInputStream<T> extends InputStream {
-    private static final int percentStep = 1;
+    private static final int PERCENT_STEP = 1;
 
     private final InputStream contentStream;
     private final long size;
@@ -20,14 +20,27 @@ public class ObservableInputStream<T> extends InputStream {
 
     private BiConsumer<T, Double> listener;
 
+    /**
+     * Constructs the ObservableInputStream from a normal InputStream,
+     * the size of the stream, and the object to send to the listeners
+     *
+     * @param in     InputStream to wrap
+     * @param size   Total size of the stream
+     * @param object Object to send to the listeners
+     */
     public ObservableInputStream(InputStream in, long size, T object) {
         contentStream = in;
         this.size = size;
         this.object = object;
 
-        this.countStep = (size * percentStep) / 100;
+        this.countStep = (size * PERCENT_STEP) / 100;
     }
 
+    /**
+     * Adds a progress listener. It will be notified for each 1% that is read.
+     *
+     * @param otherListener The listener to add
+     */
     public void addListener(BiConsumer<T, Double> otherListener) {
         if (listener == null)
             listener = otherListener;

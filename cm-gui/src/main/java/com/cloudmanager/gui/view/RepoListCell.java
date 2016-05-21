@@ -10,10 +10,19 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Represents a repository in the repository dropdown.
+ */
 public class RepoListCell extends ListCell<FileRepo> {
 
     private ObservableStringValue otherSelection;
 
+    /**
+     * Constructs the cell from an observable of the selection of the other dropdown.
+     * This observable is used to gray out the repository used on the other side
+     *
+     * @param otherSelection The selection on the other dropdown
+     */
     public RepoListCell(ObservableStringValue otherSelection) {
         this.otherSelection = otherSelection;
     }

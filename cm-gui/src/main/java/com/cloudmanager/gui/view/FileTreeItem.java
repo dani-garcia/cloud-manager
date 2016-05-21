@@ -10,31 +10,41 @@ import javafx.scene.image.ImageView;
 
 import java.util.function.BiConsumer;
 
+/**
+ * Represents a file in the tree. The children are obtained lazily.
+ */
 public class FileTreeItem extends TreeItem<ModelFile> {
 
-    private FileService fs;
+    private FileService service;
 
     private BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener;
     private boolean forceRefresh = false;
     private boolean childrenSet = false;
 
-    public static FileTreeItem getRoot(FileService fs, BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener) {
-        FileTreeItem root = new FileTreeItem(fs.getRootFile(), fs, treeItemListener);
+    /**
+     * Returns the root file of the given service as a FileTreeItem
+     *
+     * @param service          The service
+     * @param treeItemListener A change listener
+     * @return The FileTreeItem
+     */
+    public static FileTreeItem getRoot(FileService service, BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener) {
+        FileTreeItem root = new FileTreeItem(service.getRootFile(), service, treeItemListener);
         root.setExpanded(true);
 
         return root;
     }
 
-    private FileTreeItem(ModelFile f, FileService fs, BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener) {
-        super(f);
-        this.fs = fs;
+    private FileTreeItem(ModelFile file, FileService service, BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener) {
+        super(file);
+        this.service = service;
         this.treeItemListener = treeItemListener;
 
         // We set the file icon
-        setGraphic(new ImageView(ResourceManager.toFXImage(f.getIcon())));
+        setGraphic(new ImageView(ResourceManager.toFXImage(file.getIcon())));
 
         // And add the treeItemListener
-        addFileListener(f);
+        addFileListener(file);
     }
 
     @Override
@@ -48,7 +58,7 @@ public class FileTreeItem extends TreeItem<ModelFile> {
         // If we haven't added the children to the model
         if (!getValue().areChildrenSet() || forceRefresh) {
             // We get them from the service and add them to the model
-            getValue().setChildren(fs.getChildren(this.getValue()));
+            getValue().setChildren(service.getChildren(this.getValue()));
 
             // Reload the tree items
             forceRefresh = false;
@@ -64,7 +74,7 @@ public class FileTreeItem extends TreeItem<ModelFile> {
             // We take the children from the model and add it to the tree
             getValue().getChildren().stream()
                     .filter(ModelFile::isFolder) // Only show folders in the tree
-                    .map(f -> new FileTreeItem(f, fs, treeItemListener))
+                    .map(f -> new FileTreeItem(f, service, treeItemListener))
                     .forEach(super.getChildren()::add);
         }
 

@@ -5,6 +5,9 @@ import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.core.services.factories.ServiceFactory;
 import com.cloudmanager.core.services.login.LoginProcedure;
 
+/**
+ * Implementation of the service factory for the Dropbox service
+ */
 public class DropboxServiceFactory implements ServiceFactory {
     @Override
     public String getServiceName() {

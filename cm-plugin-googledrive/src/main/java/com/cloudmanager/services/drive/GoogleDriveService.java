@@ -1,8 +1,8 @@
 package com.cloudmanager.services.drive;
 
+import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
-import com.cloudmanager.core.transfers.FileTransfer;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * File Service implementation for the Google Drive Service
+ */
 class GoogleDriveService extends AbstractFileService {
     /* Service Name and Icon */
     public static final String SERVICE_NAME = "googledrive";
@@ -34,7 +37,6 @@ class GoogleDriveService extends AbstractFileService {
 
     /*Google Drive folder type. Used to differenciate folders from normal files */
     private static final String MIME_FOLDER = "application/vnd.google-apps.folder";
-
 
     /*----------------------------*/
     /* Google drive service class */
@@ -59,6 +61,7 @@ class GoogleDriveService extends AbstractFileService {
         HttpTransport httpTransport;
 
         try {
+            // Create secure connection
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
         } catch (GeneralSecurityException | IOException e) {
@@ -72,14 +75,16 @@ class GoogleDriveService extends AbstractFileService {
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                     httpTransport, JacksonFactory.getDefaultInstance(), GoogleDriveApiKeys.SECRETS,
                     Collections.singleton(DriveScopes.DRIVE))
-                    .setCredentialDataStore(new CredentialDataStore(getRepo()))
+                    .setCredentialDataStore(new CredentialDataStore(repo.getAuth()))
                     .build();
 
+            // Get credentials
             Credential credential = flow.loadCredential("user");
             if (credential == null || credential.getRefreshToken() == null) {
                 return false;
             }
 
+            // Create client
             client = new Drive.Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance(), credential)
                     .setApplicationName(APP_NAME)
                     .build();
@@ -90,6 +95,84 @@ class GoogleDriveService extends AbstractFileService {
         }
 
         return true;
+    }
+
+    @Override
+    public ModelFile getRootFile() {
+        try {
+            String id = client.files().get("root").setFields("id").execute().getId();
+            return new ModelFile(id, "/", "", ModelFile.Type.FOLDER, 0L, null, null);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<ModelFile> getChildren(ModelFile parent) {
+        if (!parent.isFolder())
+            return null;
+
+        try {
+            // Create query
+            String query = "'" + parent.getId() + "' in parents and trashed = false";
+            String fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, trashed)";
+            int pageSize = 250;
+
+            List<File> files = new ArrayList<>();
+            String token = null;
+
+            do {
+                // We get the files
+                FileList _files = client.files().list()
+                        .setPageSize(pageSize)
+                        .setPageToken(token)
+                        .setQ(query).setFields(fields).execute();
+
+                // If there is more than one page of results,
+                // we use the token to get the next ones
+                token = _files.getNextPageToken();
+
+                // we add them to the list
+                _files.getFiles().forEach(files::add);
+            } while (token != null);
+
+            // Return the list converted and sorted
+            return files.stream()
+                    .map(f -> toModelFile(f, parent))
+                    .sorted()
+                    .collect(Collectors.toList());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ModelFile getDefaultDir() {
+        return getRootFile();
+    }
+
+    private ModelFile toModelFile(File f, ModelFile parent) {
+        String path = parent.getPath() + "/" + f.getName();
+        ModelFile.Type type = f.getMimeType().equals(MIME_FOLDER) ? ModelFile.Type.FOLDER : ModelFile.Type.FILE;
+        long size = f.getSize() == null ? 0 : f.getSize();
+        Date date = f.getModifiedTime() == null ? null : new Date(f.getModifiedTime().getValue());
+
+        return new ModelFile(f.getId(), f.getName(), path, type, size, date, parent);
+    }
+
+    @Override
+    public FileTransfer sendFile(ModelFile file) {
+        try {
+            InputStream stream = client.files().get(file.getId()).executeMediaAsInputStream();
+            return new FileTransfer(stream, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -121,79 +204,6 @@ class GoogleDriveService extends AbstractFileService {
     }
 
     @Override
-    public FileTransfer sendFile(ModelFile file) {
-        try {
-            InputStream stream = client.files().get(file.getId()).executeMediaAsInputStream();
-            return new FileTransfer(stream, file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public ModelFile getRootFile() {
-        try {
-            String id = client.files().get("root").setFields("id").execute().getId();
-            return new ModelFile(id, "/", "", ModelFile.Type.FOLDER, 0L, null, null);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public List<ModelFile> getChildren(ModelFile parent) {
-        if (!parent.isFolder())
-            return null;
-
-        try {
-            String query = "'" + parent.getId() + "' in parents and trashed = false";
-            String fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime, trashed)";
-            int pageSize = 250;
-
-            List<File> files = new ArrayList<>();
-            String token = null;
-
-            do {
-                // We get the files
-                FileList _files = client.files().list()
-                        .setPageSize(pageSize)
-                        .setPageToken(token)
-                        .setQ(query).setFields(fields).execute();
-
-                // If there is more than one page of results,
-                // we use the token to get the next ones
-                token = _files.getNextPageToken();
-
-                // we add them to the list
-                _files.getFiles().forEach(files::add);
-            } while (token != null);
-
-            // Return the list converted and sorted
-            return files.stream()
-                    .map(f -> toFile(f, parent))
-                    .sorted()
-                    .collect(Collectors.toList());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private ModelFile toFile(File f, ModelFile parent) {
-        String path = parent.getPath() + "/" + f.getName();
-        ModelFile.Type type = f.getMimeType().equals(MIME_FOLDER) ? ModelFile.Type.FOLDER : ModelFile.Type.FILE;
-        long size = f.getSize() == null ? 0 : f.getSize();
-        Date date = f.getModifiedTime() == null ? null : new Date(f.getModifiedTime().getValue());
-
-        return new ModelFile(f.getId(), f.getName(), path, type, size, date, parent);
-    }
-
-
-    @Override
     public boolean createFolder(ModelFile parent, String name) {
         File meta = new File();
         meta.setName(name);
@@ -216,6 +226,7 @@ class GoogleDriveService extends AbstractFileService {
         try {
             File _file = client.files().get(file.getId()).setFields("parents").execute();
 
+            // To move the file, we remove the parents and add the new one
             client.files().update(file.getId(), null)
                     .setRemoveParents(Joiner.on(',').join(_file.getParents()))
                     .setAddParents(targetFolder.getId())

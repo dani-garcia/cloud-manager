@@ -6,11 +6,21 @@ import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
 
+/**
+ * Represents a cell in the file table view.
+ */
 public class DraggableTableRow extends TableRow<ModelFile> {
 
+    /**
+     * Construct a cell from the table and the service
+     *
+     * @param table   The parent table
+     * @param service The file service
+     */
     public DraggableTableRow(TableView<ModelFile> table, FileService service) {
         DraggableFileHandler.getInstance().setOnDragEvents(this, service.getRepoId(), this::getItem);
 
+        // Create the context menu
         createContextMenu(service);
     }
 

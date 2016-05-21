@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <Accordion xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
            fx:id="root"
-           fx:controller="com.cloudmanager.gui.controller.DownloadController">
+           fx:controller="com.cloudmanager.gui.controller.TransferController">
     <panes>
         <TitledPane fx:id="downloadPane" animated="true">
             <VBox fx:id="downloadsBox" spacing="5">

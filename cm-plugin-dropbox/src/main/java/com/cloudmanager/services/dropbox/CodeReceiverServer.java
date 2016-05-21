@@ -15,6 +15,12 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Receives the authentication codes from the web browser.
+ * <p>
+ * Once the user authorizes the application, the web browser
+ * calls this server with the authorization tokens as parameters.
+ */
 final class CodeReceiverServer {
     private static final String HOST = "localhost";
     private static final int PORT = 41325;
@@ -27,6 +33,11 @@ final class CodeReceiverServer {
     private final Lock lock = new ReentrantLock();
     private final Condition gotAuthorizationResponse = lock.newCondition();
 
+    /**
+     * Starts the web server
+     *
+     * @throws IOException If the server couldn't be started
+     */
     void start() throws IOException {
         if (server != null)
             return;
@@ -41,10 +52,21 @@ final class CodeReceiverServer {
         }
     }
 
+    /**
+     * Returns the URL to redirect to. This is where this server expects a response.
+     *
+     * @return The redirect URL
+     */
     String getRedirectUri() {
         return "http://" + HOST + ":" + PORT + PATH;
     }
 
+    /**
+     * Locks the thread until an authentication mao is aquired.
+     *
+     * @return The authentication Map
+     * @throws IOException If there is any problem
+     */
     Map<String, String[]> waitForCode() throws IOException {
         lock.lock();
         try {
@@ -58,6 +80,11 @@ final class CodeReceiverServer {
         }
     }
 
+    /**
+     * Stops the server
+     *
+     * @throws IOException If the server coudn't be stopped
+     */
     void stop() throws IOException {
         if (server != null) {
             try {
@@ -69,22 +96,29 @@ final class CodeReceiverServer {
         }
     }
 
+    /**
+     * Handles the requests to the server
+     */
     private class CallbackHandler extends AbstractHandler {
 
         @Override
         public void handle(String target, Request request, HttpServletRequest servletRequest, HttpServletResponse response)
                 throws IOException, ServletException {
-            if (!PATH.equals(target)) {
+            if (!PATH.equals(target)) { // If it's not where we expect it, ignore it
                 return;
             }
+
+            // Write a basic page
             writeLandingHtml(response);
             response.flushBuffer();
             request.setHandled(true);
             lock.lock();
             try {
+                // Save the response
                 responseMap = new HashMap<>();
                 responseMap.putAll(request.getParameterMap());
 
+                // Signal the function to return;
                 gotAuthorizationResponse.signal();
             } finally {
                 lock.unlock();

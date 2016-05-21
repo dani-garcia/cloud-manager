@@ -2,10 +2,6 @@ package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.config.RepoManager;
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.local.LocalService;
-import com.cloudmanager.gui.controller.fileview.AbstractFileViewController;
-import com.cloudmanager.gui.controller.fileview.LocalViewController;
-import com.cloudmanager.gui.controller.fileview.RemoteViewController;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.RepoListCell;
 import javafx.beans.property.StringProperty;
@@ -13,25 +9,35 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableStringValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
+/**
+ * Handles the selection of a repository from the dropdown.
+ * <p>
+ * When the selection changes, it loads the new repository in the panel.
+ */
 public class RepoViewController {
     @FXML
     private BorderPane columnViewBorderPane;
     @FXML
     private ComboBox<FileRepo> repoSelector;
-    @FXML
-    private Button reloadButton;
 
     private StringProperty ownSelectionProperty;
     private ObservableStringValue otherSelectionValue;
 
+    private final ChangeListener<? super FileRepo> selectionChanged = (obs, oldVal, newVal) -> loadService(newVal);
 
+    /**
+     * Initializes the controller. Both parameters are used to control that the repository
+     * selected in one side cannot be selected in the other at the same time.
+     *
+     * @param own   The selection of this panel
+     * @param other The selection of the other panel
+     */
     public void initialize(StringProperty own, ObservableStringValue other) {
         // We set a repo change listener. When the repos change, we reload the tabs
         RepoManager.getInstance().addListener(__ -> loadSelection());
@@ -41,16 +47,16 @@ public class RepoViewController {
         this.otherSelectionValue = other;
 
         loadSelection();
-
-        // TODO Implement the reload button
-        reloadButton.setOnAction(event -> select(null));
     }
 
+    /**
+     * Selects the given repository
+     *
+     * @param repo The repository to select
+     */
     public void select(FileRepo repo) {
         repoSelector.getSelectionModel().select(repo);
     }
-
-    private final ChangeListener<? super FileRepo> selectionChanged = (obs, oldVal, newVal) -> loadService(newVal);
 
     private void loadSelection() {
         // Disable the listener temporarily
@@ -88,7 +94,7 @@ public class RepoViewController {
             if (repo != null) {
 
 
-                loader.setController(getController(repo));
+                loader.setController(new FileViewController(repo.getService()));
                 this.ownSelectionProperty.set(repo.getId());
 
             } else {
@@ -102,13 +108,5 @@ public class RepoViewController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    private static AbstractFileViewController getController(FileRepo repo) {
-        if (repo.getServiceName().equals(LocalService.SERVICE_NAME))
-            return new LocalViewController(repo.getService());
-        else
-            return new RemoteViewController(repo.getService());
     }
 }

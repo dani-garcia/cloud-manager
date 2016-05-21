@@ -7,6 +7,9 @@ import com.cloudmanager.core.services.login.LoginField;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Login procedure implementation for the local login. This one is manual and doesn't need any authentication
+ */
 class LocalLoginProcedure extends AbstractLoginProcedure {
     private FileRepo repo;
 
@@ -32,5 +35,5 @@ class LocalLoginProcedure extends AbstractLoginProcedure {
     }
 
     @Override
-    public void cancel() { }
+    public void cancel() { /* Nothing to cancel */ }
 }

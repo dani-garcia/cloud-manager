@@ -18,6 +18,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Implementation of the login procedure for the Google Drive service
+ */
 class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
     private GoogleAuthorizationCodeFlow flow;
     private VerificationCodeReceiver server;
@@ -27,6 +30,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
         HttpTransport httpTransport;
 
         try {
+            // Create a secure connection
             httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
         } catch (GeneralSecurityException | IOException e) {
@@ -44,9 +48,11 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 .setCredentialDataStore(new CredentialDataStore(authMap))
                 .build();
 
+        // Create the code receiver server
         server = new LocalServerReceiver();
 
         try {
+            // Set the login url and start the server
             String redirectUri = server.getRedirectUri();
             AuthorizationCodeRequestUrl authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectUri);
 
@@ -64,8 +70,10 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
     private void startCodeReceiverThread(String redirectUri, Map<String, String> authMap) {
         Thread thread = new Thread(() -> {
             try {
+                // Wait for a response from the browser
                 String code = server.waitForCode();
 
+                // If we get a code, check if it's valid
                 TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
 
                 // store credential
@@ -75,12 +83,15 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 FileRepo repo = new FileRepo(repoName, GoogleDriveService.SERVICE_NAME);
                 repo.getAuth().putAll(authMap);
 
+                // Call the listeners
                 onComplete.accept(true, repo);
 
             } catch (IOException e) {
+                // If there was any error
                 e.printStackTrace();
                 onComplete.accept(false, null);
             } finally {
+                // Stop the server at the end
                 cancel();
             }
         });

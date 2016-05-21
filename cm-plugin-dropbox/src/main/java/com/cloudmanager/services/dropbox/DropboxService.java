@@ -1,8 +1,8 @@
 package com.cloudmanager.services.dropbox;
 
+import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.services.AbstractFileService;
-import com.cloudmanager.core.transfers.FileTransfer;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+/**
+ * File Service implementation for the Dropbox service
+ */
 class DropboxService extends AbstractFileService {
     /* Service Name  and Icon */
     public static final String SERVICE_NAME = "dropbox";
@@ -48,7 +51,7 @@ class DropboxService extends AbstractFileService {
 
     @Override
     public boolean authenticate() {
-        String accessToken = getRepo().getAuth().get("access_token");
+        String accessToken = repo.getAuth().get("access_token");
 
         if (accessToken == null)
             return false;
@@ -56,6 +59,77 @@ class DropboxService extends AbstractFileService {
         client = new DbxClientV2(requestConfig, accessToken);
         return true;
     }
+
+
+    @Override
+    public ModelFile getRootFile() {
+        return new ModelFile("", "/", "", ModelFile.Type.FOLDER, 0L, null, null);
+    }
+
+    @Override
+    public List<ModelFile> getChildren(ModelFile parent) {
+        if (!parent.isFolder())
+            return null;
+
+        try {
+            // We get all the children
+            List<Metadata> files = new ArrayList<>();
+
+            ListFolderResult result = client.files().listFolder(parent.getPath());
+
+            files.addAll(result.getEntries());
+
+            // If there are more, we get those as well
+            while (result.getHasMore()) {
+                result = client.files().listFolderContinue(result.getCursor());
+                files.addAll(result.getEntries());
+            }
+
+            // We convert them to our model and return them
+            return files
+                    .stream()
+                    .map(f -> toModelFile(f, parent))
+                    .sorted()
+                    .collect(Collectors.toList());
+
+        } catch (DbxException e) {
+            System.err.println("Error listing files: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public ModelFile getDefaultDir() {
+        return getRootFile();
+    }
+
+    private ModelFile toModelFile(Metadata dbxFile, ModelFile parent) {
+        ModelFile.Type type = ModelFile.Type.FOLDER;
+        long size = 0;
+        Date modified = null;
+
+        if (dbxFile instanceof FileMetadata) {
+            FileMetadata _dbxFile = (FileMetadata) dbxFile;
+
+            type = ModelFile.Type.FILE;
+            size = _dbxFile.getSize();
+            modified = _dbxFile.getServerModified();
+        }
+
+        return new ModelFile(dbxFile.getPathLower(), dbxFile.getName(), dbxFile.getPathLower(), type, size, modified, parent);
+    }
+
+    @Override
+    public FileTransfer sendFile(ModelFile file) {
+        try {
+            InputStream stream = client.files().download(file.getPath()).getInputStream();
+            return new FileTransfer(stream, file);
+        } catch (DbxException e) {
+            System.err.println("Error downloading file: " + e.getMessage());
+            return null;
+        }
+    }
+
 
     @Override
     public boolean receiveFile(FileTransfer transfer) {
@@ -76,68 +150,6 @@ class DropboxService extends AbstractFileService {
         }
     }
 
-    @Override
-    public FileTransfer sendFile(ModelFile file) {
-        try {
-            InputStream stream = client.files().download(file.getPath()).getInputStream();
-            return new FileTransfer(stream, file);
-        } catch (DbxException e) {
-            System.err.println("Error downloading file: " + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public ModelFile getRootFile() {
-        return new ModelFile("", "/", "", ModelFile.Type.FOLDER, 0L, null, null);
-    }
-
-    @Override
-    public List<ModelFile> getChildren(ModelFile parent) {
-        if (!parent.isFolder())
-            return null;
-
-        try {
-            // We get all the children
-            List<Metadata> files = new ArrayList<>();
-
-            ListFolderResult result = client.files().listFolder(parent.getPath());
-
-            files.addAll(result.getEntries());
-
-            while (result.getHasMore()) {
-                result = client.files().listFolderContinue(result.getCursor());
-                files.addAll(result.getEntries());
-            }
-
-            // We convert them to our model and return them
-            return files
-                    .stream()
-                    .map(f -> toFile(f, parent))
-                    .sorted()
-                    .collect(Collectors.toList());
-
-        } catch (DbxException e) {
-            System.err.println("Error listing files: " + e.getMessage());
-            return null;
-        }
-    }
-
-    private ModelFile toFile(Metadata dbxFile, ModelFile parent) {
-        ModelFile.Type type = ModelFile.Type.FOLDER;
-        long size = 0;
-        Date modified = null;
-
-        if (dbxFile instanceof FileMetadata) {
-            FileMetadata _dbxFile = (FileMetadata) dbxFile;
-
-            type = ModelFile.Type.FILE;
-            size = _dbxFile.getSize();
-            modified = _dbxFile.getServerModified();
-        }
-
-        return new ModelFile(dbxFile.getPathLower(), dbxFile.getName(), dbxFile.getPathLower(), type, size, modified, parent);
-    }
 
     @Override
     public boolean createFolder(ModelFile parent, String name) {

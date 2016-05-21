@@ -1,6 +1,7 @@
 package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.config.Config;
+import com.cloudmanager.core.config.Config.Setting;
 import com.cloudmanager.core.config.ConfigManager;
 import com.cloudmanager.core.config.RepoManager;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,6 +9,9 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 
+/**
+ * Controls the main window and sets the initial service selections
+ */
 public class MainController {
 
     @FXML
@@ -30,15 +34,13 @@ public class MainController {
         rightColumnController.initialize(rightSelection, leftSelection);
 
         final Config conf = ConfigManager.getConfig();
-        final String leftPanel = "leftPanel";
-        final String rightPanel = "rightPanel";
-
-        // Save the changes on the config
-        leftSelection.addListener((obs, oldVal, newVal) -> conf.putSetting(leftPanel, newVal));
-        rightSelection.addListener((obs, oldVal, newVal) -> conf.putSetting(rightPanel, newVal));
 
         // Restore last services
-        leftColumnController.select(RepoManager.getInstance().getRepo(conf.getSetting(leftPanel)));
-        rightColumnController.select(RepoManager.getInstance().getRepo(conf.getSetting(rightPanel)));
+        leftColumnController.select(RepoManager.getInstance().getRepo(conf.getSetting(Setting.leftPanel)));
+        rightColumnController.select(RepoManager.getInstance().getRepo(conf.getSetting(Setting.rightPanel)));
+
+        // Save the changes on the config
+        leftSelection.addListener((obs, oldVal, newVal) -> conf.putSetting(Setting.leftPanel, newVal));
+        rightSelection.addListener((obs, oldVal, newVal) -> conf.putSetting(Setting.rightPanel, newVal));
     }
 }

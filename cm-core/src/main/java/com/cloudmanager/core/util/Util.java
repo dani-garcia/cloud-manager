@@ -10,18 +10,33 @@ import java.util.Map;
 import java.util.Properties;
 
 public final class Util {
-    public static long copy(InputStream source, OutputStream sink)
-            throws IOException {
-        long nread = 0L;
-        byte[] buf = new byte[4096];
-        int n;
-        while ((n = source.read(buf)) > 0) {
-            sink.write(buf, 0, n);
-            nread += n;
+
+    /**
+     * Copy all data from an InputStream to an OutputStream
+     *
+     * @param in  Source InputStream
+     * @param out Target OutputStream
+     * @return Bytes transfered
+     * @throws IOException If there is any problem reading or writing the streams
+     */
+    public static long copy(InputStream in, OutputStream out) throws IOException {
+        long totalBytesRead = 0L;
+        byte[] buffer = new byte[4096];
+
+        int bytesRead;
+        while ((bytesRead = in.read(buffer)) > 0) {
+            out.write(buffer, 0, bytesRead);
+            totalBytesRead += bytesRead;
         }
-        return nread;
+        return totalBytesRead;
     }
 
+    /**
+     * Returns the properties map from the specified properties file
+     *
+     * @param path The path to the properties file
+     * @return The properties map
+     */
     public static Map<String, String> getPropertiesMap(String path) {
         final Map<String, String> properties = new HashMap<>();
 

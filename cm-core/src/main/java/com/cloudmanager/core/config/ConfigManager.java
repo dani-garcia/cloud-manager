@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+/**
+ * Manages the load and save procedure of the application config
+ */
 public class ConfigManager {
     private static final String FALLBACK_FILE = "/default-config.json";
 
@@ -21,6 +24,13 @@ public class ConfigManager {
 
     private ConfigManager() {}
 
+    /**
+     * Get the application config. If it isn't loaded, this method will load it first using the default location.
+     * <p>
+     * To save after modifying, call the method {@link #save()}
+     *
+     * @return The configuration object for the application
+     */
     public static Config getConfig() {
         if (instance == null) {
             load(DEFAULT_FILE);
@@ -29,6 +39,13 @@ public class ConfigManager {
         return instance;
     }
 
+    /**
+     * Get the application config from a different location. This needs to be called before any access to the configuration is done.
+     *
+     * @param file The config file location
+     * @return The configuration object for the application
+     * @throws IllegalStateException If the config was already loaded
+     */
     public static Config load(File file) {
         if (instance != null)
             throw new IllegalStateException("Config already set");
@@ -55,6 +72,11 @@ public class ConfigManager {
         return instance;
     }
 
+    /**
+     * Saves the current configuration to the file it was loaded from.
+     *
+     * @return Whether it could save the configuration or not
+     */
     public static boolean save() {
         try {
             // Make sure the config is loaded before saving

@@ -4,18 +4,29 @@ package com.cloudmanager.core.services;
 import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.model.ModelFile;
 
+/**
+ * Abstract implementation of the {@link FileService} interface that includes the repository and the current directory methods.
+ * It also includes equals and hashcode based on the repository ID.
+ */
 public abstract class AbstractFileService implements FileService {
 
-    private FileRepo repo;
+    /**
+     * The repository in use
+     */
+    protected FileRepo repo;
+    /**
+     * The current directory. Used when receiving files
+     */
     private ModelFile currentDir;
 
     @Override
     public String getRepoId() {
-        return getRepo().getId();
+        return repo.getId();
     }
 
-    protected FileRepo getRepo() {
-        return repo;
+    @Override
+    public String getRepoName() {
+        return repo.getName();
     }
 
     public FileService setRepo(FileRepo repo) {
@@ -24,11 +35,6 @@ public abstract class AbstractFileService implements FileService {
 
         this.repo = repo;
         return this;
-    }
-
-    @Override
-    public String getRepoName() {
-        return getRepo().getName();
     }
 
     @Override

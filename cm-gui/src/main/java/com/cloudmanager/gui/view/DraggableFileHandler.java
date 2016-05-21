@@ -1,9 +1,9 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.config.RepoManager;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.DownloadService;
 import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.core.services.TransferService;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.*;
@@ -12,12 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * Handles the files being dragged
+ */
 public class DraggableFileHandler {
     private static DataFormat draggableFile = new DataFormat("com.cloudmanager.dnd.File");
     private static DataFormat draggableAccountId = new DataFormat("com.cloudmanager.dnd.AccountId");
 
     private static DraggableFileHandler instance = new DraggableFileHandler();
 
+    /**
+     * Returns the Handle's instance
+     *
+     * @return The instance
+     */
     public static DraggableFileHandler getInstance() {
         return instance;
     }
@@ -26,13 +34,20 @@ public class DraggableFileHandler {
 
     private Map<String, ModelFile> draggedFiles = new HashMap<>();
 
-    void setOnDragEvents(Node node, String accountId, Supplier<ModelFile> file) {
-        node.setOnDragDetected(getOnDragDetected(node, accountId, file));
+    /**
+     * Add the onDrag events to the given node and for the given repository.
+     *
+     * @param node   The node to add the drag events to
+     * @param repoId The repository being represented in the node
+     * @param file   Supplies the file being dragged / dropped
+     */
+    void setOnDragEvents(Node node, String repoId, Supplier<ModelFile> file) {
+        node.setOnDragDetected(getOnDragDetected(node, repoId, file));
         node.setOnDragOver(getOnDragOver(file));
-        node.setOnDragDropped(getOnDragDropped(accountId, file));
+        node.setOnDragDropped(getOnDragDropped(repoId, file));
     }
 
-    private EventHandler<? super MouseEvent> getOnDragDetected(Node node, String accountId, Supplier<ModelFile> draggedFile) {
+    private EventHandler<? super MouseEvent> getOnDragDetected(Node node, String repoId, Supplier<ModelFile> draggedFile) {
         return event -> {
             ModelFile file = draggedFile.get();
             if (file == null) {
@@ -47,7 +62,7 @@ public class DraggableFileHandler {
             ClipboardContent content = new ClipboardContent();
 
             content.put(draggableFile, file.getId());
-            content.put(draggableAccountId, accountId);
+            content.put(draggableAccountId, repoId);
 
             dragBoard.setContent(content);
 
@@ -81,12 +96,14 @@ public class DraggableFileHandler {
             String fileId = (String) dragEvent.getDragboard().getContent(draggableFile);
 
             if (fileId != null) {
+                // Get both services and initiate a transfer
+
                 String draggedAccountId = (String) dragEvent.getDragboard().getContent(draggableAccountId);
 
-                FileService draggedService = ServiceManager.getInstance().getService(draggedAccountId);
-                FileService targetService = ServiceManager.getInstance().getService(targetAccountId);
+                FileService draggedService = RepoManager.getInstance().getRepo(draggedAccountId).getService();
+                FileService targetService = RepoManager.getInstance().getRepo(targetAccountId).getService();
 
-                DownloadService.get().transferFile(draggedService, draggedFiles.get(fileId), targetService, targetFolder.get());
+                TransferService.get().transferFile(draggedService, draggedFiles.get(fileId), targetService, targetFolder.get());
             }
 
             draggedFiles.remove(fileId);

@@ -19,6 +19,9 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
+/**
+ * Handles the repository list window. It shows the current list and enables the new and delete buttons.
+ */
 public class RepoManagerController {
     @FXML
     private Parent root;
@@ -42,9 +45,11 @@ public class RepoManagerController {
 
     @FXML
     private void initialize() {
+        // Add all the repositories
         repoTable.getItems().setAll(RepoManager.getInstance().getRepos());
         RepoManager.getInstance().addListener(accounts -> repoTable.getItems().setAll(accounts));
 
+        // Set the icon column
         iconColumn.setCellValueFactory(s -> {
             Image icon = ResourceManager.loadImage(s.getValue().getService().getIcon());
             ImageView view = new ImageView(icon);
@@ -55,9 +60,11 @@ public class RepoManagerController {
             return new SimpleObjectProperty<>(view);
         });
 
+        // Set the other two columns
         serviceNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getService().getServiceDisplayName()));
         repoNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
 
+        // Set the buttons
         setButtons();
     }
 
@@ -85,6 +92,7 @@ public class RepoManagerController {
         removeButton.setOnAction(event -> {
             FileRepo acc = repoTable.getSelectionModel().getSelectedItem();
 
+            // Alert if nothing is selected
             if (acc == null) {
                 Alert alert = new Alert(Alert.AlertType.WARNING, ResourceManager.getString("repo_not_selected"));
                 alert.showAndWait();

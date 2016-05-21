@@ -1,26 +1,43 @@
 package com.cloudmanager.core.services;
 
+import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.transfers.FileTransfer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class DownloadService {
-    private static final DownloadService instance = new DownloadService();
+/**
+ * Manages the transfers in progress
+ */
+public class TransferService {
+    private static final TransferService instance = new TransferService();
 
-    public static DownloadService get() {
+    /**
+     * Returns the trasfer service instance.
+     *
+     * @return The trasfer service instance
+     */
+    public static TransferService get() {
         return instance;
     }
 
-    private DownloadService() { }
+    private TransferService() { }
 
     private BiConsumer<ModelFile, Double> listener;
 
     private List<Thread> transfersInProgress = Collections.synchronizedList(new ArrayList<>());
 
+    /**
+     * Transfer a file. If both repositories are the same, the file is moved,
+     * whereas if the repositories are different, the files are copied.
+     *
+     * @param origin       The service of the original file
+     * @param file         The file to transfer
+     * @param target       The service of the target file
+     * @param targetFolder The target file
+     */
     public void transferFile(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         // TODO Error si el archivo ya existe
         // TODO Si son el mismo servicio, comprobar que no intentamos mover un archivo dentro de si mismo o similar
@@ -32,6 +49,7 @@ public class DownloadService {
 
         target.setCurrentDir(targetFolder);
 
+        // If both are the same repository, we move the file
         if (origin.getRepoId().equals(target.getRepoId())) {
             moveOnSameService(origin, file, targetFolder);
 
@@ -74,10 +92,21 @@ public class DownloadService {
         thread.start();
     }
 
+    /**
+     * Returns a list of the transfers in progress.
+     *
+     * @return List of the transfers in progress
+     */
     public int getTransfersInProgress() {
         return transfersInProgress.size();
     }
 
+    /**
+     * Add a listener for all the downloads. For each transfer in progress, this listener will be called for every 1% transfered.
+     * The parameters are the file being transfered and the progress of the transfer (0-100)
+     *
+     * @param otherListener
+     */
     public void addProgressListener(BiConsumer<ModelFile, Double> otherListener) {
         if (listener == null)
             listener = otherListener;

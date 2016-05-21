@@ -5,7 +5,11 @@ import com.cloudmanager.core.services.FileService;
 import com.cloudmanager.core.services.factories.ServiceFactory;
 import com.cloudmanager.core.services.login.LoginProcedure;
 
+/**
+ * Factory for the local service
+ */
 public class LocalServiceFactory implements ServiceFactory {
+
     @Override
     public String getServiceName() {
         return LocalService.SERVICE_NAME;

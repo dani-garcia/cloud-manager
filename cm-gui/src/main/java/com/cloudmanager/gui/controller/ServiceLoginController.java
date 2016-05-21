@@ -19,6 +19,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ * Controls the login window. It's job is to generate a login form based on
+ * the fields from the {@link LoginProcedure} of the selected service,
+ * and save the login details once the login is complete.
+ */
 public class ServiceLoginController {
     @FXML
     private Parent root;
@@ -40,10 +45,11 @@ public class ServiceLoginController {
 
         serviceSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> loadWindow(newValue));
 
-        serviceSelector.disableProperty().bind(nameField.textProperty().isEmpty()); // TODO Comprobar que nombre ya existe?
+        serviceSelector.disableProperty().bind(nameField.textProperty().isEmpty());
     }
 
     private void loadWindow(ServiceFactory factory) {
+        // Once a service is selected, don't allow the name to change
         nameField.setDisable(true);
 
         // If there is a login in process, cancel it
@@ -70,6 +76,7 @@ public class ServiceLoginController {
         loginForm.getChildren().clear();
         int row = 0;
 
+        // For each field on the login procedure, we add the corresponding element to the form
         for (LoginField field : login.getFields()) {
             switch (field.getType()) {
                 case INPUT:
@@ -105,6 +112,7 @@ public class ServiceLoginController {
             row++;
         }
 
+        // If the login is automatic, there is no need for a button
         if (login.isPostLoginManual()) {
             Button loginButton = new Button(ResourceManager.getString("add"));
             loginButton.setOnAction(e -> login.postLogin());
@@ -112,6 +120,7 @@ public class ServiceLoginController {
         }
     }
 
+    // This is used as the completion listener
     private void loginCompleted(boolean success, FileRepo account) {
         Platform.runLater(() -> {
             if (success) {

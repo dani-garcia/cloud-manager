@@ -6,6 +6,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Represents a service factory in the login service selector dropdown
+ */
 public class ServiceFactoryListCell extends ListCell<ServiceFactory> {
 
     @Override

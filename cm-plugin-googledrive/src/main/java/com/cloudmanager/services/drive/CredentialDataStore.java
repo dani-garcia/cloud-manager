@@ -1,7 +1,6 @@
 package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.model.FileRepo;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.DataStoreFactory;
@@ -11,14 +10,18 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Stores the authentication credentials to a Google Drive repository
+ */
 class CredentialDataStore implements DataStore<StoredCredential> {
 
     private Map<String, String> map;
 
-    CredentialDataStore(FileRepo repo) {
-        this(repo.getAuth());
-    }
-
+    /**
+     * Constructs A CredentialDataStore from an authertication map
+     *
+     * @param map The authentication map
+     */
     CredentialDataStore(Map<String, String> map) {
         this.map = map;
     }

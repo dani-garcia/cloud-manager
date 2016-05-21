@@ -8,6 +8,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 
+/**
+ * Represents a cell in the file tree view.
+ */
 public class DraggableTreeCell extends TreeCell<ModelFile> {
 
     @Override
@@ -24,9 +27,16 @@ public class DraggableTreeCell extends TreeCell<ModelFile> {
         }
     }
 
+    /**
+     * Construct a cell from the tree and the service
+     *
+     * @param tree    The parent tree
+     * @param service The file service
+     */
     public DraggableTreeCell(final TreeView<ModelFile> tree, FileService service) {
         DraggableFileHandler.getInstance().setOnDragEvents(this, service.getRepoId(), this::getItem);
 
+        // Create the context menu
         createContextMenu();
     }
 
