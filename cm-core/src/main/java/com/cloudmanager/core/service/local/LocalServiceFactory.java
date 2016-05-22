@@ -1,9 +1,9 @@
-package com.cloudmanager.core.services.local;
+package com.cloudmanager.core.service.local;
 
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.factories.ServiceFactory;
-import com.cloudmanager.core.services.login.LoginProcedure;
+import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.api.service.ServiceFactory;
+import com.cloudmanager.core.api.login.LoginProcedure;
 
 /**
  * Factory for the local service

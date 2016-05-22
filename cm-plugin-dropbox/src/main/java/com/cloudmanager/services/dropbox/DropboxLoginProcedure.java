@@ -1,7 +1,7 @@
 package com.cloudmanager.services.dropbox;
 
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
+import com.cloudmanager.core.api.login.AbstractOauthLoginProcedure;
 import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWebAuth;

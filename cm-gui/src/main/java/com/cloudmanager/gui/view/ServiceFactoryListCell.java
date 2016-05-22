@@ -1,6 +1,6 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.services.factories.ServiceFactory;
+import com.cloudmanager.core.api.service.ServiceFactory;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;

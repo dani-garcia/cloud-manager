@@ -1,6 +1,5 @@
 package com.cloudmanager.services.drive;
 
-import com.cloudmanager.core.config.ConfigManager;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.DataStoreFactory;
@@ -43,8 +42,6 @@ class CredentialDataStore implements DataStore<StoredCredential> {
         map.put("accessToken", cred.getAccessToken());
         map.put("expirationTimeMilliseconds", cred.getExpirationTimeMilliseconds() + "");
         map.put("refreshToken", cred.getRefreshToken());
-
-        ConfigManager.save();
         return this;
     }
 

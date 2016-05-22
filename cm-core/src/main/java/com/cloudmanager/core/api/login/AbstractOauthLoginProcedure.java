@@ -1,6 +1,6 @@
-package com.cloudmanager.core.services.login;
+package com.cloudmanager.core.api.login;
 
-import com.cloudmanager.core.services.login.LoginField.FieldType;
+import com.cloudmanager.core.api.login.LoginField.FieldType;
 
 import java.util.ArrayList;
 import java.util.List;

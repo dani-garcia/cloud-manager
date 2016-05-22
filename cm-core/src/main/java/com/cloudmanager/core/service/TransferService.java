@@ -1,5 +1,6 @@
-package com.cloudmanager.core.services;
+package com.cloudmanager.core.service;
 
+import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
 

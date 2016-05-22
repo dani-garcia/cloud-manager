@@ -1,8 +1,7 @@
-package com.cloudmanager.core.services.factories;
+package com.cloudmanager.core.api.service;
 
+import com.cloudmanager.core.api.login.LoginProcedure;
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.login.LoginProcedure;
 
 /**
  * Represents a factory used to create instances of services.

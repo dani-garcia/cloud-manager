@@ -1,9 +1,9 @@
 package com.cloudmanager.services.dropbox;
 
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.factories.ServiceFactory;
-import com.cloudmanager.core.services.login.LoginProcedure;
+import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.api.service.ServiceFactory;
+import com.cloudmanager.core.api.login.LoginProcedure;
 
 /**
  * Implementation of the service factory for the Dropbox service

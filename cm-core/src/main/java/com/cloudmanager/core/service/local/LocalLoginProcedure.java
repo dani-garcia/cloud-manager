@@ -1,8 +1,8 @@
-package com.cloudmanager.core.services.local;
+package com.cloudmanager.core.service.local;
 
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.login.AbstractLoginProcedure;
-import com.cloudmanager.core.services.login.LoginField;
+import com.cloudmanager.core.api.login.AbstractLoginProcedure;
+import com.cloudmanager.core.api.login.LoginField;
 
 import java.util.Collections;
 import java.util.List;

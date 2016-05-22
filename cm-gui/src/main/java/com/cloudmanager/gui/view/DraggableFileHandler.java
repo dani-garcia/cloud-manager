@@ -2,8 +2,8 @@ package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.config.RepoManager;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.TransferService;
+import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.service.TransferService;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.*;

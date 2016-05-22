@@ -1,4 +1,4 @@
-package com.cloudmanager.core.services;
+package com.cloudmanager.core.api.service;
 
 
 import com.cloudmanager.core.model.FileRepo;

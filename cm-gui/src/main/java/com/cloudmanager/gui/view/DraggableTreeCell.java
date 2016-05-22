@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.FileService;
+import com.cloudmanager.core.api.service.FileService;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;

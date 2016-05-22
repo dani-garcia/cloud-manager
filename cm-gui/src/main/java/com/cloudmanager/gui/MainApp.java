@@ -1,8 +1,8 @@
 package com.cloudmanager.gui;
 
+import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.services.FileService;
-import com.cloudmanager.core.services.TransferService;
+import com.cloudmanager.core.service.TransferService;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -76,5 +76,11 @@ public class MainApp extends Application {
                 });
             }
         });
+
+        // Make sure to save everything before closing
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Saving settings on close");
+            ConfigManager.save();
+        }));
     }
 }

@@ -1,4 +1,4 @@
-package com.cloudmanager.core.services.login;
+package com.cloudmanager.core.api.login;
 
 /**
  * Represents a field on the login form.

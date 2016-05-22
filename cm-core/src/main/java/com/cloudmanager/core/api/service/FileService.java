@@ -1,4 +1,4 @@
-package com.cloudmanager.core.services;
+package com.cloudmanager.core.api.service;
 
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
@@ -9,8 +9,8 @@ import java.util.List;
  * Represents a file service. This can be an online service or the local filesystem service.
  * <p>
  * To use it you first need to create a {@link com.cloudmanager.core.model.FileRepo} with the
- * help of a {@link com.cloudmanager.core.services.login.LoginProcedure}. The recommended way to
- * get this is with a {@link com.cloudmanager.core.services.factories.ServiceFactory}
+ * help of a {@link com.cloudmanager.core.api.login.LoginProcedure}. The recommended way to
+ * get this is with a {@link ServiceFactory}
  */
 public interface FileService {
 

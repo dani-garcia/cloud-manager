@@ -2,10 +2,10 @@ package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.config.RepoManager;
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.factories.ServiceFactory;
-import com.cloudmanager.core.services.factories.ServiceFactoryLocator;
-import com.cloudmanager.core.services.login.LoginField;
-import com.cloudmanager.core.services.login.LoginProcedure;
+import com.cloudmanager.core.api.service.ServiceFactory;
+import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
+import com.cloudmanager.core.api.login.LoginField;
+import com.cloudmanager.core.api.login.LoginProcedure;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.ServiceFactoryListCell;
 import javafx.application.Platform;

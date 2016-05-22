@@ -1,7 +1,7 @@
 package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.login.AbstractOauthLoginProcedure;
+import com.cloudmanager.core.api.login.AbstractOauthLoginProcedure;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;

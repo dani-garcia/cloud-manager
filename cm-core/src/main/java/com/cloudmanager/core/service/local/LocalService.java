@@ -1,8 +1,8 @@
-package com.cloudmanager.core.services.local;
+package com.cloudmanager.core.service.local;
 
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.AbstractFileService;
+import com.cloudmanager.core.api.service.AbstractFileService;
 import com.cloudmanager.core.util.Util;
 
 import javax.swing.filechooser.FileSystemView;

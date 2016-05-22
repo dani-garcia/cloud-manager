@@ -1,4 +1,6 @@
-package com.cloudmanager.core.services.factories;
+package com.cloudmanager.core.service.factories;
+
+import com.cloudmanager.core.api.service.ServiceFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -11,7 +13,7 @@ import java.util.*;
  * <p>
  * To be able to locate these implementations, their JAR file must be on the application's classpath
  * and there must be a file on the 'META-INF\services' folder named
- * {@linkplain com.cloudmanager.core.services.factories.ServiceFactory com.cloudmanager.core.services.factories.ServiceFactory}
+ * {@linkplain ServiceFactory com.cloudmanager.core.api.service.ServiceFactory}
  * that contains the fully qualified class name to the Factory implementation (To include more than one, put each one on a separate line)
  */
 public class ServiceFactoryLocator {

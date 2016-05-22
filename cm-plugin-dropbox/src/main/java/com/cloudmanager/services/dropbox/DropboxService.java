@@ -2,7 +2,7 @@ package com.cloudmanager.services.dropbox;
 
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.AbstractFileService;
+import com.cloudmanager.core.api.service.AbstractFileService;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;

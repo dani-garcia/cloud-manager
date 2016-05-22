@@ -2,7 +2,7 @@ package com.cloudmanager.services.drive;
 
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.AbstractFileService;
+import com.cloudmanager.core.api.service.AbstractFileService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;

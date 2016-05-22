@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.services.TransferService;
+import com.cloudmanager.core.service.TransferService;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;

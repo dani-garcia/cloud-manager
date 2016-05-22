@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.services.factories.ServiceFactoryLocator;
+import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
