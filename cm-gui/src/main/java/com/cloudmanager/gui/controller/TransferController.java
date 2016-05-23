@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.service.TransferService;
+import com.cloudmanager.core.managers.TransferManager;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -45,7 +45,7 @@ public class TransferController {
         downloadPane.textProperty().bind(Bindings.format(ResourceManager.getString("transfers"), sizeBinding));
 
         // Listen to the transfers progress
-        TransferService.get().addProgressListener((f, p) -> Platform.runLater(() -> {
+        TransferManager.get().addProgressListener((f, p) -> Platform.runLater(() -> {
             TransferBox transfer = transfersMap.get(f);
 
             // If it's not on the map, we create it and add it

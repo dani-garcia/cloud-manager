@@ -38,11 +38,7 @@ public class Config {
      *
      * @return List of service globalSettings
      */
-    List<FileServiceSettings> getServiceSettings() {
-        return Collections.unmodifiableList(serviceSettings);
-    }
-
-    List<FileServiceSettings> _getServiceSettings() {
+    public List<FileServiceSettings> getServiceSettings() {
         return serviceSettings;
     }
 

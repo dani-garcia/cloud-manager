@@ -3,7 +3,7 @@ package com.cloudmanager.gui.controller;
 import com.cloudmanager.core.config.Config;
 import com.cloudmanager.core.config.Config.Setting;
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.managers.ServiceManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;

@@ -3,7 +3,7 @@ package com.cloudmanager.gui.controller;
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.model.ModelFile.Event;
-import com.cloudmanager.core.service.local.LocalService;
+import com.cloudmanager.core.localservice.LocalService;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.DraggableTableRow;
 import com.cloudmanager.gui.view.DraggableTreeCell;

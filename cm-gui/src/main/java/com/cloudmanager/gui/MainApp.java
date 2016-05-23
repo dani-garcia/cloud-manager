@@ -2,8 +2,7 @@ package com.cloudmanager.gui;
 
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.config.ConfigManager;
-import com.cloudmanager.core.service.TransferService;
-import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
+import com.cloudmanager.core.managers.TransferManager;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -48,9 +47,6 @@ public class MainApp extends Application {
             alert.showAndWait();
             System.exit(0);
         }
-
-        // Find all the service factories available
-        ServiceFactoryLocator.findAll();
     }
 
     private void initRootLayout() {
@@ -66,7 +62,7 @@ public class MainApp extends Application {
 
         // If there are downloads pending, alert the user
         primaryStage.setOnCloseRequest(e -> {
-            if (TransferService.get().getTransfersInProgress() > 0) {
+            if (TransferManager.get().getTransfersInProgress() > 0) {
 
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle(ResourceManager.getString("unfinished_transfers"));

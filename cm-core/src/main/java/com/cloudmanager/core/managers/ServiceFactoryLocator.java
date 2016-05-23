@@ -1,4 +1,4 @@
-package com.cloudmanager.core.service.factories;
+package com.cloudmanager.core.managers;
 
 import com.cloudmanager.core.api.service.ServiceFactory;
 

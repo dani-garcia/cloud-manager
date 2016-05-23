@@ -1,6 +1,6 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.managers.ServiceManager;
 import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.property.SimpleObjectProperty;

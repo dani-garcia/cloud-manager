@@ -1,5 +1,7 @@
-package com.cloudmanager.core.config;
+package com.cloudmanager.core.managers;
 
+import com.cloudmanager.core.config.Config;
+import com.cloudmanager.core.config.ConfigManager;
 import com.cloudmanager.core.model.FileServiceSettings;
 
 import java.util.List;
@@ -46,7 +48,7 @@ public class ServiceManager {
      */
     public void addServiceSettings(FileServiceSettings serviceSettings) {
         Config conf = ConfigManager.getConfig();
-        conf._getServiceSettings().add(serviceSettings);
+        conf.getServiceSettings().add(serviceSettings);
 
         // Notify listeners and save
         serviceSettingsListeer.accept(getServiceSettings());
@@ -60,7 +62,7 @@ public class ServiceManager {
      */
     public void removeServiceSettings(FileServiceSettings serviceSettings) {
         Config conf = ConfigManager.getConfig();
-        conf._getServiceSettings().remove(serviceSettings);
+        conf.getServiceSettings().remove(serviceSettings);
 
         // Notify listeners and save
         serviceSettingsListeer.accept(getServiceSettings());

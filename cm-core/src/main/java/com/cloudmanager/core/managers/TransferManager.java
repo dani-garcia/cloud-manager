@@ -1,4 +1,4 @@
-package com.cloudmanager.core.service;
+package com.cloudmanager.core.managers;
 
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.model.FileTransfer;
@@ -12,19 +12,19 @@ import java.util.function.BiConsumer;
 /**
  * Manages the transfers in progress
  */
-public class TransferService {
-    private static final TransferService instance = new TransferService();
+public class TransferManager {
+    private static final TransferManager instance = new TransferManager();
 
     /**
      * Returns the trasfer service instance.
      *
      * @return The trasfer service instance
      */
-    public static TransferService get() {
+    public static TransferManager get() {
         return instance;
     }
 
-    private TransferService() { }
+    private TransferManager() { }
 
     private BiConsumer<ModelFile, Double> listener;
 

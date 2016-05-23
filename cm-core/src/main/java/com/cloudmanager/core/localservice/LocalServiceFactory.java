@@ -1,4 +1,4 @@
-package com.cloudmanager.core.service.local;
+package com.cloudmanager.core.localservice;
 
 import com.cloudmanager.core.api.login.LoginProcedure;
 import com.cloudmanager.core.api.service.FileService;

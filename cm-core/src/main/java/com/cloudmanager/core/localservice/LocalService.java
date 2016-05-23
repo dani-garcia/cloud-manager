@@ -1,4 +1,4 @@
-package com.cloudmanager.core.service.local;
+package com.cloudmanager.core.localservice;
 
 import com.cloudmanager.core.api.service.AbstractFileService;
 import com.cloudmanager.core.model.FileServiceSettings;

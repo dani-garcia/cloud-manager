@@ -1,9 +1,9 @@
 package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.api.service.FileService;
-import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.managers.ServiceManager;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.service.TransferService;
+import com.cloudmanager.core.managers.TransferManager;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.*;
@@ -103,7 +103,7 @@ public class DraggableFileHandler {
                 FileService draggedService = ServiceManager.getInstance().getServiceSettings(draggedServiceId).getService();
                 FileService targetService = ServiceManager.getInstance().getServiceSettings(targetServiceId).getService();
 
-                TransferService.get().transferFile(draggedService, draggedFiles.get(fileId), targetService, targetFolder.get());
+                TransferManager.get().transferFile(draggedService, draggedFiles.get(fileId), targetService, targetFolder.get());
             }
 
             draggedFiles.remove(fileId);

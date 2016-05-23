@@ -1,7 +1,7 @@
 package com.cloudmanager.core.model;
 
 import com.cloudmanager.core.api.service.FileService;
-import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
+import com.cloudmanager.core.managers.ServiceFactoryLocator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
