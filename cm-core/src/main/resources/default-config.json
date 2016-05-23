@@ -1,5 +1,5 @@
 {
-  "repos": [
+  "serviceSettings": [
     {
       "id": "d57c5659-8f31-4be9-9a01-145019507e39",
       "name": "Local",
@@ -7,7 +7,7 @@
       "auth": {}
     }
   ],
-  "settings": {
+  "globalSettings": {
     "leftPanel": "d57c5659-8f31-4be9-9a01-145019507e39"
   }
 }

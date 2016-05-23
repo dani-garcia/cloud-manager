@@ -1,9 +1,9 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.RepoManager;
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.gui.util.ResourceManager;
-import com.cloudmanager.gui.view.RepoListCell;
+import com.cloudmanager.gui.view.ServiceListCell;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableStringValue;
@@ -16,31 +16,31 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
 /**
- * Handles the selection of a repository from the dropdown.
+ * Handles the selection of a service from the dropdown.
  * <p>
- * When the selection changes, it loads the new repository in the panel.
+ * When the selection changes, it loads the new service in the panel.
  */
-public class RepoViewController {
+public class ServiceViewController {
     @FXML
     private BorderPane columnViewBorderPane;
     @FXML
-    private ComboBox<FileRepo> repoSelector;
+    private ComboBox<FileServiceSettings> serviceSelector;
 
     private StringProperty ownSelectionProperty;
     private ObservableStringValue otherSelectionValue;
 
-    private final ChangeListener<? super FileRepo> selectionChanged = (obs, oldVal, newVal) -> loadService(newVal);
+    private final ChangeListener<? super FileServiceSettings> selectionChanged = (obs, oldVal, newVal) -> loadService(newVal);
 
     /**
-     * Initializes the controller. Both parameters are used to control that the repository
+     * Initializes the controller. Both parameters are used to control that the service
      * selected in one side cannot be selected in the other at the same time.
      *
      * @param own   The selection of this panel
      * @param other The selection of the other panel
      */
     public void initialize(StringProperty own, ObservableStringValue other) {
-        // We set a repo change listener. When the repos change, we reload the tabs
-        RepoManager.getInstance().addListener(__ -> loadSelection());
+        // We set a settings change listener. When the services change, we reload the tabs
+        ServiceManager.getInstance().addListener(__ -> loadSelection());
 
         // Set properties
         this.ownSelectionProperty = own;
@@ -50,52 +50,50 @@ public class RepoViewController {
     }
 
     /**
-     * Selects the given repository
+     * Selects the given service
      *
-     * @param repo The repository to select
+     * @param service The service to select
      */
-    public void select(FileRepo repo) {
-        repoSelector.getSelectionModel().select(repo);
+    public void select(FileServiceSettings service) {
+        serviceSelector.getSelectionModel().select(service);
     }
 
     private void loadSelection() {
         // Disable the listener temporarily
-        repoSelector.getSelectionModel().selectedItemProperty().removeListener(selectionChanged);
+        serviceSelector.getSelectionModel().selectedItemProperty().removeListener(selectionChanged);
 
         // Get the current selection, if there is one, to restore it later
-        FileRepo selection = repoSelector.getSelectionModel().selectedItemProperty().get();
+        FileServiceSettings selection = serviceSelector.getSelectionModel().selectedItemProperty().get();
         String selectionId = selection != null ? selection.getId() : null;
 
         // Set the new values
-        repoSelector.setCellFactory((val) -> new RepoListCell(this.otherSelectionValue));
-        repoSelector.setButtonCell(new RepoListCell(this.otherSelectionValue));
-        repoSelector.getItems().setAll(RepoManager.getInstance().getRepos());
+        serviceSelector.setCellFactory((val) -> new ServiceListCell(this.otherSelectionValue));
+        serviceSelector.setButtonCell(new ServiceListCell(this.otherSelectionValue));
+        serviceSelector.getItems().setAll(ServiceManager.getInstance().getServiceSettings());
 
         // Get the new selection (if exists)
-        FileRepo newSelection = RepoManager.getInstance().getRepo(selectionId);
+        FileServiceSettings newSelection = ServiceManager.getInstance().getServiceSettings(selectionId);
 
         if (newSelection == null) {
             // Clear the selector and the panel
-            repoSelector.valueProperty().setValue(null);
+            serviceSelector.valueProperty().setValue(null);
             loadService(null);
         } else {
             select(newSelection);
         }
 
         // Restore the listener
-        repoSelector.getSelectionModel().selectedItemProperty().addListener(selectionChanged);
+        serviceSelector.getSelectionModel().selectedItemProperty().addListener(selectionChanged);
     }
 
-    private void loadService(FileRepo repo) {
+    private void loadService(FileServiceSettings service) {
         try {
             // Load the fxml
             FXMLLoader loader = ResourceManager.getFXMLLoader("/view/FileTreeView.fxml");
 
-            if (repo != null) {
-
-
-                loader.setController(new FileViewController(repo.getService()));
-                this.ownSelectionProperty.set(repo.getId());
+            if (service != null) {
+                loader.setController(new FileViewController(service.getService()));
+                this.ownSelectionProperty.set(service.getId());
 
             } else {
                 this.ownSelectionProperty.set(null);

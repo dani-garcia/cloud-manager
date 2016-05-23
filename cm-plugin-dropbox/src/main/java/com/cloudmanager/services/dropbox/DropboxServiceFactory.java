@@ -1,9 +1,9 @@
 package com.cloudmanager.services.dropbox;
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.api.login.LoginProcedure;
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.api.service.ServiceFactory;
-import com.cloudmanager.core.api.login.LoginProcedure;
+import com.cloudmanager.core.model.FileServiceSettings;
 
 /**
  * Implementation of the service factory for the Dropbox service
@@ -30,7 +30,7 @@ public class DropboxServiceFactory implements ServiceFactory {
     }
 
     @Override
-    public FileService create(FileRepo repo) {
-        return new DropboxService().setRepo(repo);
+    public FileService create(FileServiceSettings settings) {
+        return new DropboxService(settings);
     }
 }

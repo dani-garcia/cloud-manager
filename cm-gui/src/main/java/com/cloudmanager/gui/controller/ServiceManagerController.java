@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.RepoManager;
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,21 +20,21 @@ import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
 /**
- * Handles the repository list window. It shows the current list and enables the new and delete buttons.
+ * Handles the service list window. It shows the current list and enables the new and delete buttons.
  */
-public class RepoManagerController {
+public class ServiceManagerController {
     @FXML
     private Parent root;
 
     @FXML
-    private TableView<FileRepo> repoTable;
+    private TableView<FileServiceSettings> serviceTable;
 
     @FXML
-    private TableColumn<FileRepo, ImageView> iconColumn;
+    private TableColumn<FileServiceSettings, ImageView> iconColumn;
     @FXML
-    private TableColumn<FileRepo, String> serviceNameColumn;
+    private TableColumn<FileServiceSettings, String> serviceNameColumn;
     @FXML
-    private TableColumn<FileRepo, String> repoNameColumn;
+    private TableColumn<FileServiceSettings, String> nameColumn;
 
     @FXML
     private Button newButton;
@@ -45,9 +45,9 @@ public class RepoManagerController {
 
     @FXML
     private void initialize() {
-        // Add all the repositories
-        repoTable.getItems().setAll(RepoManager.getInstance().getRepos());
-        RepoManager.getInstance().addListener(accounts -> repoTable.getItems().setAll(accounts));
+        // Add all the services
+        serviceTable.getItems().setAll(ServiceManager.getInstance().getServiceSettings());
+        ServiceManager.getInstance().addListener(services -> serviceTable.getItems().setAll(services));
 
         // Set the icon column
         iconColumn.setCellValueFactory(s -> {
@@ -62,7 +62,7 @@ public class RepoManagerController {
 
         // Set the other two columns
         serviceNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getService().getServiceDisplayName()));
-        repoNameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
+        nameColumn.setCellValueFactory(s -> new SimpleStringProperty(s.getValue().getName()));
 
         // Set the buttons
         setButtons();
@@ -81,7 +81,7 @@ public class RepoManagerController {
             stage.initOwner(root.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
-            stage.setTitle(ResourceManager.getString("add_repo"));
+            stage.setTitle(ResourceManager.getString("add_service"));
             stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
             stage.setScene(new Scene(newWindow));
@@ -90,21 +90,21 @@ public class RepoManagerController {
         });
 
         removeButton.setOnAction(event -> {
-            FileRepo acc = repoTable.getSelectionModel().getSelectedItem();
+            FileServiceSettings acc = serviceTable.getSelectionModel().getSelectedItem();
 
             // Alert if nothing is selected
             if (acc == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, ResourceManager.getString("repo_not_selected"));
+                Alert alert = new Alert(Alert.AlertType.WARNING, ResourceManager.getString("service_not_selected"));
                 alert.showAndWait();
                 return;
             }
 
-            RepoManager.getInstance().removeRepo(acc);
+            ServiceManager.getInstance().removeServiceSettings(acc);
 
             // Reload the data
             initialize();
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("repo_delete_success", acc.getName()));
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("service_delete_success", acc.getName()));
             alert.showAndWait();
         });
     }

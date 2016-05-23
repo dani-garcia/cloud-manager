@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;
@@ -18,7 +18,7 @@ public class DraggableTableRow extends TableRow<ModelFile> {
      * @param service The file service
      */
     public DraggableTableRow(TableView<ModelFile> table, FileService service) {
-        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getRepoId(), this::getItem);
+        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getInstanceId(), this::getItem);
 
         // Create the context menu
         createContextMenu(service);

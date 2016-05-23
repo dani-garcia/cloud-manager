@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.model.ModelFile;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -34,7 +34,7 @@ public class DraggableTreeCell extends TreeCell<ModelFile> {
      * @param service The file service
      */
     public DraggableTreeCell(final TreeView<ModelFile> tree, FileService service) {
-        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getRepoId(), this::getItem);
+        DraggableFileHandler.getInstance().setOnDragEvents(this, service.getInstanceId(), this::getItem);
 
         // Create the context menu
         createContextMenu();

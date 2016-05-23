@@ -1,7 +1,7 @@
 package com.cloudmanager.services.dropbox;
 
-import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.api.login.AbstractOauthLoginProcedure;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxWebAuth;
@@ -65,11 +65,11 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
                 }
 
                 // Finish login
-                FileRepo repo = new FileRepo(repoName, DropboxService.SERVICE_NAME);
-                repo.getAuth().put("access_token", authFinish.getAccessToken());
+                FileServiceSettings settings = new FileServiceSettings(settingsName, DropboxService.SERVICE_NAME);
+                settings.getAuth().put("access_token", authFinish.getAccessToken());
 
                 // Call the listeners
-                onComplete.accept(true, repo);
+                onComplete.accept(true, settings);
 
             } catch (IOException e) {
                 e.printStackTrace();

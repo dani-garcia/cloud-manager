@@ -10,14 +10,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Stores the authentication credentials to a Google Drive repository
+ * Stores the authentication credentials to a Google Drive service
  */
 class CredentialDataStore implements DataStore<StoredCredential> {
 
     private Map<String, String> map;
 
     /**
-     * Constructs A CredentialDataStore from an authertication map
+     * Constructs A CredentialDataStore from an authentication map
      *
      * @param map The authentication map
      */

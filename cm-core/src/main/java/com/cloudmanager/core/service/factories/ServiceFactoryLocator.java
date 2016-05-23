@@ -35,7 +35,7 @@ public class ServiceFactoryLocator {
      *
      * @return List with all the factories
      */
-    public static Collection<ServiceFactory> listAll() {
+    public static Collection<ServiceFactory> findAll() {
         return getServiceFactories().values();
     }
 

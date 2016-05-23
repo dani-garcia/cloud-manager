@@ -20,7 +20,7 @@ public class MenuController {
     private Parent root;
 
     @FXML
-    private MenuItem repoManagerItem;
+    private MenuItem serviceManagerItem;
 
     @FXML
     private MenuItem fullScreenItem;
@@ -47,15 +47,15 @@ public class MenuController {
             MainApp.getPrimaryStage().setFullScreen(true);
         });
 
-        repoManagerItem.setOnAction(event -> {
-            Parent newWindow = ResourceManager.loadFXML("/view/RepoManager.fxml");
+        serviceManagerItem.setOnAction(event -> {
+            Parent newWindow = ResourceManager.loadFXML("/view/ServiceManager.fxml");
 
             Stage stage = new Stage();
 
             stage.initOwner(root.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
 
-            stage.setTitle(ResourceManager.getString("repo_manager"));
+            stage.setTitle(ResourceManager.getString("service_manager"));
             stage.getIcons().add(ResourceManager.loadImage("/branding/app-icon.png"));
 
             stage.setScene(new Scene(newWindow));

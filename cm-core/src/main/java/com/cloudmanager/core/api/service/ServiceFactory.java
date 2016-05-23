@@ -1,7 +1,7 @@
 package com.cloudmanager.core.api.service;
 
 import com.cloudmanager.core.api.login.LoginProcedure;
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.model.FileServiceSettings;
 
 /**
  * Represents a factory used to create instances of services.
@@ -37,10 +37,10 @@ public interface ServiceFactory {
     LoginProcedure startLoginProcedure();
 
     /**
-     * Create an instance of the service from the repository object
+     * Create an instance of the service from the settings object
      *
-     * @param repo The repository
+     * @param settings The service settings
      * @return The service instance
      */
-    FileService create(FileRepo repo);
+    FileService create(FileServiceSettings settings);
 }

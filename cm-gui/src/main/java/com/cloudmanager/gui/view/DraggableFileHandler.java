@@ -1,8 +1,8 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.config.RepoManager;
-import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.service.TransferService;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 public class DraggableFileHandler {
     private static DataFormat draggableFile = new DataFormat("com.cloudmanager.dnd.File");
-    private static DataFormat draggableAccountId = new DataFormat("com.cloudmanager.dnd.AccountId");
+    private static DataFormat draggableServiceId = new DataFormat("com.cloudmanager.dnd.ServiceId");
 
     private static DraggableFileHandler instance = new DraggableFileHandler();
 
@@ -35,22 +35,22 @@ public class DraggableFileHandler {
     private Map<String, ModelFile> draggedFiles = new HashMap<>();
 
     /**
-     * Add the onDrag events to the given node and for the given repository.
+     * Add the onDrag events to the given node and for the given service.
      *
-     * @param node   The node to add the drag events to
-     * @param repoId The repository being represented in the node
-     * @param file   Supplies the file being dragged / dropped
+     * @param node      The node to add the drag events to
+     * @param serviceId The service being represented in the node
+     * @param file      Supplies the file being dragged / dropped
      */
-    void setOnDragEvents(Node node, String repoId, Supplier<ModelFile> file) {
-        node.setOnDragDetected(getOnDragDetected(node, repoId, file));
+    void setOnDragEvents(Node node, String serviceId, Supplier<ModelFile> file) {
+        node.setOnDragDetected(getOnDragDetected(node, serviceId, file));
         node.setOnDragOver(getOnDragOver(file));
-        node.setOnDragDropped(getOnDragDropped(repoId, file));
+        node.setOnDragDropped(getOnDragDropped(serviceId, file));
     }
 
-    private EventHandler<? super MouseEvent> getOnDragDetected(Node node, String repoId, Supplier<ModelFile> draggedFile) {
+    private EventHandler<? super MouseEvent> getOnDragDetected(Node node, String serviceId, Supplier<ModelFile> draggedFile) {
         return event -> {
             ModelFile file = draggedFile.get();
-            if (file == null) {
+            if (file == null || !file.isFile()) {
                 return;
             }
 
@@ -62,7 +62,7 @@ public class DraggableFileHandler {
             ClipboardContent content = new ClipboardContent();
 
             content.put(draggableFile, file.getId());
-            content.put(draggableAccountId, repoId);
+            content.put(draggableServiceId, serviceId);
 
             dragBoard.setContent(content);
 
@@ -91,17 +91,17 @@ public class DraggableFileHandler {
         };
     }
 
-    private EventHandler<? super DragEvent> getOnDragDropped(String targetAccountId, Supplier<ModelFile> targetFolder) {
+    private EventHandler<? super DragEvent> getOnDragDropped(String targetServiceId, Supplier<ModelFile> targetFolder) {
         return dragEvent -> {
             String fileId = (String) dragEvent.getDragboard().getContent(draggableFile);
 
             if (fileId != null) {
                 // Get both services and initiate a transfer
 
-                String draggedAccountId = (String) dragEvent.getDragboard().getContent(draggableAccountId);
+                String draggedServiceId = (String) dragEvent.getDragboard().getContent(draggableServiceId);
 
-                FileService draggedService = RepoManager.getInstance().getRepo(draggedAccountId).getService();
-                FileService targetService = RepoManager.getInstance().getRepo(targetAccountId).getService();
+                FileService draggedService = ServiceManager.getInstance().getServiceSettings(draggedServiceId).getService();
+                FileService targetService = ServiceManager.getInstance().getServiceSettings(targetServiceId).getService();
 
                 TransferService.get().transferFile(draggedService, draggedFiles.get(fileId), targetService, targetFolder.get());
             }

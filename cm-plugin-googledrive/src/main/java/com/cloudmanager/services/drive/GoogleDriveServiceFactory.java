@@ -1,9 +1,9 @@
 package com.cloudmanager.services.drive;
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.api.login.LoginProcedure;
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.api.service.ServiceFactory;
-import com.cloudmanager.core.api.login.LoginProcedure;
+import com.cloudmanager.core.model.FileServiceSettings;
 
 /**
  * Implementation of the service factory for the Google Drive service
@@ -31,7 +31,7 @@ public class GoogleDriveServiceFactory implements ServiceFactory {
     }
 
     @Override
-    public FileService create(FileRepo repo) {
-        return new GoogleDriveService().setRepo(repo);
+    public FileService create(FileServiceSettings settings) {
+        return new GoogleDriveService(settings);
     }
 }

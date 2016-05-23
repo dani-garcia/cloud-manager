@@ -1,8 +1,8 @@
 package com.cloudmanager.core.service.local;
 
-import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.api.login.AbstractLoginProcedure;
 import com.cloudmanager.core.api.login.LoginField;
+import com.cloudmanager.core.model.FileServiceSettings;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * Login procedure implementation for the local login. This one is manual and doesn't need any authentication
  */
 class LocalLoginProcedure extends AbstractLoginProcedure {
-    private FileRepo repo;
+    private FileServiceSettings settings;
 
     @Override
     public List<LoginField> getFields() {
@@ -24,13 +24,13 @@ class LocalLoginProcedure extends AbstractLoginProcedure {
     }
 
     @Override
-    public void preLogin(String repoName) {
-        repo = new FileRepo(repoName, LocalService.SERVICE_NAME);
+    public void preLogin(String visualName) {
+        settings = new FileServiceSettings(visualName, LocalService.SERVICE_NAME);
     }
 
     @Override
     public boolean postLogin() {
-        onComplete.accept(true, repo);
+        onComplete.accept(true, settings);
         return true;
     }
 

@@ -1,7 +1,7 @@
 package com.cloudmanager.services.drive;
 
-import com.cloudmanager.core.model.FileRepo;
 import com.cloudmanager.core.api.login.AbstractOauthLoginProcedure;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.extensions.java6.auth.oauth2.VerificationCodeReceiver;
@@ -80,11 +80,11 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 flow.createAndStoreCredential(response, "user");
 
                 // Finish login
-                FileRepo repo = new FileRepo(repoName, GoogleDriveService.SERVICE_NAME);
-                repo.getAuth().putAll(authMap);
+                FileServiceSettings settings = new FileServiceSettings(settingsName, GoogleDriveService.SERVICE_NAME);
+                settings.getAuth().putAll(authMap);
 
                 // Call the listeners
-                onComplete.accept(true, repo);
+                onComplete.accept(true, settings);
 
             } catch (IOException e) {
                 // If there was any error

@@ -1,8 +1,9 @@
 package com.cloudmanager.core.service.local;
 
+import com.cloudmanager.core.api.service.AbstractFileService;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.api.service.AbstractFileService;
 import com.cloudmanager.core.util.Util;
 
 import javax.swing.filechooser.FileSystemView;
@@ -21,6 +22,10 @@ public class LocalService extends AbstractFileService {
     public static final String SERVICE_NAME = "local";
     public static final String SERVICE_DISPLAY_NAME = "Local";
     public static final String SERVICE_ICON = "/icons/computer_keyboard.png";
+
+    LocalService(FileServiceSettings settings) {
+        super(settings);
+    }
 
     @Override
     public String getServiceName() {

@@ -57,9 +57,13 @@ public class ConfigManager {
             try (InputStream stream = Config.class.getResourceAsStream(FALLBACK_FILE)) {
                 instance = MAPPER.readValue(stream, Config.class);
 
+                System.out.println("Couldn't find the config file, loading the default config");
+
             } catch (IOException e1) {
                 // If we couldn't use the default, start with a blank one
                 instance = new Config();
+
+                System.out.println("Couldn't find the config or the default, loading a blank one");
             }
         }
 

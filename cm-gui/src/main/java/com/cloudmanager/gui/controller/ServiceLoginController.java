@@ -1,11 +1,11 @@
 package com.cloudmanager.gui.controller;
 
-import com.cloudmanager.core.config.RepoManager;
-import com.cloudmanager.core.model.FileRepo;
-import com.cloudmanager.core.api.service.ServiceFactory;
-import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
 import com.cloudmanager.core.api.login.LoginField;
 import com.cloudmanager.core.api.login.LoginProcedure;
+import com.cloudmanager.core.api.service.ServiceFactory;
+import com.cloudmanager.core.config.ServiceManager;
+import com.cloudmanager.core.model.FileServiceSettings;
+import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.ServiceFactoryListCell;
 import javafx.application.Platform;
@@ -41,7 +41,7 @@ public class ServiceLoginController {
     private void initialize() {
         serviceSelector.setCellFactory(val -> new ServiceFactoryListCell());
         serviceSelector.setButtonCell(new ServiceFactoryListCell());
-        serviceSelector.getItems().setAll(ServiceFactoryLocator.listAll());
+        serviceSelector.getItems().setAll(ServiceFactoryLocator.findAll());
 
         serviceSelector.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> loadWindow(newValue));
 
@@ -121,18 +121,18 @@ public class ServiceLoginController {
     }
 
     // This is used as the completion listener
-    private void loginCompleted(boolean success, FileRepo account) {
+    private void loginCompleted(boolean success, FileServiceSettings settings) {
         Platform.runLater(() -> {
             if (success) {
-                // Add the account
-                RepoManager.getInstance().addRepo(account);
+                // Add the settings
+                ServiceManager.getInstance().addServiceSettings(settings);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("repo_added"));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("service_added"));
                 alert.show();
 
                 ((Stage) root.getScene().getWindow()).close();
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_repo"));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_service"));
                 alert.showAndWait();
             }
         });

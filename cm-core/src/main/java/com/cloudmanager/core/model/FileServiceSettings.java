@@ -12,9 +12,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Represents a file repository. This is the equivalent of an account in an online service.
+ * Represents the settings of a service instance. This includes a name given
+ * by the user and any authentication information used by the service.
  */
-public class FileRepo implements Serializable {
+public class FileServiceSettings implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String id, name, serviceName;
@@ -25,17 +26,17 @@ public class FileRepo implements Serializable {
     private transient FileService service;
 
     /**
-     * Constructs a FileRepo from the ID, name, service name and authentication values
+     * Constructs a FileServiceSettings from the ID, name, service name and authentication values
      *
-     * @param id          The ID of the repository, must be unique. Set to null to generate a random one
-     * @param name        The name of the repository. Only visual
+     * @param id          The ID of the service, must be unique. Set to null to generate a random one
+     * @param name        The name of the service. Only visual
      * @param serviceName The name of the service. Must be able to be located by ServiceLocator
-     * @param auth        The authentication parameters. These depend on the service of the repository
+     * @param auth        The authentication parameters. These depend on the service of the service
      */
-    public FileRepo(@JsonProperty("id") String id,
-                    @JsonProperty("name") String name,
-                    @JsonProperty("service_name") String serviceName,
-                    @JsonProperty("auth") Map<String, String> auth) {
+    public FileServiceSettings(@JsonProperty("id") String id,
+                               @JsonProperty("name") String name,
+                               @JsonProperty("service_name") String serviceName,
+                               @JsonProperty("auth") Map<String, String> auth) {
         this.id = (id == null) ? UUID.randomUUID().toString() : id;
         this.name = name;
         this.serviceName = serviceName;
@@ -43,28 +44,28 @@ public class FileRepo implements Serializable {
     }
 
     /**
-     * Constructs a FileRepo from its name and service name
+     * Constructs a FileServiceSettings from its name and service name
      *
-     * @param name        The name of the repository. Only visual
+     * @param name        A visual name for this service instance.
      * @param serviceName The name of the service. Must be able to be located by ServiceLocator
      */
-    public FileRepo(String name, String serviceName) {
+    public FileServiceSettings(String name, String serviceName) {
         this(null, name, serviceName, new HashMap<>());
     }
 
     /**
-     * Returns the ID of the repository
+     * Returns the ID of the service
      *
-     * @return The ID of the repository
+     * @return The ID of the service
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Returns the name of the repository. This is only visual, to get a unique identifier, use {@link #getId()}
+     * Returns the name of the service. This is only visual, to get a unique identifier, use {@link #getId()}
      *
-     * @return The name of the repository
+     * @return The name of the service
      */
     public String getName() {
         return name;

@@ -31,8 +31,8 @@ public class TransferService {
     private List<Thread> transfersInProgress = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * Transfer a file. If both repositories are the same, the file is moved,
-     * whereas if the repositories are different, the files are copied.
+     * Transfer a file. If both services are the same, the file is moved,
+     * whereas if the services are different, the files are copied.
      *
      * @param origin       The service of the original file
      * @param file         The file to transfer
@@ -50,8 +50,8 @@ public class TransferService {
 
         target.setCurrentDir(targetFolder);
 
-        // If both are the same repository, we move the file
-        if (origin.getRepoId().equals(target.getRepoId())) {
+        // If both are the same services, we move the file
+        if (origin.getInstanceId().equals(target.getInstanceId())) {
             moveOnSameService(origin, file, targetFolder);
 
         } else {

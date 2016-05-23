@@ -1,6 +1,6 @@
 package com.cloudmanager.core.config;
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class Config {
     /**
-     * Enumeration with the global settings keys
+     * Enumeration with the global globalSettings keys
      */
     public enum Setting {
         leftPanel, rightPanel
@@ -20,9 +20,9 @@ public class Config {
     @JsonProperty
     private Locale locale = Locale.getDefault();
     @JsonProperty
-    private List<FileRepo> repos = new ArrayList<>();
+    private List<FileServiceSettings> serviceSettings = new ArrayList<>();
     @JsonProperty
-    private Map<Setting, String> settings = new HashMap<>();
+    private Map<Setting, String> globalSettings = new HashMap<>();
 
     /**
      * Returns the application locale, by default this is the system locale
@@ -34,16 +34,16 @@ public class Config {
     }
 
     /**
-     * Get the list of repositories saved
+     * Get the list of service globalSettings saved
      *
-     * @return List of repositories
+     * @return List of service globalSettings
      */
-    List<FileRepo> getRepos() {
-        return Collections.unmodifiableList(repos);
+    List<FileServiceSettings> getServiceSettings() {
+        return Collections.unmodifiableList(serviceSettings);
     }
 
-    List<FileRepo> _getRepos() {
-        return repos;
+    List<FileServiceSettings> _getServiceSettings() {
+        return serviceSettings;
     }
 
     /**
@@ -52,8 +52,8 @@ public class Config {
      * @param key The setting key
      * @return The setting value
      */
-    public String getSetting(Setting key) {
-        return settings.get(key);
+    public String getGlobalSetting(Setting key) {
+        return globalSettings.get(key);
     }
 
     /**
@@ -62,8 +62,8 @@ public class Config {
      * @param key   The setting key
      * @param value The setting value
      */
-    public void putSetting(Setting key, String value) {
-        settings.put(key, value);
+    public void putGlobalSetting(Setting key, String value) {
+        globalSettings.put(key, value);
         ConfigManager.save();
     }
 }

@@ -6,14 +6,14 @@
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
             prefHeight="500.0"
             fx:id="root"
-            fx:controller="com.cloudmanager.gui.controller.RepoManagerController">
+            fx:controller="com.cloudmanager.gui.controller.ServiceManagerController">
 
     <center>
-        <TableView fx:id="repoTable">
+        <TableView fx:id="serviceTable">
             <columns>
                 <TableColumn fx:id="iconColumn" prefWidth="40.0" text=""/>
                 <TableColumn fx:id="serviceNameColumn" prefWidth="130.0" text="%service"/>
-                <TableColumn fx:id="repoNameColumn" prefWidth="140.0" text="%repo_name"/>
+                <TableColumn fx:id="nameColumn" prefWidth="140.0" text="%name"/>
             </columns>
         </TableView>
     </center>

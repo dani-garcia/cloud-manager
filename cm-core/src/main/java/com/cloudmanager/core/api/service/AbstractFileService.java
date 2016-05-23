@@ -1,40 +1,33 @@
 package com.cloudmanager.core.api.service;
 
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.core.model.ModelFile;
 
 /**
- * Abstract implementation of the {@link FileService} interface that includes the repository and the current directory methods.
- * It also includes equals and hashcode based on the repository ID.
+ * Abstract implementation of the {@link FileService} interface
+ * that includes the service settings and the current directory methods.
+ * <p>
+ * It also includes equals and hashcode based on the service ID.
  */
 public abstract class AbstractFileService implements FileService {
 
     /**
-     * The repository in use
+     * The settings in use
      */
-    protected FileRepo repo;
+    protected FileServiceSettings settings;
     /**
      * The current directory. Used when receiving files
      */
     private ModelFile currentDir;
 
-    @Override
-    public String getRepoId() {
-        return repo.getId();
+    public AbstractFileService(FileServiceSettings settings) {
+        this.settings = settings;
     }
 
     @Override
-    public String getRepoName() {
-        return repo.getName();
-    }
-
-    public FileService setRepo(FileRepo repo) {
-        if (this.repo != null)
-            throw new IllegalStateException("Account already set");
-
-        this.repo = repo;
-        return this;
+    public String getInstanceId() {
+        return settings.getId();
     }
 
     @Override
@@ -57,12 +50,12 @@ public abstract class AbstractFileService implements FileService {
 
         AbstractFileService that = (AbstractFileService) o;
 
-        return getRepoId() != null ? getRepoId().equals(that.getRepoId()) : that.getRepoId() == null;
+        return getInstanceId() != null ? getInstanceId().equals(that.getInstanceId()) : that.getInstanceId() == null;
 
     }
 
     @Override
     public int hashCode() {
-        return getRepoId() != null ? getRepoId().hashCode() : 0;
+        return getInstanceId() != null ? getInstanceId().hashCode() : 0;
     }
 }

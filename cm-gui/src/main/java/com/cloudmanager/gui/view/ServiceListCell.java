@@ -1,6 +1,6 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
@@ -11,24 +11,24 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Represents a repository in the repository dropdown.
+ * Represents a service in the service dropdown.
  */
-public class RepoListCell extends ListCell<FileRepo> {
+public class ServiceListCell extends ListCell<FileServiceSettings> {
 
     private ObservableStringValue otherSelection;
 
     /**
      * Constructs the cell from an observable of the selection of the other dropdown.
-     * This observable is used to gray out the repository used on the other side
+     * This observable is used to gray out the service used on the other side
      *
      * @param otherSelection The selection on the other dropdown
      */
-    public RepoListCell(ObservableStringValue otherSelection) {
+    public ServiceListCell(ObservableStringValue otherSelection) {
         this.otherSelection = otherSelection;
     }
 
     @Override
-    public void updateItem(FileRepo item, boolean empty) {
+    public void updateItem(FileServiceSettings item, boolean empty) {
         super.updateItem(item, empty);
         if (empty) {
             setText(null);

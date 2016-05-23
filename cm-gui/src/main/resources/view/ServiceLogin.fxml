@@ -21,7 +21,7 @@
                 <ColumnConstraints hgrow="ALWAYS"/>
             </columnConstraints>
 
-            <Label text="%repo_name"/>
+            <Label text="%name"/>
             <TextField fx:id="nameField" GridPane.columnIndex="1"/>
 
             <Label text="%service" GridPane.rowIndex="1"/>

@@ -1,8 +1,9 @@
 package com.cloudmanager.services.dropbox;
 
+import com.cloudmanager.core.api.service.AbstractFileService;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.api.service.AbstractFileService;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
@@ -36,6 +37,10 @@ class DropboxService extends AbstractFileService {
     /*-----------------------*/
     private DbxClientV2 client;
 
+    DropboxService(FileServiceSettings settings) {
+        super(settings);
+    }
+
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
@@ -51,7 +56,7 @@ class DropboxService extends AbstractFileService {
 
     @Override
     public boolean authenticate() {
-        String accessToken = repo.getAuth().get("access_token");
+        String accessToken = settings.getAuth().get("access_token");
 
         if (accessToken == null)
             return false;

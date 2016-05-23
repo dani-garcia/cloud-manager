@@ -1,6 +1,6 @@
 package com.cloudmanager.core.api.login;
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.model.FileServiceSettings;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -27,9 +27,9 @@ public interface LoginProcedure {
      * Prepares the login procedure and the login form. Use this step to generate a URL in the case of OAuth
      * and to include the necessary fields in the case of a normal login
      *
-     * @param repoName The repo name the user has chosen
+     * @param visualName The name the user has chosen for this service.
      */
-    void preLogin(String repoName);
+    void preLogin(String visualName);
 
     /**
      * Returns the list of fields to show on the login window.
@@ -57,12 +57,12 @@ public interface LoginProcedure {
      * Adds a completion listener. Necessary for the automatic postLogin and recommended for the manual postLogin.
      * <p>
      * The listener is called if the procedure completes. The first parameter is the completion status:
-     * true for success and false if there was any error. The second parameter contains the repository
+     * true for success and false if there was any error. The second parameter contains the settings
      * created, and should be added to the list.
      *
      * @param listener The listener to add
      */
-    void addLoginCompleteListener(BiConsumer<Boolean, FileRepo> listener);
+    void addLoginCompleteListener(BiConsumer<Boolean, FileServiceSettings> listener);
 
     /**
      * Cancels the login procedure. In the case of OAuth login, the web server should be stopped here.

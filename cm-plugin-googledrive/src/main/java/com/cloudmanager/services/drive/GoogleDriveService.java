@@ -1,8 +1,9 @@
 package com.cloudmanager.services.drive;
 
+import com.cloudmanager.core.api.service.AbstractFileService;
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
-import com.cloudmanager.core.api.service.AbstractFileService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -43,6 +44,10 @@ class GoogleDriveService extends AbstractFileService {
     /*----------------------------*/
     private Drive client;
 
+    GoogleDriveService(FileServiceSettings settings) {
+        super(settings);
+    }
+
     @Override
     public String getServiceName() {
         return SERVICE_NAME;
@@ -54,7 +59,9 @@ class GoogleDriveService extends AbstractFileService {
     }
 
     @Override
-    public String getIcon() {return SERVICE_ICON;}
+    public String getIcon() {
+        return SERVICE_ICON;
+    }
 
     @Override
     public boolean authenticate() {
@@ -75,7 +82,7 @@ class GoogleDriveService extends AbstractFileService {
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                     httpTransport, JacksonFactory.getDefaultInstance(), GoogleDriveApiKeys.SECRETS,
                     Collections.singleton(DriveScopes.DRIVE))
-                    .setCredentialDataStore(new CredentialDataStore(repo.getAuth()))
+                    .setCredentialDataStore(new CredentialDataStore(settings.getAuth()))
                     .build();
 
             // Get credentials

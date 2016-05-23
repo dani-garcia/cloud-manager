@@ -1,7 +1,7 @@
 package com.cloudmanager.gui.view;
 
-import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;

@@ -1,5 +1,6 @@
 package com.cloudmanager.core.api.service;
 
+import com.cloudmanager.core.model.FileServiceSettings;
 import com.cloudmanager.core.model.FileTransfer;
 import com.cloudmanager.core.model.ModelFile;
 
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * Represents a file service. This can be an online service or the local filesystem service.
  * <p>
- * To use it you first need to create a {@link com.cloudmanager.core.model.FileRepo} with the
+ * To use it you first need to create a {@link FileServiceSettings} with the
  * help of a {@link com.cloudmanager.core.api.login.LoginProcedure}. The recommended way to
  * get this is with a {@link ServiceFactory}
  */
@@ -20,25 +21,18 @@ public interface FileService {
     String APP_NAME = "CloudManager";
 
     /*
-     * REPOSITORY INFO
+     * INSTANCE SERVICE INFO
      */
 
     /**
-     * Returns the repo ID.
+     * Returns the settings ID.
      *
-     * @return The repo ID
+     * @return The settings ID
      */
-    String getRepoId();
-
-    /**
-     * Returns the repo name. This is only visual.
-     *
-     * @return The repo name
-     */
-    String getRepoName();
+    String getInstanceId();
 
     /*
-     * SERVICE INFO
+     * COMMON SERVICE INFO
      */
 
     /**
@@ -114,7 +108,7 @@ public interface FileService {
 
 
     /**
-     * Send a file (to another repository).
+     * Send a file (to another service).
      *
      * @param file The file to transfer
      * @return The trasfer object
@@ -122,7 +116,7 @@ public interface FileService {
     FileTransfer sendFile(ModelFile file);
 
     /**
-     * Receive a file (from another repository).
+     * Receive a file (from another service).
      *
      * @param transfer The transfer object
      * @return True if the trasfer is successful, false otherwise
@@ -140,7 +134,7 @@ public interface FileService {
     boolean createFolder(ModelFile parent, String name);
 
     /**
-     * Move a file (on the same repository).
+     * Move a file (on the same service).
      *
      * @param file         The file to move
      * @param targetFolder Where to move it
@@ -149,7 +143,7 @@ public interface FileService {
     boolean moveFile(ModelFile file, ModelFile targetFolder);
 
     /**
-     * Copy a file (on the same repository).
+     * Copy a file (on the same service).
      *
      * @param file         The file to copy
      * @param targetFolder Where to copy it

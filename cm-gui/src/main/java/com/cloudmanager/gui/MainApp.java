@@ -3,6 +3,7 @@ package com.cloudmanager.gui;
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.config.ConfigManager;
 import com.cloudmanager.core.service.TransferService;
+import com.cloudmanager.core.service.factories.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -47,6 +48,9 @@ public class MainApp extends Application {
             alert.showAndWait();
             System.exit(0);
         }
+
+        // Find all the service factories available
+        ServiceFactoryLocator.findAll();
     }
 
     private void initRootLayout() {

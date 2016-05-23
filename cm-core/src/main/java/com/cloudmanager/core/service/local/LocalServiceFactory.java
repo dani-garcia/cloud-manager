@@ -1,9 +1,9 @@
 package com.cloudmanager.core.service.local;
 
-import com.cloudmanager.core.model.FileRepo;
+import com.cloudmanager.core.api.login.LoginProcedure;
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.api.service.ServiceFactory;
-import com.cloudmanager.core.api.login.LoginProcedure;
+import com.cloudmanager.core.model.FileServiceSettings;
 
 /**
  * Factory for the local service
@@ -31,7 +31,7 @@ public class LocalServiceFactory implements ServiceFactory {
     }
 
     @Override
-    public FileService create(FileRepo account) {
-        return new LocalService().setRepo(account);
+    public FileService create(FileServiceSettings settings) {
+        return new LocalService(settings);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Login procedure made specifically for OAuth login.
- * It already includes a adequate form and is using the automatic postLogin method.
+ * It already includes an adequate form and is using the automatic postLogin method.
  */
 public abstract class AbstractOauthLoginProcedure extends AbstractLoginProcedure {
     /**
@@ -22,13 +22,13 @@ public abstract class AbstractOauthLoginProcedure extends AbstractLoginProcedure
     protected LoginField url;
 
     /**
-     * The repository name chosen by the user
+     * The settings name chosen by the user
      */
-    protected String repoName;
+    protected String settingsName;
 
     @Override
-    public void preLogin(String repoName) {
-        this.repoName = repoName;
+    public void preLogin(String visualName) {
+        this.settingsName = visualName;
 
         LoginField text = new LoginField(FieldType.PLAIN_TEXT, "", "login_url_auto_code_explanation");
         url = new LoginField(FieldType.OUTPUT, "login_url", "");
