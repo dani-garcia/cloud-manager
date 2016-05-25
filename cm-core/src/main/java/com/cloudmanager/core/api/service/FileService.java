@@ -158,4 +158,13 @@ public interface FileService {
      * @return True if the deletion is successful, false otherwise
      */
     boolean deleteFile(ModelFile file);
+
+    /**
+     * Rename the given file.
+     *
+     * @param file    The file
+     * @param newName The new name
+     * @return True if the rename is successful, false otherwise
+     */
+    boolean renameFile(ModelFile file, String newName);
 }

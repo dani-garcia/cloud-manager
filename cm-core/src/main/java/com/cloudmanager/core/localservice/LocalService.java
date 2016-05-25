@@ -8,8 +8,11 @@ import com.cloudmanager.core.util.Util;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -136,6 +139,10 @@ public class LocalService extends AbstractFileService {
         Path filePath = new File(file.getPath()).toPath();
         Path targetPath = new File(target.getPath(), file.getName()).toPath();
 
+        return moveFile(filePath, targetPath);
+    }
+
+    private boolean moveFile(Path filePath, Path targetPath) {
         try {
             Files.move(filePath, targetPath);
             return true;
@@ -166,12 +173,36 @@ public class LocalService extends AbstractFileService {
         Path filePath = new File(file.getPath()).toPath();
 
         try {
-            Files.delete(filePath);
+            // This doesn't delete onempty directories
+            // Files.delete(filePath);
+
+            Files.walkFileTree(filePath, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+
             return true;
 
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean renameFile(ModelFile file, String newName) {
+        Path filePath = new File(file.getPath()).toPath();
+        Path newPath = filePath.resolveSibling(newName);
+
+        return moveFile(filePath, newPath);
     }
 }

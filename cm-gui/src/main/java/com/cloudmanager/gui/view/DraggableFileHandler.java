@@ -2,8 +2,8 @@ package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.managers.ServiceManager;
-import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.managers.TransferManager;
+import com.cloudmanager.core.model.ModelFile;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.*;
@@ -43,14 +43,14 @@ public class DraggableFileHandler {
      */
     void setOnDragEvents(Node node, String serviceId, Supplier<ModelFile> file) {
         node.setOnDragDetected(getOnDragDetected(node, serviceId, file));
-        node.setOnDragOver(getOnDragOver(file));
+        node.setOnDragOver(getOnDragOver(serviceId, file));
         node.setOnDragDropped(getOnDragDropped(serviceId, file));
     }
 
     private EventHandler<? super MouseEvent> getOnDragDetected(Node node, String serviceId, Supplier<ModelFile> draggedFile) {
         return event -> {
             ModelFile file = draggedFile.get();
-            if (file == null || !file.isFile()) {
+            if (file == null) {
                 return;
             }
 
@@ -70,19 +70,29 @@ public class DraggableFileHandler {
         };
     }
 
-    private EventHandler<? super DragEvent> getOnDragOver(Supplier<ModelFile> targetFile) {
+    private EventHandler<? super DragEvent> getOnDragOver(String targetServiceId, Supplier<ModelFile> targetFile) {
         return dragEvent -> {
             String fileId = (String) dragEvent.getDragboard().getContent(draggableFile);
+            String draggedServiceId = (String) dragEvent.getDragboard().getContent(draggableServiceId);
 
             if (fileId != null) {
+                ModelFile draggedFile = draggedFiles.get(fileId);
+
+                // TODO Suppport folder transfers
+                if (draggedFile.isFolder() && !draggedServiceId.equals(targetServiceId)) {
+                    // Currently we don't support folder trasfers
+                    dragEvent.consume();
+                    return;
+                }
+
                 // If the file is dropped on an empty space on the table
                 if (targetFile.get() == null) {
-                    if (dragEvent.getSource() instanceof DraggableTableRow) { // TODO Cambiar esto
+                    if (dragEvent.getSource() instanceof DraggableTableRow) {
                         dragEvent.acceptTransferModes(TransferMode.MOVE);
                     }
 
                     // If it's dropped on a folder (and not on itself)
-                } else if (!targetFile.get().equals(draggedFiles.get(fileId))
+                } else if (!targetFile.get().equals(draggedFile)
                         && targetFile.get().isFolder()) {
                     dragEvent.acceptTransferModes(TransferMode.MOVE);
                 }
@@ -94,16 +104,16 @@ public class DraggableFileHandler {
     private EventHandler<? super DragEvent> getOnDragDropped(String targetServiceId, Supplier<ModelFile> targetFolder) {
         return dragEvent -> {
             String fileId = (String) dragEvent.getDragboard().getContent(draggableFile);
+            String draggedServiceId = (String) dragEvent.getDragboard().getContent(draggableServiceId);
 
             if (fileId != null) {
                 // Get both services and initiate a transfer
-
-                String draggedServiceId = (String) dragEvent.getDragboard().getContent(draggableServiceId);
+                ModelFile draggedFile = draggedFiles.get(fileId);
 
                 FileService draggedService = ServiceManager.getInstance().getServiceSettings(draggedServiceId).getService();
                 FileService targetService = ServiceManager.getInstance().getServiceSettings(targetServiceId).getService();
 
-                TransferManager.get().transferFile(draggedService, draggedFiles.get(fileId), targetService, targetFolder.get());
+                TransferManager.get().transferFile(draggedService, draggedFile, targetService, targetFolder.get());
             }
 
             draggedFiles.remove(fileId);

@@ -199,4 +199,15 @@ class DropboxService extends AbstractFileService {
             return false;
         }
     }
+
+    @Override
+    public boolean renameFile(ModelFile file, String newName) {
+        try {
+            client.files().move(file.getPath(), file.getParent().getPath() + "/" + newName);
+            return true;
+        } catch (DbxException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

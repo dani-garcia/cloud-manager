@@ -1,7 +1,6 @@
 package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.model.FileServiceSettings;
-import com.cloudmanager.core.managers.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -36,7 +35,7 @@ public class ServiceListCell extends ListCell<FileServiceSettings> {
 
         } else {
             // Get the icon
-            String iconName = ServiceFactoryLocator.find(item.getServiceName()).getIcon(); // TODO Cambiar esto
+            String iconName = item.getService().getIcon();
             Image icon = ResourceManager.loadImage(iconName);
             ImageView view = new ImageView(icon);
 

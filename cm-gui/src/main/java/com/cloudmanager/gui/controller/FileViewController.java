@@ -1,9 +1,9 @@
 package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.localservice.LocalService;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.core.model.ModelFile.Event;
-import com.cloudmanager.core.localservice.LocalService;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.DraggableTableRow;
 import com.cloudmanager.gui.view.DraggableTreeCell;
@@ -133,14 +133,6 @@ public class FileViewController {
         // On item selected, fill the table
         fileTree.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             onSelectionChanged(newVal);
-        });
-
-        ///////
-        // On double click on item on the table, change directory
-        fileTable.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
-                fileTable.getSelectionModel().getSelectedItem().selectFile();
-            }
         });
 
         ////////

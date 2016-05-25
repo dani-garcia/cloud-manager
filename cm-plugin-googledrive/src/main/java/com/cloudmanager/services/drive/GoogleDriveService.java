@@ -253,7 +253,7 @@ class GoogleDriveService extends AbstractFileService {
         meta.setParents(Collections.singletonList(targetFolder.getId()));
 
         try {
-            client.files().copy(file.getId(), meta);
+            client.files().copy(file.getId(), meta).execute();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -264,7 +264,22 @@ class GoogleDriveService extends AbstractFileService {
     @Override
     public boolean deleteFile(ModelFile file) {
         try {
-            client.files().delete(file.getId());
+            client.files().delete(file.getId()).execute();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean renameFile(ModelFile file, String newName) {
+        try {
+            File newFile = new File();
+            newFile.setName(newName);
+
+            client.files().update(file.getId(), newFile)
+                    .execute();
             return true;
         } catch (IOException e) {
             e.printStackTrace();

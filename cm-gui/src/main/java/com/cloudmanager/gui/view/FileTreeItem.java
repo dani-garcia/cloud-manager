@@ -1,6 +1,7 @@
 package com.cloudmanager.gui.view;
 
 import com.cloudmanager.core.api.service.FileService;
+import com.cloudmanager.core.localservice.LocalService;
 import com.cloudmanager.core.model.ModelFile;
 import com.cloudmanager.gui.util.ResourceManager;
 import javafx.application.Platform;
@@ -14,12 +15,15 @@ import java.util.function.BiConsumer;
  * Represents a file in the tree. The children are obtained lazily.
  */
 public class FileTreeItem extends TreeItem<ModelFile> {
+    private static final boolean FORCE_EAGER_ISLEAF = false;
 
     private FileService service;
 
     private BiConsumer<FileTreeItem, ModelFile.Event> treeItemListener;
     private boolean forceRefresh = false;
     private boolean childrenSet = false;
+
+    private final boolean isLocalService;
 
     /**
      * Returns the root file of the given service as a FileTreeItem
@@ -39,6 +43,7 @@ public class FileTreeItem extends TreeItem<ModelFile> {
         super(file);
         this.service = service;
         this.treeItemListener = treeItemListener;
+        isLocalService = service.getServiceName().equals(LocalService.SERVICE_NAME);
 
         // We set the file icon
         setGraphic(new ImageView(ResourceManager.toFXImage(file.getIcon())));
@@ -50,7 +55,8 @@ public class FileTreeItem extends TreeItem<ModelFile> {
     @Override
     public boolean isLeaf() {
         // It's a leaf if it doesn't have children directories
-        return getChildren().filtered(f -> f.getValue().getType().equals(ModelFile.Type.FOLDER)).isEmpty();
+        return (FORCE_EAGER_ISLEAF || isLocalService || childrenSet)
+                && getChildren().filtered(f -> f.getValue().isFolder()).isEmpty();
     }
 
     @Override
@@ -85,7 +91,11 @@ public class FileTreeItem extends TreeItem<ModelFile> {
         file.addListener((m, e) -> {
                     switch (e) {
                         case FILE_UPDATED:
-                            file.getParent().refreshChildren();
+                            if (file.getParent() != null) {
+                                file.getParent().refreshChildren();
+                            } else {
+                                file.refreshChildren();
+                            }
                             break; // Refresh the parents children to refresh this file
 
                         case CHILDREN_UPDATED:

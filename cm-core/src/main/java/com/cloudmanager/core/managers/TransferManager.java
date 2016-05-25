@@ -41,8 +41,6 @@ public class TransferManager {
      */
     public void transferFile(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         // TODO Error si el archivo ya existe
-        // TODO Si son el mismo servicio, comprobar que no intentamos mover un archivo dentro de si mismo o similar
-        // TODO Si estamos moviendo una carpeta, copiar recursivamente su contenido
 
         // If we don't get a target, assume the current directory
         if (targetFolder == null)
@@ -60,6 +58,8 @@ public class TransferManager {
     }
 
     private void moveOnSameService(FileService service, ModelFile file, ModelFile targetFolder) {
+        // TODO Comprobar que no intentamos mover un archivo dentro de si mismo o similar
+
         service.moveFile(file, targetFolder);
 
         // TODO En ciertas ocasiones no recarga bien los ficheros
