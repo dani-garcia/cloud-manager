@@ -4,8 +4,11 @@ import com.cloudmanager.core.api.service.FileService;
 import com.cloudmanager.core.managers.ServiceManager;
 import com.cloudmanager.core.managers.TransferManager;
 import com.cloudmanager.core.model.ModelFile;
+import com.cloudmanager.gui.util.ResourceManager;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.*;
 
 import java.util.HashMap;
@@ -80,7 +83,7 @@ public class DraggableFileHandler {
 
                 // TODO Suppport folder transfers
                 if (draggedFile.isFolder() && !draggedServiceId.equals(targetServiceId)) {
-                    // Currently we don't support folder trasfers
+                    // Currently we don't support folder transfers
                     dragEvent.consume();
                     return;
                 }
@@ -113,7 +116,11 @@ public class DraggableFileHandler {
                 FileService draggedService = ServiceManager.getInstance().getServiceSettings(draggedServiceId).getService();
                 FileService targetService = ServiceManager.getInstance().getServiceSettings(targetServiceId).getService();
 
-                TransferManager.get().transferFile(draggedService, draggedFile, targetService, targetFolder.get());
+                boolean result = TransferManager.get().transferFile(draggedService, draggedFile, targetService, targetFolder.get());
+
+                if (!result) {
+                    new Alert(AlertType.WARNING, ResourceManager.getString("error_moving_file")).show();
+                }
             }
 
             draggedFiles.remove(fileId);

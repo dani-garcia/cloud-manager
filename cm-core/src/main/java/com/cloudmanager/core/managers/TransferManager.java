@@ -39,7 +39,7 @@ public class TransferManager {
      * @param target       The service of the target file
      * @param targetFolder The target file
      */
-    public void transferFile(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
+    public boolean transferFile(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         // TODO Error si el archivo ya existe
 
         // If we don't get a target, assume the current directory
@@ -50,26 +50,33 @@ public class TransferManager {
 
         // If both are the same services, we move the file
         if (origin.getInstanceId().equals(target.getInstanceId())) {
-            moveOnSameService(origin, file, targetFolder);
+            return moveOnSameService(origin, file, targetFolder);
 
         } else {
-            transferToAnotherService(origin, file, target, targetFolder);
+            return transferToAnotherService(origin, file, target, targetFolder);
         }
     }
 
-    private void moveOnSameService(FileService service, ModelFile file, ModelFile targetFolder) {
-        // TODO Comprobar que no intentamos mover un archivo dentro de si mismo o similar
+    private boolean moveOnSameService(FileService service, ModelFile file, ModelFile targetFolder) {
+        ModelFile commonAncestor = file.getCommonAncestor(targetFolder);
 
-        service.moveFile(file, targetFolder);
+        // Can't move a file inside itself
+        if (commonAncestor.equals(file)) {
+            return false;
+        }
+
+        boolean result = service.moveFile(file, targetFolder);
 
         // TODO En ciertas ocasiones no recarga bien los ficheros
         // EJ Tenemos la carpeta aa/bb y aa/cc
         // Si arrastramos un fichero de una a otra, aparecerá en los dos lados hasta que se recargue
         file.refreshFile();
         targetFolder.refreshChildren();
+
+        return result;
     }
 
-    private void transferToAnotherService(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
+    private boolean transferToAnotherService(FileService origin, ModelFile file, FileService target, ModelFile targetFolder) {
         Thread thread = new Thread(() -> {
             // Create the file trasfer, add the listener and notify the start of the download
             FileTransfer transfer = origin.sendFile(file);
@@ -91,6 +98,8 @@ public class TransferManager {
 
         thread.setDaemon(true);
         thread.start();
+
+        return true;
     }
 
     /**
@@ -106,7 +115,7 @@ public class TransferManager {
      * Add a listener for all the downloads. For each transfer in progress, this listener will be called for every 1% transfered.
      * The parameters are the file being transfered and the progress of the transfer (0-100)
      *
-     * @param otherListener
+     * @param otherListener The listener to add
      */
     public void addProgressListener(BiConsumer<ModelFile, Double> otherListener) {
         if (listener == null)
