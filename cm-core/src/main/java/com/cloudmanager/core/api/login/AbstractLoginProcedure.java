@@ -12,10 +12,10 @@ public abstract class AbstractLoginProcedure implements LoginProcedure {
     /**
      * Notifies any listeners of the completion of the procedure.
      */
-    protected BiConsumer<Boolean, FileServiceSettings> onComplete;
+    protected BiConsumer<Status, FileServiceSettings> onComplete;
 
     @Override
-    public void addLoginCompleteListener(BiConsumer<Boolean, FileServiceSettings> listener) {
+    public void addLoginCompleteListener(BiConsumer<Status, FileServiceSettings> listener) {
         if (onComplete == null)
             onComplete = listener;
         else

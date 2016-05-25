@@ -1,1 +1,1 @@
-localservice.LocalServiceFactory
+com.cloudmanager.core.localservice.LocalServiceFactory

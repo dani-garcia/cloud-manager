@@ -69,6 +69,7 @@ final class CodeReceiverServer {
      */
     Map<String, String[]> waitForCode() throws IOException {
         lock.lock();
+        responseMap = null;
         try {
             while (responseMap == null) {
                 gotAuthorizationResponse.awaitUninterruptibly();

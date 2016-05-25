@@ -22,7 +22,7 @@ public class ServiceManager {
         return instance;
     }
 
-    private Consumer<List<FileServiceSettings>> serviceSettingsListeer;
+    private Consumer<List<FileServiceSettings>> serviceSettingsListener;
 
     private ServiceManager() { }
 
@@ -35,10 +35,10 @@ public class ServiceManager {
      * @param listener The function to call when the service instances change
      */
     public void addListener(Consumer<List<FileServiceSettings>> listener) {
-        if (serviceSettingsListeer == null)
-            serviceSettingsListeer = listener;
+        if (serviceSettingsListener == null)
+            serviceSettingsListener = listener;
         else
-            serviceSettingsListeer = serviceSettingsListeer.andThen(listener);
+            serviceSettingsListener = serviceSettingsListener.andThen(listener);
     }
 
     /**
@@ -51,7 +51,7 @@ public class ServiceManager {
         conf.getServiceSettings().add(serviceSettings);
 
         // Notify listeners and save
-        serviceSettingsListeer.accept(getServiceSettings());
+        serviceSettingsListener.accept(getServiceSettings());
         ConfigManager.save();
     }
 
@@ -65,7 +65,7 @@ public class ServiceManager {
         conf.getServiceSettings().remove(serviceSettings);
 
         // Notify listeners and save
-        serviceSettingsListeer.accept(getServiceSettings());
+        serviceSettingsListener.accept(getServiceSettings());
         ConfigManager.save();
     }
 

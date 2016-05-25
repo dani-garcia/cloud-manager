@@ -2,10 +2,11 @@ package com.cloudmanager.gui.controller;
 
 import com.cloudmanager.core.api.login.LoginField;
 import com.cloudmanager.core.api.login.LoginProcedure;
+import com.cloudmanager.core.api.login.LoginProcedure.Status;
 import com.cloudmanager.core.api.service.ServiceFactory;
+import com.cloudmanager.core.managers.ServiceFactoryLocator;
 import com.cloudmanager.core.managers.ServiceManager;
 import com.cloudmanager.core.model.FileServiceSettings;
-import com.cloudmanager.core.managers.ServiceFactoryLocator;
 import com.cloudmanager.gui.util.ResourceManager;
 import com.cloudmanager.gui.view.ServiceFactoryListCell;
 import javafx.application.Platform;
@@ -121,20 +122,29 @@ public class ServiceLoginController {
     }
 
     // This is used as the completion listener
-    private void loginCompleted(boolean success, FileServiceSettings settings) {
+    private void loginCompleted(Status status, FileServiceSettings settings) {
         Platform.runLater(() -> {
-            if (success) {
-                // Add the settings
-                ServiceManager.getInstance().addServiceSettings(settings);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("service_added"));
-                alert.show();
+            switch (status) {
+                case OK:
+                    // Add the settings
+                    ServiceManager.getInstance().addServiceSettings(settings);
 
-                ((Stage) root.getScene().getWindow()).close();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_service"));
-                alert.showAndWait();
+                    new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("service_added"))
+                            .show();
+                    break;
+
+                case DENIED_PERMISSION:
+                    new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_denied_permission"))
+                            .showAndWait();
+                    break;
+                case OTHER_ERR:
+                    new Alert(Alert.AlertType.INFORMATION, ResourceManager.getString("error_adding_service"))
+                            .showAndWait();
+                    break;
             }
+
+            ((Stage) root.getScene().getWindow()).close();
         });
     }
 }

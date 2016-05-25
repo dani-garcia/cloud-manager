@@ -30,7 +30,7 @@ class LocalLoginProcedure extends AbstractLoginProcedure {
 
     @Override
     public boolean postLogin() {
-        onComplete.accept(true, settings);
+        onComplete.accept(Status.OK, settings);
         return true;
     }
 

@@ -38,7 +38,7 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
 
         } catch (IOException e) {
             e.printStackTrace();
-            onComplete.accept(false, null);
+            onComplete.accept(Status.OTHER_ERR, null);
             cancel();
         }
     }
@@ -51,29 +51,27 @@ class DropboxLoginProcedure extends AbstractOauthLoginProcedure {
 
                 DbxAuthFinish authFinish;
 
-                try {
-                    // Authenticate the response
-                    authFinish = webAuth.finish(authMap);
-                } catch (NotApprovedException e) {
-                    e.printStackTrace(); // User denied access
-                    onComplete.accept(false, null);
-                    return;
-                } catch (DbxException | BadRequestException | ProviderException | CsrfException | BadStateException e) {
-                    e.printStackTrace();
-                    onComplete.accept(false, null); // Other error
-                    return;
-                }
+                // Authenticate the response
+                authFinish = webAuth.finish(authMap);
+
 
                 // Finish login
                 FileServiceSettings settings = new FileServiceSettings(settingsName, DropboxService.SERVICE_NAME);
                 settings.getAuth().put("access_token", authFinish.getAccessToken());
 
                 // Call the listeners
-                onComplete.accept(true, settings);
+                onComplete.accept(Status.OK, settings);
 
-            } catch (IOException e) {
+            } catch (NotApprovedException e) {
+                e.printStackTrace(); // User denied access
+                onComplete.accept(Status.DENIED_PERMISSION, null);
+
+            } catch (IOException | DbxException | BadRequestException
+                    | ProviderException | CsrfException | BadStateException e) {
+
                 e.printStackTrace();
-                onComplete.accept(false, null);
+                onComplete.accept(Status.OTHER_ERR, null); // Other error
+
             } finally {
                 cancel();
             }

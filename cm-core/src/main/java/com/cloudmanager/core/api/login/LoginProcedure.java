@@ -24,6 +24,13 @@ import java.util.function.BiConsumer;
 public interface LoginProcedure {
 
     /**
+     * Represents the status of the login.
+     */
+    enum Status {
+        OK, DENIED_PERMISSION, OTHER_ERR
+    }
+
+    /**
      * Prepares the login procedure and the login form. Use this step to generate a URL in the case of OAuth
      * and to include the necessary fields in the case of a normal login
      *
@@ -62,7 +69,7 @@ public interface LoginProcedure {
      *
      * @param listener The listener to add
      */
-    void addLoginCompleteListener(BiConsumer<Boolean, FileServiceSettings> listener);
+    void addLoginCompleteListener(BiConsumer<Status, FileServiceSettings> listener);
 
     /**
      * Cancels the login procedure. In the case of OAuth login, the web server should be stopped here.

@@ -35,7 +35,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
 
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
-            onComplete.accept(false, null);
+            onComplete.accept(Status.OTHER_ERR, null);
             return;
         }
 
@@ -62,7 +62,7 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
 
         } catch (IOException e) {
             e.printStackTrace();
-            onComplete.accept(false, null);
+            onComplete.accept(Status.OTHER_ERR, null);
             cancel();
         }
     }
@@ -84,12 +84,18 @@ class GoogleDriveLoginProcedure extends AbstractOauthLoginProcedure {
                 settings.getAuth().putAll(authMap);
 
                 // Call the listeners
-                onComplete.accept(true, settings);
+                onComplete.accept(Status.OK, settings);
 
             } catch (IOException e) {
                 // If there was any error
                 e.printStackTrace();
-                onComplete.accept(false, null);
+
+                if (e.getMessage().contains("(access_denied)")) {
+                    onComplete.accept(Status.DENIED_PERMISSION, null);
+                } else {
+                    onComplete.accept(Status.OTHER_ERR, null);
+                }
+
             } finally {
                 // Stop the server at the end
                 cancel();
